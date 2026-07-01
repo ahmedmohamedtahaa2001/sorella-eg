@@ -1,0 +1,86 @@
+{
+  "url": "https://dossier.co/collections/sbt-perfumes-with-grapefruit-scent",
+  "name": "Perfumes With Grapefruit Scent : Best Grapefruit Fragrances with Grapefruit notes & scents",
+  "meta": {
+    "og:title": "Perfumes With Grapefruit Scent : Best Grapefruit Fragrances with Grapefruit notes & scents",
+    "description": "Perfumes With Grapefruit Scent Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Perfumes With Grapefruit Scent Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-perfumes-with-grapefruit-scent",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-perfumes-with-grapefruit-scent"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Offers - Perfumes With Grapefruit Scent"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Perfumes With Grapefruit Scent : Best Grapefruit Fragrances with Grapefruit notes & scents",
+      "description": "Perfumes With Grapefruit Scent Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-perfumes-with-grapefruit-scent",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/floral-grapefruit"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/fruity-orange"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/aromatic-ginger"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/citrus-marine"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/spicy-vetiver"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/fougere-bergamot"
+          }
+        ]
+      }
+    }
+  ]
+}

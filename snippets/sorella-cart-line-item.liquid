@@ -1,0 +1,31 @@
+{%- comment -%}
+  sorella-cart-line-item — compact line-item card (§9). Used in drawer + cart page.
+  Params: line (line_item object, required), index (number, required — 1-based line index)
+{%- endcomment -%}
+<li class="sorella-line" data-line-item>
+  <a class="sorella-line__media media media--1x1" href="{{ line.url }}">
+    {%- if line.image -%}
+      {{ line.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: line.title | escape }}
+    {%- endif -%}
+  </a>
+  <div class="sorella-line__body">
+    <div class="sorella-line__top">
+      <a class="sorella-line__title t-body-strong" href="{{ line.url }}">{{ line.product.title }}</a>
+      <a class="sorella-line__remove" href="{{ line.url_to_remove }}"
+         data-line="{{ index }}" data-line-change="0" aria-label="{{ 'cart.general.remove' | t }}">
+        {% render 'sorella-icon', name: 'close', size: 16 %}
+      </a>
+    </div>
+    {%- unless line.product.has_only_default_variant -%}
+      <span class="t-caption text-mist">{{ line.variant.title }}</span>
+    {%- endunless -%}
+    <div class="sorella-line__bottom">
+      <div class="sorella-line__qty">
+        <a href="{{ line.url }}" data-line="{{ index }}" data-line-change="{{ line.quantity | minus: 1 }}" aria-label="{{ 'products.product.decrease_quantity' | t }}">{% render 'sorella-icon', name: 'minus', size: 14 %}</a>
+        <span class="t-caption-strong">{{ line.quantity }}</span>
+        <a href="{{ line.url }}" data-line="{{ index }}" data-line-change="{{ line.quantity | plus: 1 }}" aria-label="{{ 'products.product.increase_quantity' | t }}">{% render 'sorella-icon', name: 'plus', size: 14 %}</a>
+      </div>
+      <span class="t-price text-gold">{{ line.final_line_price | money }}</span>
+    </div>
+  </div>
+</li>

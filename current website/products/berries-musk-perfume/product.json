@@ -1,0 +1,55 @@
+{
+  "id": 8427265261755,
+  "title": "Berries musk perfume",
+  "handle": "berries-musk-perfume",
+  "body_html": "<p><span>Sweet, gentle, and oh-so-dreamy. A delicate blend of ripe mixed berries and creamy musk, this fragrance wraps you in a soft, cozy aura—perfect for the soft girls who lead with kindness, warmth, and quiet confidence</span></p>",
+  "published_at": "2026-05-26T18:35:37+03:00",
+  "created_at": "2026-05-26T18:35:04+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47879938998459,
+      "title": "30ml",
+      "option1": "30ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "640.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8427265261755,
+      "created_at": "2026-05-26T18:35:32+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42493494427835,
+      "created_at": "2026-05-26T18:39:56+03:00",
+      "position": 1,
+      "updated_at": "2026-05-26T18:39:58+03:00",
+      "product_id": 8427265261755,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-0550.png?v=1779809998",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Size",
+      "position": 1,
+      "values": [
+        "30ml"
+      ]
+    }
+  ]
+}

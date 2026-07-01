@@ -1,0 +1,115 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "open_menu": "Open menu",
+      "close_menu": "Close menu",
+      "next": "Next",
+      "previous": "Previous",
+      "loading": "Loading"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search fragrances…",
+      "submit": "Search",
+      "no_results": "No results for “{{ terms }}”.",
+      "results_for": "Results for “{{ terms }}”"
+    },
+    "newsletter": {
+      "label": "Email",
+      "placeholder": "Your email address",
+      "submit": "Sign up",
+      "success": "Thanks — you’re on the list.",
+      "heading": "Subscribe to our emails"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "load_more": "Load more"
+    },
+    "404": {
+      "title": "This page drifted off.",
+      "subtext": "The page you’re after doesn’t exist — but our best sellers do.",
+      "cta": "Shop best sellers"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_bag": "Add to bag",
+      "sold_out": "Sold out",
+      "notify_me": "Sold out — notify me",
+      "unavailable": "Unavailable",
+      "from_price": "From {{ price }}",
+      "sale": "Sale",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price",
+      "quantity": "Quantity",
+      "increase_quantity": "Increase quantity",
+      "decrease_quantity": "Decrease quantity",
+      "inspired_by": "Inspired by {{ name }}",
+      "notes_top": "Top notes",
+      "notes_heart": "Heart notes",
+      "notes_base": "Base notes",
+      "view_details": "View details",
+      "quick_add": "Quick add",
+      "choose_options": "Choose options",
+      "related": "You may also love"
+    },
+    "facets": {
+      "filter": "Filter",
+      "sort_by": "Sort by",
+      "clear": "Clear all",
+      "apply": "Apply",
+      "results_count": "{{ count }} products",
+      "in_stock_only": "In stock only"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Your bag",
+      "empty": "Your bag is empty.",
+      "empty_cta": "Start shopping",
+      "subtotal": "Subtotal",
+      "checkout": "Checkout",
+      "remove": "Remove",
+      "note": "Order note",
+      "taxes_shipping": "Shipping & taxes calculated at checkout.",
+      "free_gift_progress": "You’re {{ amount }} away from a free 5ml.",
+      "free_gift_unlocked": "You’ve unlocked a free 5ml. 🎁",
+      "upsell_heading": "Complete your set"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Log in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "forgot": "Forgot your password?",
+      "create": "Create account"
+    },
+    "register": {
+      "title": "Create account",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "submit": "Create"
+    },
+    "account": {
+      "title": "My account",
+      "orders": "Orders",
+      "addresses": "Addresses",
+      "logout": "Log out"
+    }
+  },
+  "sections": {
+    "contact": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Comment",
+      "submit": "Send",
+      "success": "Thanks — we’ll be in touch shortly."
+    }
+  }
+}

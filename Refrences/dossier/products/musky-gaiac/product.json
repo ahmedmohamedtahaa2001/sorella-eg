@@ -1,0 +1,84 @@
+{
+  "url": "https://dossier.co/products/musky-gaiac",
+  "name": "Musky Gaiac",
+  "inspired_by": "Dossier Inspired by Le Labo Fragrances' Gaïac 10",
+  "meta": {
+    "og:title": "Le Labo's Gaiac 10 Dupe Perfume: Musky Gaiac - Dossier Perfumes",
+    "twitter:title": "Le Labo's Gaiac 10 Dupe Perfume: Musky Gaiac - Dossier Perfumes",
+    "description": "Buy ➔ Musky Gaiac Perfume Online ✔️ Inspired by Le Labo Fragrances' Gaiac 10. ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Buy ➔ Musky Gaiac Perfume Online ✔️ Inspired by Le Labo Fragrances' Gaiac 10. ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:description": "Buy ➔ Musky Gaiac Perfume Online ✔️ Inspired by Le Labo Fragrances' Gaiac 10. ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/musky-gaiac",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Musky-Gaiac-Musky-Clean-minimalist-scent.png?v=1712933216",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Musky-Gaiac-Musky-Clean-minimalist-scent.png?v=1712933216",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/musky-gaiac"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Musky Gaiac"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Le Labo Fragrances' Gaïac 10"
+      },
+      "description": "Buy ➔ Musky Gaiac Perfume Online ✔️ Inspired by Le Labo Fragrances' Gaiac 10. ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Musky-Gaiac-Musky-Clean-minimalist-scent.png?v=1712933216"
+      ],
+      "name": "Musky Gaiac",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 44.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 49,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "39393208762435",
+          "url": "https://dossier.co/products/musky-gaiac?Title=Default+Title"
+        }
+      ],
+      "sku": "39393208762435",
+      "url": "https://dossier.co/products/musky-gaiac"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{%- comment -%}
+  sorella-glass-panel — base glass wrapper (Art Direction §8.4).
+  Wraps pre-captured markup. Blur budget applies (§8.4) — only for nav dock,
+  hero, brand-story, cart drawer, mega-menu. Elsewhere prefer a solid surface.
+  Params:
+    content (string, required) — captured HTML to place inside
+    variant (string) — 'card' (default, radius.lg) | 'hero' (radius.xl) | 'compact' (radius.md)
+    sheen   (boolean) — add the 1-pass sheen highlight
+    tag     (string) — wrapper element, default 'div'
+    class   (string) — extra classes
+{%- endcomment -%}
+{%- liquid
+  assign classes = 'glass-panel'
+  case variant
+    when 'hero'
+      assign classes = classes | append: ' glass-panel--xl'
+    when 'compact'
+      assign classes = classes | append: ' glass-panel--md'
+  endcase
+  if sheen
+    assign classes = classes | append: ' glass-panel--sheen'
+  endif
+  if class != blank
+    assign classes = classes | append: ' ' | append: class
+  endif
+  assign el = tag | default: 'div'
+-%}
+<{{ el }} class="{{ classes }}">{{ content }}</{{ el }}>

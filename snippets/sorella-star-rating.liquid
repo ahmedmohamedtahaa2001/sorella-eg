@@ -1,0 +1,18 @@
+{%- comment -%}
+  sorella-star-rating — value out of 5, Gold stars (§9).
+  Params:
+    value (number, 0–5) — supports halves rounded to nearest for fill count
+    count (number) — optional review count to append
+{%- endcomment -%}
+{%- liquid
+  assign rating = value | default: 5 | round
+  if rating > 5
+    assign rating = 5
+  endif
+  assign empty = 5 | minus: rating
+-%}
+<span class="sorella-stars text-gold" role="img" aria-label="{{ value | default: 5 }} out of 5 stars">
+  {%- for i in (1..rating) -%}{% render 'sorella-icon', name: 'star', size: 15 %}{%- endfor -%}
+  {%- if empty > 0 -%}{%- for i in (1..empty) -%}{% render 'sorella-icon', name: 'star-outline', size: 15 %}{%- endfor -%}{%- endif -%}
+  {%- if count -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+</span>

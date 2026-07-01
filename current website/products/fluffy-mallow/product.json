@@ -1,0 +1,77 @@
+{
+  "id": 8070198591675,
+  "title": "Fluffy Mallow",
+  "handle": "fluffy-mallow",
+  "body_html": "<p><strong>Top Notes:</strong></p>\n<p>Italian lemon,Apple,Nectarine blossom </p>\n<p><br><strong>Heart Notes:</strong></p>\n<p>Marshmallow,Strawberry,Coconut,Orange blossom </p>\n<p><br><strong>Base Notes:</strong></p>\n<p>Whipped Cream, Sugar, Vanilla,Musk,Raspberry </p>\n<p><strong>The Vibe:</strong><br>Sweet, fluffy, and ultra-girly. It’s like a decadent dessert in a bottle, with notes of marshmallow and cotton candy wrapped in creamy vanilla and nutty pistachio. It feels fun, flirty, and a little extra in the best way—like a pink cloud of deliciousness.</p>\n<p>When to Wear:<br>Perfect for brunch, date night, girls' night out, or any time you want to feel cute, confident, and irresistible. Best worn in cooler weather or evenings when you want your sweet scent to linger.</p>",
+  "published_at": "2025-05-02T14:33:46+03:00",
+  "created_at": "2025-05-02T14:28:26+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [
+    "free-gift-5ml"
+  ],
+  "variants": [
+    {
+      "id": 46916715741371,
+      "title": "30ml",
+      "option1": "30ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "640.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 2,
+      "product_id": 8070198591675,
+      "created_at": "2025-08-30T15:22:45+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    },
+    {
+      "id": 46647379886267,
+      "title": "50ml",
+      "option1": "50ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "850.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 3,
+      "product_id": 8070198591675,
+      "created_at": "2025-05-21T10:53:08+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42277751816379,
+      "created_at": "2026-04-27T17:49:23+03:00",
+      "position": 1,
+      "updated_at": "2026-04-27T17:49:25+03:00",
+      "product_id": 8070198591675,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/1C5F784C-1095-45F7-B057-0B11B1896E6E.png?v=1777301365",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Size",
+      "position": 1,
+      "values": [
+        "30ml",
+        "50ml"
+      ]
+    }
+  ]
+}

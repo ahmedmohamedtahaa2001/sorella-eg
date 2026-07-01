@@ -1,0 +1,84 @@
+{
+  "url": "https://dossier.co/products/ambery-neroli",
+  "name": "Ambery Neroli",
+  "inspired_by": "Dossier Inspired by Prada’s Paradoxe",
+  "meta": {
+    "og:title": "Ambery Neroli",
+    "twitter:title": "Ambery Neroli",
+    "description": "Fresh, elegant, and undeniably sexy––yet wearable for every day. Inspired by Prada’s Paradoxe, Ambery Neroli is a luxurious and profoundly sensual harmo...",
+    "og:description": "Fresh, elegant, and undeniably sexy––yet wearable for every day. Inspired by Prada’s Paradoxe, Ambery Neroli is a luxurious and profoundly sensual harmo...",
+    "twitter:description": "Fresh, elegant, and undeniably sexy––yet wearable for every day. Inspired by Prada’s Paradoxe, Ambery Neroli is a luxurious and profoundly sensual harmo...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/ambery-neroli",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Ambery_Neroli_e205e92f-f186-4d55-8864-bb832d928e36.jpg?v=1781021597",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Ambery_Neroli_e205e92f-f186-4d55-8864-bb832d928e36.jpg?v=1781021597",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/ambery-neroli"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Ambery Neroli"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Prada’s Paradoxe"
+      },
+      "description": "Fresh, elegant, and undeniably sexy––yet wearable for every day. Inspired by Prada’s Paradoxe, Ambery Neroli is a luxurious and profoundly sensual harmo...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Ambery_Neroli_e205e92f-f186-4d55-8864-bb832d928e36.jpg?v=1781021597"
+      ],
+      "name": "Ambery Neroli",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 28.8,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 32,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50AMNUS",
+          "url": "https://dossier.co/products/ambery-neroli?SIZE=50ml"
+        }
+      ],
+      "sku": "DI50AMNUS",
+      "url": "https://dossier.co/products/ambery-neroli"
+    }
+  ]
+}

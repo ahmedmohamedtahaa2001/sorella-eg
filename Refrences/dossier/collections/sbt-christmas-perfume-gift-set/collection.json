@@ -1,0 +1,116 @@
+{
+  "url": "https://dossier.co/collections/sbt-christmas-perfume-gift-set",
+  "name": "Christmas perfume gift set",
+  "meta": {
+    "og:title": "Christmas perfume gift set",
+    "description": "Luxury fragrances. Premium quality, not pricing. ",
+    "og:description": "Luxury fragrances. Premium quality, not pricing. ",
+    "og:url": "https://dossier.co/collections/sbt-christmas-perfume-gift-set",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-christmas-perfume-gift-set"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Event - Christmas perfume gift set"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Christmas perfume gift set",
+      "description": "",
+      "url": "/collections/sbt-christmas-perfume-gift-set",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/ambery-saffron"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/ambery-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/woody-sandalwood"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/floral-marshmallow"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/woody-sage"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/fruity-almond"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/floral-lavender"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/gourmand-white-flowers"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/caramelized-lavender-hazelnut"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/golden-rum-amber"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "/products/sage-black-tea-renew"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "/products/aromatic-star-anise"
+          }
+        ]
+      }
+    }
+  ]
+}

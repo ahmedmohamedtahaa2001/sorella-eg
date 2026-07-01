@@ -1,0 +1,326 @@
+{
+  "url": "https://dossier.co/collections/the-genderless-collection",
+  "name": "Dossier Originals ",
+  "meta": {
+    "og:title": "Dossier Originals ",
+    "description": "Dossier Originals ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Dossier Originals ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/dossier-originals",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/dossier-originals"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Dossier Originals"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Dossier Originals ",
+      "description": "Dossier Originals ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/dossier-originals",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/originals-trial-set"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/better-days"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/of-the-hour"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/caramelized-lavender-hazelnut"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/sunny-vetiver-neroli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/fiery-leather-rhubarb"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/golden-rum-amber"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/fresh-margarita-lime"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/smoky-mezcal-cucumber"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/bubbly-spritz-bitters"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "/products/sage-black-tea-renew"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "/products/ginger-grapefruit-zing"
+          },
+          {
+            "@type": "ListItem",
+            "position": 13,
+            "url": "/products/rose-basil-bliss"
+          },
+          {
+            "@type": "ListItem",
+            "position": 14,
+            "url": "/products/orchid-sandalwood-at-dusk"
+          },
+          {
+            "@type": "ListItem",
+            "position": 15,
+            "url": "/products/oud-rose-on-fire"
+          },
+          {
+            "@type": "ListItem",
+            "position": 16,
+            "url": "/products/discovery-set"
+          },
+          {
+            "@type": "ListItem",
+            "position": 17,
+            "url": "/products/neroli-romance"
+          },
+          {
+            "@type": "ListItem",
+            "position": 18,
+            "url": "/products/free-the-musk"
+          },
+          {
+            "@type": "ListItem",
+            "position": 19,
+            "url": "/products/chasing-the-sun"
+          },
+          {
+            "@type": "ListItem",
+            "position": 20,
+            "url": "/products/zest-for-life"
+          },
+          {
+            "@type": "ListItem",
+            "position": 21,
+            "url": "/products/fruits-of-love"
+          },
+          {
+            "@type": "ListItem",
+            "position": 22,
+            "url": "/products/slice-of-heaven"
+          },
+          {
+            "@type": "ListItem",
+            "position": 23,
+            "url": "/products/milky-white"
+          },
+          {
+            "@type": "ListItem",
+            "position": 24,
+            "url": "/products/pink-blossom"
+          },
+          {
+            "@type": "ListItem",
+            "position": 25,
+            "url": "/products/blue-breeze"
+          },
+          {
+            "@type": "ListItem",
+            "position": 26,
+            "url": "/products/green-lush"
+          },
+          {
+            "@type": "ListItem",
+            "position": 27,
+            "url": "/products/tantalizing-red"
+          },
+          {
+            "@type": "ListItem",
+            "position": 28,
+            "url": "/products/yellow-daze"
+          },
+          {
+            "@type": "ListItem",
+            "position": 29,
+            "url": "/products/black-shadow"
+          },
+          {
+            "@type": "ListItem",
+            "position": 30,
+            "url": "/products/orange-glow"
+          },
+          {
+            "@type": "ListItem",
+            "position": 31,
+            "url": "/products/summer-crush"
+          },
+          {
+            "@type": "ListItem",
+            "position": 32,
+            "url": "/products/winter-kiss"
+          },
+          {
+            "@type": "ListItem",
+            "position": 33,
+            "url": "/products/better-together"
+          },
+          {
+            "@type": "ListItem",
+            "position": 34,
+            "url": "/products/spring-fling"
+          },
+          {
+            "@type": "ListItem",
+            "position": 35,
+            "url": "/products/from-the-heart"
+          },
+          {
+            "@type": "ListItem",
+            "position": 36,
+            "url": "/products/blooming-for-you"
+          },
+          {
+            "@type": "ListItem",
+            "position": 37,
+            "url": "/products/call-me-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 38,
+            "url": "/products/it-factor"
+          },
+          {
+            "@type": "ListItem",
+            "position": 39,
+            "url": "/products/autumn-rendezvous"
+          },
+          {
+            "@type": "ListItem",
+            "position": 40,
+            "url": "/products/lost-americana"
+          },
+          {
+            "@type": "ListItem",
+            "position": 41,
+            "url": "/products/advent-calendar-retail"
+          },
+          {
+            "@type": "ListItem",
+            "position": 42,
+            "url": "/products/big-scent-energy-trio-set"
+          },
+          {
+            "@type": "ListItem",
+            "position": 43,
+            "url": "/products/glow-on-the-go-trio-set"
+          },
+          {
+            "@type": "ListItem",
+            "position": 44,
+            "url": "/products/electric-picks-jewelry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 45,
+            "url": "/products/all-time-bestsellers"
+          },
+          {
+            "@type": "ListItem",
+            "position": 46,
+            "url": "/products/mutual-chemistry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 47,
+            "url": "/products/universal-crowd-pleasers"
+          },
+          {
+            "@type": "ListItem",
+            "position": 48,
+            "url": "/products/nace-de-ti"
+          },
+          {
+            "@type": "ListItem",
+            "position": 49,
+            "url": "/products/advent-calendar-2025"
+          },
+          {
+            "@type": "ListItem",
+            "position": 50,
+            "url": "/products/dulce-flor"
+          },
+          {
+            "@type": "ListItem",
+            "position": 51,
+            "url": "/products/airy-linens"
+          },
+          {
+            "@type": "ListItem",
+            "position": 52,
+            "url": "/products/daily-bliss-duo"
+          },
+          {
+            "@type": "ListItem",
+            "position": 53,
+            "url": "/products/springtime-sweetness-duo"
+          },
+          {
+            "@type": "ListItem",
+            "position": 54,
+            "url": "/products/choose-your-3-free-samples"
+          }
+        ]
+      }
+    }
+  ]
+}

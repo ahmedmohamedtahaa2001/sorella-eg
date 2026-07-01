@@ -1,0 +1,66 @@
+{
+  "id": 8028356772027,
+  "title": "Velvet Santal Roll-on",
+  "handle": "velvet-santal-perfume-oil",
+  "body_html": "<p>Velvet Santal is a warm, luxurious, and deeply sensual fragrance, perfect for those who love rich oriental scents. It blends sweetness, spice, and oud to create an aura of mystery and elegance</p>\n<p>Amount: 6ml</p>\n<p> </p>\n<p>Fragrance Notes:<br>-Top Notes: Saffron, Bergamot <br>-Heart Notes: Oud, Bulgarian Rose <br>-Base Notes:Tonka Bean, Amber, Sugar, White Musk</p>\n<p> </p>\n<p>When to wear: <br>It is ideal for sophisticated Ramadan nights, lavish suhoor, and grand iftar gatherings.</p>\n<p> </p>",
+  "published_at": "2026-04-21T10:28:44+02:00",
+  "created_at": "2025-02-25T02:40:38+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47095455187131,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "380.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8028356772027,
+      "created_at": "2025-10-13T14:21:14+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 37576554807483,
+      "created_at": "2025-03-27T21:23:26+02:00",
+      "position": 1,
+      "updated_at": "2025-03-27T23:15:21+02:00",
+      "product_id": 8028356772027,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5712.jpg?v=1743110121",
+      "width": 2827,
+      "height": 2827
+    },
+    {
+      "id": 37340212789435,
+      "created_at": "2025-03-01T16:42:33+02:00",
+      "position": 2,
+      "updated_at": "2025-03-27T23:15:21+02:00",
+      "product_id": 8028356772027,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/BFEE8E9D-9ACE-4D1F-9ACE-3125B67190B6.jpg?v=1743110121",
+      "width": 3464,
+      "height": 3464
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "url": "https://dossier.co/collections/sbt-seductive-perfumes",
+  "name": "Seductive Perfumes : Best Seductive Fragrances with Seductive notes & scents",
+  "meta": {
+    "og:title": "Seductive Perfumes : Best Seductive Fragrances with Seductive notes & scents",
+    "description": "Seductive Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Seductive Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-seductive-perfumes",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-seductive-perfumes"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Offers - Seductive Perfumes"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Seductive Perfumes : Best Seductive Fragrances with Seductive notes & scents",
+      "description": "Seductive Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-seductive-perfumes",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/ambery-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/floral-marshmallow"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/floral-lavender"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/fougere-oud"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/ambery-sage"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/powdery-orange-flower"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/fougere-pink-pepper"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/ambery-mint"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/spicy-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/woody-coriander"
+          }
+        ]
+      }
+    }
+  ]
+}

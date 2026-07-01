@@ -1,0 +1,29 @@
+{%- comment -%} Activate account {%- endcomment -%}
+<section class="sorella-account surface-gradient">
+  <div class="container container--read">
+    <div class="glass-panel glass-panel--xl sorella-account__card">
+      <div class="sorella-account__head">
+        <span class="t-eyebrow text-gold">{{ shop.name }}</span>
+        <h1 class="t-display-md">Activate your account</h1>
+        <p class="t-body-sm text-mist">Create a password to finish setting up your account.</p>
+      </div>
+      {%- form 'activate_customer_password', class: 'sorella-account__form' -%}
+        {%- if form.errors -%}
+          <div class="sorella-account__error t-caption">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="sorella-field">
+          <label class="sorella-field__label t-caption-strong" for="activate_password">{{ 'customer.login.password' | t }}</label>
+          <input type="password" name="customer[password]" id="activate_password" autocomplete="new-password" required>
+        </div>
+        <div class="sorella-field">
+          <label class="sorella-field__label t-caption-strong" for="activate_password_confirm">Confirm password</label>
+          <input type="password" name="customer[password_confirmation]" id="activate_password_confirm" autocomplete="new-password" required>
+        </div>
+        <div class="sorella-account__links">
+          <button type="submit" class="btn btn--primary">Activate</button>
+          <button type="submit" name="decline" class="btn btn--text">Decline invitation</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+{
+  "url": "https://dossier.co/products/from-the-heart",
+  "name": "From the Heart",
+  "inspired_by": "Dossier Dossier Perfumes",
+  "meta": {
+    "og:title": "Mother's Day 50ml Duo Set - From the Heart",
+    "twitter:title": "Mother's Day 50ml Duo Set - From the Heart",
+    "description": "Spritz unconditional love with our EXCLUSIVE From The Heart gift set. For a limited time, buy two of our warmest designer-inspired bestsellers in one gi...",
+    "og:description": "Spritz unconditional love with our EXCLUSIVE From The Heart gift set. For a limited time, buy two of our warmest designer-inspired bestsellers in one gi...",
+    "twitter:description": "Spritz unconditional love with our EXCLUSIVE From The Heart gift set. For a limited time, buy two of our warmest designer-inspired bestsellers in one gi...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/from-the-heart",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Mother_s-Day-Set-Box-Side-view-closed-_-2-perfumes.jpg?v=1762865836",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Mother_s-Day-Set-Box-Side-view-closed-_-2-perfumes.jpg?v=1762865836",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/from-the-heart"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "From the Heart"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Dossier Perfumes"
+      },
+      "description": "Spritz unconditional love with our EXCLUSIVE From The Heart gift set. For a limited time, buy two of our warmest designer-inspired bestsellers in one gi...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Mother_s-Day-Set-Box-Side-view-closed-_-2-perfumes.jpg?v=1762865836"
+      ],
+      "name": "From the Heart",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 66.6,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 74,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DOS50MDAYDUOFTH",
+          "url": "https://dossier.co/products/from-the-heart?Title=Default+Title"
+        }
+      ],
+      "sku": "DOS50MDAYDUOFTH",
+      "url": "https://dossier.co/products/from-the-heart"
+    }
+  ]
+}

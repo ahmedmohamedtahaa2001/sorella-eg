@@ -1,0 +1,112 @@
+{
+  "url": "https://dossier.co/products/woody-oakmoss",
+  "name": "Woody Oakmoss",
+  "inspired_by": "Dossier Inspired by Chanel's Coco Mademoiselle",
+  "meta": {
+    "og:title": "Chanel's Coco Mademoiselle Dupe Perfume: Woody Oakmoss - Dossier Perfumes",
+    "twitter:title": "Chanel's Coco Mademoiselle Dupe Perfume: Woody Oakmoss - Dossier Perfumes",
+    "description": "Buy ➔ Woody Oakmoss Perfume Online ✔️ Inspired by Chanel's Coco Mademoiselle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Buy ➔ Woody Oakmoss Perfume Online ✔️ Inspired by Chanel's Coco Mademoiselle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:description": "Buy ➔ Woody Oakmoss Perfume Online ✔️ Inspired by Chanel's Coco Mademoiselle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/woody-oakmoss",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Woody_Oakmoss_488986d7-b4f1-46ad-a761-f667ad7c7b51.jpg?v=1779275663",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Woody_Oakmoss_488986d7-b4f1-46ad-a761-f667ad7c7b51.jpg?v=1779275663",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/woody-oakmoss?Size=100ml"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Woody Oakmoss"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Chanel's Coco Mademoiselle"
+      },
+      "description": "Buy ➔ Woody Oakmoss Perfume Online ✔️ Inspired by Chanel's Coco Mademoiselle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Woody_Oakmoss_488986d7-b4f1-46ad-a761-f667ad7c7b51.jpg?v=1779275663"
+      ],
+      "name": "Woody Oakmoss",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 28.8,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 32,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50WOUS",
+          "url": "https://dossier.co/products/woody-oakmoss?Size=Fragrance+50ml%2F1.7oz"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 44.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 49,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI100WOUS",
+          "url": "https://dossier.co/products/woody-oakmoss?Size=100ml"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 28.8,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 32,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DOS50RETAILWO",
+          "url": "https://dossier.co/products/woody-oakmoss?Size=50ml+2.0+retail"
+        }
+      ],
+      "sku": "DI100WOUS",
+      "url": "https://dossier.co/products/woody-oakmoss?Size=100ml"
+    }
+  ]
+}

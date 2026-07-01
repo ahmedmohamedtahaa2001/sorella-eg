@@ -1,0 +1,66 @@
+{
+  "id": 8028355952827,
+  "title": "Sweet oud perfume oil",
+  "handle": "sweet-oud-perfume-oil",
+  "body_html": "<p>Sweet Oud is a rich, opulent, and deeply sensual fragrance that embodies luxury and warmth. With its intoxicating blend of creamy praline, velvety rose, and smoky oud. The sweet praline and vanilla soften the intensity of the deep oud and rich rose, resulting in a scent that is bold yet irresistibly smooth. <br>Amount: 5ml</p>\n<p> </p>\n<p>Fragrance notes:<br>-Top Notes: Saffron <br>-Heart Notes: Rose, Oud <br>-Base Notes: Praline, Vanilla, Woody Notes</p>\n<p> </p>\n<p>When to wear:<br>It creates an aura of elegance and mystery, making it perfect for Ramadan nights, indulgent suhoor, and glamorous iftar gatherings. </p>",
+  "published_at": "2026-04-21T10:29:07+02:00",
+  "created_at": "2025-02-25T02:35:05+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47095454990523,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "380.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8028355952827,
+      "created_at": "2025-10-13T14:20:14+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 37576559001787,
+      "created_at": "2025-03-27T21:23:43+02:00",
+      "position": 1,
+      "updated_at": "2025-03-27T21:23:44+02:00",
+      "product_id": 8028355952827,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5709.jpg?v=1743103424",
+      "width": 2827,
+      "height": 2827
+    },
+    {
+      "id": 37293069402299,
+      "created_at": "2025-02-25T02:40:36+02:00",
+      "position": 2,
+      "updated_at": "2025-03-27T21:23:44+02:00",
+      "product_id": 8028355952827,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5227.jpg?v=1743103424",
+      "width": 2827,
+      "height": 2827
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

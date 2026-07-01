@@ -1,0 +1,111 @@
+{%- comment -%}
+  sorella-filter-sort-bar — sticky glass filter/sort bar (§10). Blur does NOT
+  cascade into the grid below. One <form> holds both facet filters and sort, so
+  submitting preserves everything (auto-submit via theme.js). Used on Collection + Search.
+{%- endcomment -%}
+{%- liquid
+  assign results = collection
+  if template.name == 'search'
+    assign results = search
+  endif
+-%}
+<div class="sorella-filterbar" data-section-id="{{ section.id }}">
+  <div class="container container--catalog sorella-filterbar__inner glass-panel glass-panel--md">
+    <div class="sorella-filterbar__left">
+      <button type="button" class="btn btn--ghost btn--sm sorella-filterbar__toggle"
+        data-filter-toggle="filter-panel" aria-expanded="false">
+        {% render 'sorella-icon', name: 'filter', size: 16 %} {{ 'products.facets.filter' | t }}
+      </button>
+      {%- if results.results_count or results.products_count -%}
+        <span class="t-caption text-mist">{{ 'products.facets.results_count' | t: count: results.products_count | default: results.results_count }}</span>
+      {%- endif -%}
+    </div>
+
+    <form method="get" class="sorella-filterbar__form" data-filter-form>
+      {%- if template.name == 'search' -%}
+        <input type="hidden" name="q" value="{{ search.terms | escape }}">
+        <input type="hidden" name="type" value="product">
+      {%- endif -%}
+
+      <div class="sorella-filterbar__sort">
+        <label class="t-caption" for="sort-by">{{ 'products.facets.sort_by' | t }}</label>
+        {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+        <select id="sort-by" name="sort_by" class="sorella-filterbar__select t-caption">
+          {%- for option in results.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+
+      {%- if results.filters.size > 0 -%}
+        <div class="sorella-filterbar__panel" id="filter-panel">
+          {%- for filter in results.filters -%}
+            <fieldset class="sorella-filterbar__group">
+              <legend class="t-caption-strong">{{ filter.label }}</legend>
+              {%- case filter.type -%}
+                {%- when 'price_range' -%}
+                  <div class="sorella-filterbar__price">
+                    <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ filter.range_min | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency }}">
+                    <span aria-hidden="true">–</span>
+                    <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency }}">
+                  </div>
+                {%- else -%}
+                  <ul class="sorella-filterbar__values">
+                    {%- for value in filter.values -%}
+                      <li>
+                        <label class="sorella-filterbar__value t-caption">
+                          <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                          {{ value.label }} <span class="text-mist">({{ value.count }})</span>
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+              {%- endcase -%}
+            </fieldset>
+          {%- endfor -%}
+
+          {%- if results.filters.size > 0 -%}
+            <a href="{{ results.url | default: collection.url }}" class="btn btn--text sorella-filterbar__clear">{{ 'products.facets.clear' | t }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <noscript><button type="submit" class="btn btn--ghost btn--sm">{{ 'products.facets.apply' | t }}</button></noscript>
+    </form>
+  </div>
+</div>
+
+{% stylesheet %}
+  .sorella-filterbar { position: sticky; top: calc(var(--nav-dock-height) + var(--space-sm)); z-index: 20; padding-block: var(--space-md); }
+  .sorella-filterbar__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); flex-wrap: wrap; padding: var(--space-md) var(--space-lg); color: var(--color-parchment); }
+  .sorella-filterbar__left { display: flex; align-items: center; gap: var(--space-md); }
+  .sorella-filterbar__form { display: flex; align-items: center; gap: var(--space-lg); }
+  .sorella-filterbar__sort { display: flex; align-items: center; gap: var(--space-xs); }
+  .sorella-filterbar__select { background: transparent; color: inherit; border: 1px solid var(--color-mist-40); border-radius: var(--radius-pill); padding: 8px var(--space-md); }
+  .sorella-filterbar__select option { color: var(--color-ink); }
+  .sorella-filterbar__panel {
+    display: none; position: absolute; inset-inline: 0; inset-block-start: calc(100% + var(--space-xs));
+    background: var(--color-ink-90); -webkit-backdrop-filter: blur(var(--blur-panel)); backdrop-filter: blur(var(--blur-panel));
+    border: var(--border-hairline); border-radius: var(--radius-lg); padding: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-lg);
+  }
+  .sorella-filterbar__panel.is-open { display: grid; }
+  .sorella-filterbar__group { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
+  .sorella-filterbar__values { display: flex; flex-direction: column; gap: var(--space-xs); max-height: 220px; overflow-y: auto; }
+  .sorella-filterbar__value { display: flex; align-items: center; gap: var(--space-xs); cursor: pointer; }
+  .sorella-filterbar__price { display: flex; align-items: center; gap: var(--space-xs); }
+  .sorella-filterbar__price input { width: 90px; padding: 8px; background: transparent; color: inherit; border: 1px solid var(--color-mist-40); border-radius: var(--radius-sm); }
+  .sorella-filterbar__clear { grid-column: 1 / -1; justify-self: start; }
+  .sorella-filterbar__inner { position: relative; }
+  @media (max-width: 640px) {
+    .sorella-filterbar__form { width: 100%; justify-content: space-between; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Filter & sort bar",
+  "settings": [],
+  "presets": [{ "name": "Filter & sort bar" }]
+}
+{% endschema %}

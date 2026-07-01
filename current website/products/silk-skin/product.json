@@ -1,0 +1,75 @@
+{
+  "id": 8438032433339,
+  "title": "Silk skin",
+  "handle": "silk-skin",
+  "body_html": "<p class=\"isSelectedEnd\"> </p>\n<p class=\"isSelectedEnd\"><span>The clean girl fragrance in a bottle.</span></p>\n<p class=\"isSelectedEnd\"><span>Creamy fig, soft florals, and silky sandalwood melt into warm skin, creating a scent that feels fresh, expensive, and effortlessly put together. Think glowing skin, white linen, gold jewelry, and a summer spent somewhere beautiful.</span></p>\n<p class=\"isSelectedEnd\"><span>Notes:</span><br><span>Fig • Cassis • Water Lily • Iris • Jasmine • Sandalwood • Vanilla • Patchouli • Soft Musk</span></p>\n<p><span>Wear it when:</span><br><span>You want to smell naturally good. Perfect for everyday wear, sunny afternoons, date nights, vacations, and those moments when you want people to ask, \"What are you wearing?”</span></p>",
+  "published_at": "2026-06-08T15:10:41+03:00",
+  "created_at": "2026-06-07T13:36:20+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47930912637115,
+      "title": "30ml",
+      "option1": "30ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "640.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8438032433339,
+      "created_at": "2026-06-07T13:36:21+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    },
+    {
+      "id": 47930912932027,
+      "title": "50ml",
+      "option1": "50ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "850.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 2,
+      "product_id": 8438032433339,
+      "created_at": "2026-06-07T13:38:44+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42599372783803,
+      "created_at": "2026-06-07T13:36:02+03:00",
+      "position": 1,
+      "updated_at": "2026-06-07T13:36:04+03:00",
+      "product_id": 8438032433339,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-0896.png?v=1780828564",
+      "width": 896,
+      "height": 1195
+    }
+  ],
+  "options": [
+    {
+      "name": "Size",
+      "position": 1,
+      "values": [
+        "30ml",
+        "50ml"
+      ]
+    }
+  ]
+}

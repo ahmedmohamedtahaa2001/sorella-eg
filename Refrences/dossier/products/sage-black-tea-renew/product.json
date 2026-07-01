@@ -1,0 +1,126 @@
+{
+  "url": "https://dossier.co/products/sage-black-tea-renew",
+  "name": "Sage & Black Tea Renew",
+  "inspired_by": "Dossier Dossier Originals",
+  "meta": {
+    "og:title": "Sage & Black Tea Renew - Dossier Perfumes",
+    "twitter:title": "Sage & Black Tea Renew - Dossier Perfumes",
+    "description": "The Virtue: Sage and black tea are both known for their grounding and clarifying properties.The Scent: The aromatic fusion of sage and black tea exudes ...",
+    "og:description": "The Virtue: Sage and black tea are both known for their grounding and clarifying properties.The Scent: The aromatic fusion of sage and black tea exudes ...",
+    "twitter:description": "The Virtue: Sage and black tea are both known for their grounding and clarifying properties.The Scent: The aromatic fusion of sage and black tea exudes ...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/sage-black-tea-renew",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Sage-_-Black-Tea-Renew_46c52524-caf6-4da5-a53a-43f2f4db6bdb.jpg?v=1779275956",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Sage-_-Black-Tea-Renew_46c52524-caf6-4da5-a53a-43f2f4db6bdb.jpg?v=1779275956",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=Sage+%26+Black+Tea+Renew"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Sage & Black Tea Renew"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Dossier Originals"
+      },
+      "description": "The Virtue: Sage and black tea are both known for their grounding and clarifying properties.The Scent: The aromatic fusion of sage and black tea exudes ...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Sage-_-Black-Tea-Renew_46c52524-caf6-4da5-a53a-43f2f4db6bdb.jpg?v=1779275956"
+      ],
+      "name": "Sage & Black Tea Renew",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "810086661404",
+          "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=Sage+%26+Black+Tea+Renew"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "810086661398",
+          "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=Ginger+%26+Grapefruit+Zing"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "810086661381",
+          "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=Rose+%26+Basil+Bliss"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 0,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 0,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "11",
+          "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=BF+Free"
+        }
+      ],
+      "sku": "810086661404",
+      "url": "https://dossier.co/products/sage-black-tea-renew?Wellness=Sage+%26+Black+Tea+Renew"
+    }
+  ]
+}

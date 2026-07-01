@@ -1,0 +1,15 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "sorella-announcement-bar",
+      "settings": {}
+    },
+    "header": {
+      "type": "sorella-header",
+      "settings": {}
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

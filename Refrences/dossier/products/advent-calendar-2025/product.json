@@ -1,0 +1,98 @@
+{
+  "url": "https://dossier.co/products/advent-calendar-2025",
+  "name": "Advent Calendar",
+  "inspired_by": "Dossier Dossier Perfumes",
+  "meta": {
+    "og:title": "Advent Calendar",
+    "twitter:title": "Advent Calendar",
+    "description": "Welcome to your fragrance wonderland. Our limited-edition advent calendar features 12 designer-inspired bestsellers and some of our most beloved in-hous...",
+    "og:description": "Welcome to your fragrance wonderland. Our limited-edition advent calendar features 12 designer-inspired bestsellers and some of our most beloved in-hous...",
+    "twitter:description": "Welcome to your fragrance wonderland. Our limited-edition advent calendar features 12 designer-inspired bestsellers and some of our most beloved in-hous...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/advent-calendar-2025",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Advent-Calendar-Front_1.png?v=1777979606",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Advent-Calendar-Front_1.png?v=1777979606",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "2490",
+    "og:image:height": "2490"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/advent-calendar-2025?Items=Advent+Calendar"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Advent Calendar"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Dossier Perfumes"
+      },
+      "description": "Welcome to your fragrance wonderland. Our limited-edition advent calendar features 12 designer-inspired bestsellers and some of our most beloved in-hous...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Advent-Calendar-Front_1.png?v=1777979606"
+      ],
+      "name": "Advent Calendar",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 44.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 49,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DOSAC2025",
+          "url": "https://dossier.co/products/advent-calendar-2025?Items=Advent+Calendar"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 132.3,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 147,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "BF202535",
+          "url": "https://dossier.co/products/advent-calendar-2025?Items=Advent+Calendar+x3"
+        }
+      ],
+      "sku": "DOSAC2025",
+      "url": "https://dossier.co/products/advent-calendar-2025?Items=Advent+Calendar"
+    }
+  ]
+}

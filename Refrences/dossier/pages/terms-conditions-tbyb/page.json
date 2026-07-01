@@ -1,0 +1,26 @@
+{
+  "url": "https://dossier.co/pages/terms-conditions-tbyb",
+  "name": "Dossier Perfumes | Made in France perfumes, fair-prices",
+  "meta": {
+    "og:title": "Dossier Perfumes | Made in France perfumes, fair-prices",
+    "description": "Luxury fragrances. Premium quality, not pricing. ",
+    "og:description": "Luxury fragrances. Premium quality, not pricing. ",
+    "og:url": "https://dossier.co/pages/terms-conditions-tbyb"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/pages/terms-conditions-tbyb"
+    }
+  ]
+}

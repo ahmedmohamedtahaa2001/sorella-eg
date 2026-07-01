@@ -1,0 +1,103 @@
+{%- comment -%}
+  sorella-article — Blog article body (Page Templates Report §5.2).
+  Renders the current {{ article }} object: editorial header (optional eyebrow from
+  first tag, display-lg title, byline with date + author), optional featured image,
+  then article.content inside .rte. Optional native share links (no external scripts).
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="sorella-article surface-parchment" data-section-id="{{ section.id }}">
+  <div class="container container--read sorella-article__inner">
+
+    <div class="sorella-article__back">
+      {% render 'sorella-button', label: s.back_label, href: blog.url, style: 'text' %}
+    </div>
+
+    <header class="sorella-article__head">
+      {%- if article.tags.first != blank -%}
+        <span class="t-eyebrow text-gold">{{ article.tags.first }}</span>
+      {%- endif -%}
+      <h1 class="t-display-lg">{{ article.title }}</h1>
+      {%- if s.show_date or s.show_author -%}
+        <p class="sorella-article__byline t-caption text-mist">
+          {%- if s.show_date -%}{{ article.published_at | date: '%B %-d, %Y' }}{%- endif -%}
+          {%- if s.show_author -%} &middot; {{ article.author }}{%- endif -%}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if s.show_featured_image and article.image != blank -%}
+      <div class="sorella-article__media media media--16x9">
+        {{ article.image | image_url: width: 1600 | image_tag:
+          loading: 'eager',
+          sizes: '(min-width: 820px) 820px, 100vw',
+          widths: '480, 800, 1200, 1600',
+          alt: article.title | escape }}
+      </div>
+    {%- endif -%}
+
+    <div class="sorella-article__content rte t-body">
+      {{ article.content }}
+    </div>
+
+    {%- if s.show_share -%}
+      <footer class="sorella-article__share">
+        <span class="t-caption-strong">{{ s.share_label }}</span>
+        <div class="sorella-article__share-links">
+          <a href="https://twitter.com/intent/tweet?url={{ shop.url | append: article.url | url_encode }}&text={{ article.title | url_encode }}"
+             class="sorella-article__share-link" target="_blank" rel="noopener">
+            {% render 'sorella-icon', name: 'close', size: 18, label: 'Share on X' %}
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url | url_encode }}"
+             class="sorella-article__share-link" target="_blank" rel="noopener">
+            {% render 'sorella-icon', name: 'facebook', size: 18, label: 'Share on Facebook' %}
+          </a>
+        </div>
+      </footer>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+  .sorella-article {
+    padding-block-start: calc(var(--nav-dock-height) + var(--space-xxl));
+    padding-block-end: var(--space-section);
+  }
+  .sorella-article__inner { display: flex; flex-direction: column; gap: var(--space-xl); }
+  .sorella-article__back { margin-block-end: calc(var(--space-md) * -1); }
+  .sorella-article__head { display: flex; flex-direction: column; gap: var(--space-md); }
+  .sorella-article__byline { display: flex; flex-wrap: wrap; gap: var(--space-xxs); }
+  .sorella-article__media { border-radius: var(--radius-lg); }
+  .sorella-article__share {
+    display: flex; align-items: center; gap: var(--space-md);
+    padding-block-start: var(--space-lg);
+    border-block-start: 1px solid var(--color-mist-25);
+  }
+  .sorella-article__share-links { display: inline-flex; gap: var(--space-xs); }
+  .sorella-article__share-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-mist-40);
+    transition: border-color var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out);
+  }
+  .sorella-article__share-link:hover { border-color: var(--color-gold-40); color: var(--color-gold); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "back_label", "label": "Back button label", "default": "All stories" },
+    { "type": "checkbox", "id": "show_featured_image", "label": "Show featured image", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
+    { "type": "checkbox", "id": "show_date", "label": "Show date", "default": true },
+    { "type": "checkbox", "id": "show_share", "label": "Show share links", "default": true },
+    { "type": "text", "id": "share_label", "label": "Share label", "default": "Share this story" }
+  ],
+  "presets": [{ "name": "Article" }]
+}
+{% endschema %}

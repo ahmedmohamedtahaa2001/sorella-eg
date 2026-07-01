@@ -1,0 +1,96 @@
+{
+  "url": "https://dossier.co/collections/sbt-spring-fragrance",
+  "name": "Spring Fragrance : Best Spring Perfumes with Spring notes & scents",
+  "meta": {
+    "og:title": "Spring Fragrance : Best Spring Perfumes with Spring notes & scents",
+    "description": "Spring Fragrance Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Spring Fragrance Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-spring-fragrance",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-spring-fragrance"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Event - Spring Fragrance"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Spring Fragrance : Best Spring Perfumes with Spring notes & scents",
+      "description": "Spring Fragrance Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-spring-fragrance",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/fruity-honey"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/floral-violet"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/floral-pear"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/floral-honeysuckle"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/floral-peony"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/floral-ylang-ylang"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/citrus-ginger"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/woody-green-apple"
+          }
+        ]
+      }
+    }
+  ]
+}

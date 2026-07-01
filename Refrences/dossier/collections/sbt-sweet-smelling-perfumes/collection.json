@@ -1,0 +1,101 @@
+{
+  "url": "https://dossier.co/collections/sbt-sweet-smelling-perfumes",
+  "name": "Sweet Smelling Perfumes : Best Sweet Smellings Fragrances with Sweet Smellings notes & scents",
+  "meta": {
+    "og:title": "Sweet Smelling Perfumes : Best Sweet Smellings Fragrances with Sweet Smellings notes & scents",
+    "description": "Sweet Smelling Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Sweet Smelling Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-sweet-smelling-perfumes",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-sweet-smelling-perfumes"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Scents - Sweet Smelling Perfumes"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Sweet Smelling Perfumes : Best Sweet Smellings Fragrances with Sweet Smellings notes & scents",
+      "description": "Sweet Smelling Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-sweet-smelling-perfumes",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/ambery-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/fruity-almond"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/ambery-cherry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/gourmand-white-flowers"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/fruity-brown-sugar"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/woody-chestnut"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/gourmand-orange-blossom"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/gourmand-patchouli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/caramelized-lavender-hazelnut"
+          }
+        ]
+      }
+    }
+  ]
+}

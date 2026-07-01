@@ -1,0 +1,14 @@
+{%- comment -%}
+  sorella-trust-cell — icon + short claim (§9). Small glass card.
+  Params: icon (string), heading (string), text (string), glass (boolean, default true)
+{%- endcomment -%}
+{%- capture trust_inner -%}
+  {%- if icon != blank -%}<span class="sorella-trust-cell__icon">{% render 'sorella-icon', name: icon, size: 24 %}</span>{%- endif -%}
+  {%- if heading != blank -%}<span class="t-body-strong">{{ heading }}</span>{%- endif -%}
+  {%- if text != blank -%}<span class="t-body-sm text-mist">{{ text }}</span>{%- endif -%}
+{%- endcapture -%}
+{%- if glass == false -%}
+  <div class="sorella-trust-cell">{{ trust_inner }}</div>
+{%- else -%}
+  {% render 'sorella-glass-panel', content: trust_inner, variant: 'card', class: 'sorella-trust-cell' %}
+{%- endif -%}

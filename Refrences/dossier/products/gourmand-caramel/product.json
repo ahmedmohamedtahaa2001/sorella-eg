@@ -1,0 +1,84 @@
+{
+  "url": "https://dossier.co/products/gourmand-caramel",
+  "name": "Gourmand Caramel",
+  "inspired_by": "Dossier Inspired by Rare Beauty's Rare",
+  "meta": {
+    "og:title": "Gourmand Caramel",
+    "twitter:title": "Gourmand Caramel",
+    "description": "Your perfect cozy caramel and vanilla fragrance. Inspired by Rare EDP by Rare Beauty, Gourmand Caramel is your ultimate warm and grown-up gourmand indul...",
+    "og:description": "Your perfect cozy caramel and vanilla fragrance. Inspired by Rare EDP by Rare Beauty, Gourmand Caramel is your ultimate warm and grown-up gourmand indul...",
+    "twitter:description": "Your perfect cozy caramel and vanilla fragrance. Inspired by Rare EDP by Rare Beauty, Gourmand Caramel is your ultimate warm and grown-up gourmand indul...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/gourmand-caramel",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Caramel_701d3e34-2b6e-4d26-8da0-626d51beeef3.jpg?v=1779964257",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Caramel_701d3e34-2b6e-4d26-8da0-626d51beeef3.jpg?v=1779964257",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/gourmand-caramel"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gourmand Caramel"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Rare Beauty's Rare"
+      },
+      "description": "Your perfect cozy caramel and vanilla fragrance. Inspired by Rare EDP by Rare Beauty, Gourmand Caramel is your ultimate warm and grown-up gourmand indul...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Caramel_701d3e34-2b6e-4d26-8da0-626d51beeef3.jpg?v=1779964257"
+      ],
+      "name": "Gourmand Caramel",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 28.8,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 32,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50GCAUS",
+          "url": "https://dossier.co/products/gourmand-caramel?Title=Default+Title"
+        }
+      ],
+      "sku": "DI50GCAUS",
+      "url": "https://dossier.co/products/gourmand-caramel"
+    }
+  ]
+}

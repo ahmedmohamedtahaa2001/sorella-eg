@@ -1,0 +1,55 @@
+{
+  "id": 8254737350843,
+  "title": "She’s bold perfume oil",
+  "handle": "she-s-bold-perfume-oil",
+  "body_html": "<p data-start=\"79\" data-end=\"379\"><strong data-start=\"79\" data-end=\"154\">She’s bold Layering Oil — your secret to an extra-intense, long-lasting scent.</strong><br data-start=\"154\" data-end=\"157\">Use it alone for a soft, warm glow… or layer it with any perfume to make it deeper, sweeter, and more unforgettable. It melts into the skin and boosts the richness of your fragrance, making every spray last <em data-start=\"364\" data-end=\"378\">hours longer</em>.</p>\n<p data-start=\"381\" data-end=\"525\"><strong data-start=\"381\" data-end=\"391\">Notes:</strong><br data-start=\"391\" data-end=\"394\">A creamy blend of <strong data-start=\"412\" data-end=\"434\">extra-dose vanilla</strong>, <strong data-start=\"436\" data-end=\"449\">soft black currant</strong>, and <b>boozy rum</b> — the perfect base for any perfume you want to elevate.</p>\n<p data-start=\"527\" data-end=\"569\"><strong data-start=\"527\" data-end=\"569\">Layer it. Intensify it. Make it yours.</strong></p>",
+  "published_at": "2025-12-02T17:50:14+02:00",
+  "created_at": "2025-12-02T17:48:17+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47235344203963,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "380.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8254737350843,
+      "created_at": "2025-12-02T17:48:19+02:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 41159326531771,
+      "created_at": "2025-12-02T17:48:38+02:00",
+      "position": 1,
+      "updated_at": "2025-12-02T17:48:39+02:00",
+      "product_id": 8254737350843,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5848.jpg?v=1764690519",
+      "width": 1688,
+      "height": 2110
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

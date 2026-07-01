@@ -1,0 +1,106 @@
+{
+  "url": "https://dossier.co/collections/sbt-summer-perfume",
+  "name": "Summer Perfume : Best Summer Fragrances with Summer notes & scents",
+  "meta": {
+    "og:title": "Summer Perfume : Best Summer Fragrances with Summer notes & scents",
+    "description": "Summer Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Summer Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-summer-perfume",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-summer-perfume"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Event - Summer Perfume"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Summer Perfume : Best Summer Fragrances with Summer notes & scents",
+      "description": "Summer Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-summer-perfume",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/aquatic-coconut"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/citrus-green-apple"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/aquatic-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/musky-green-tea"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/citrus-neroli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/aquatic-peony"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/sunny-vetiver-neroli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/aquatic-lime"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/aromatic-watermelon"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/citrus-marine"
+          }
+        ]
+      }
+    }
+  ]
+}

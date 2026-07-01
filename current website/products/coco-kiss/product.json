@@ -1,0 +1,55 @@
+{
+  "id": 8055977017531,
+  "title": "Coco kiss perfume oil",
+  "handle": "coco-kiss",
+  "body_html": "<p>Coco Kiss is cozy, delicious, and playful—like a creamy coconut dessert with a hint of softness and warm, sun-kissed skin. It’s perfect for those who love gourmand scents with a tropical twist. Think golden hour on the beach, salty hair, and sweet memories.</p>",
+  "published_at": "2025-04-13T00:45:49+02:00",
+  "created_at": "2025-04-13T00:42:55+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47095432085691,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "380.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8055977017531,
+      "created_at": "2025-10-13T13:25:59+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 37739955290299,
+      "created_at": "2025-04-13T00:43:16+02:00",
+      "position": 1,
+      "updated_at": "2025-06-06T23:46:25+03:00",
+      "product_id": 8055977017531,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/coco_kiss.jpg?v=1749242785",
+      "width": 3464,
+      "height": 3464
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

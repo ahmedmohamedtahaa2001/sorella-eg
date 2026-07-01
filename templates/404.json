@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "header": {
+      "type": "sorella-page-header",
+      "settings": {
+        "eyebrow": "404",
+        "heading": "This page drifted off.",
+        "subheading": "<p>The page you're after doesn't exist — but our best sellers do.</p>",
+        "surface": "surface-gradient",
+        "show_blob": true,
+        "blob_scheme": "gold",
+        "text_align": "center",
+        "cta_label": "Shop best sellers"
+      }
+    }
+  },
+  "order": ["header"]
+}

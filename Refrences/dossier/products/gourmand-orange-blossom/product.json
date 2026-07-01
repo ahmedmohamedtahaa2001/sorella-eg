@@ -1,0 +1,84 @@
+{
+  "url": "https://dossier.co/products/gourmand-orange-blossom",
+  "name": "Gourmand Orange Blossom",
+  "inspired_by": "Dossier Inspired by Lancome's La Vie Est Belle",
+  "meta": {
+    "og:title": "La Vie Est Belle by Lancôme Dupe Perfume: Gourmand Orange Blossom - Dossier Perfumes",
+    "twitter:title": "La Vie Est Belle by Lancôme Dupe Perfume: Gourmand Orange Blossom - Dossier Perfumes",
+    "description": "Buy ➔ Gourmand Orange Blossom Perfume Online ✔️ Inspired by Lancome's La Vie Est Belle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Buy ➔ Gourmand Orange Blossom Perfume Online ✔️ Inspired by Lancome's La Vie Est Belle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:description": "Buy ➔ Gourmand Orange Blossom Perfume Online ✔️ Inspired by Lancome's La Vie Est Belle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/gourmand-orange-blossom",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Orange_Blossom_30a45b7f-bb88-4d1b-acd7-d6c7b820d603.jpg?v=1779275661",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Orange_Blossom_30a45b7f-bb88-4d1b-acd7-d6c7b820d603.jpg?v=1779275661",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/gourmand-orange-blossom"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gourmand Orange Blossom"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Lancome's La Vie Est Belle"
+      },
+      "description": "Buy ➔ Gourmand Orange Blossom Perfume Online ✔️ Inspired by Lancome's La Vie Est Belle ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Gourmand_Orange_Blossom_30a45b7f-bb88-4d1b-acd7-d6c7b820d603.jpg?v=1779275661"
+      ],
+      "name": "Gourmand Orange Blossom",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 26.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 29,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50GOBUS",
+          "url": "https://dossier.co/products/gourmand-orange-blossom?Pack=Fragrance+50ml%2F1.7oz"
+        }
+      ],
+      "sku": "DI50GOBUS",
+      "url": "https://dossier.co/products/gourmand-orange-blossom"
+    }
+  ]
+}

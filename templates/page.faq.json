@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "header": {
+      "type": "sorella-page-header",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Frequently asked",
+        "surface": "surface-gradient",
+        "show_blob": true,
+        "blob_scheme": "slate",
+        "text_align": "center"
+      }
+    },
+    "faq": {
+      "type": "sorella-faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How long does shipping take?", "answer": "<p>Orders are delivered across Egypt in 5–8 business days. Please don't open your parcel until the courier hands it to you.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "How do I get the free 5ml?", "answer": "<p>Spend over 1,100 LE in a single order and a free 5ml is added automatically at checkout.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "What's the difference between the oil and the spray?", "answer": "<p>The oil (roll-on) is more concentrated and longer-lasting on skin; the spray diffuses more and is easier to layer. Many customers keep both.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "Can I try before buying a full bottle?", "answer": "<p>Yes — most scents have a 5ml tester so you can live with the fragrance before committing to 30ml or 50ml.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": { "eyebrow": "Help", "heading": "Frequently asked", "open_first": true }
+    },
+    "newsletter": { "type": "sorella-newsletter", "settings": {} }
+  },
+  "order": ["header", "faq", "newsletter"]
+}

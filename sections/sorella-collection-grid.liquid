@@ -1,0 +1,49 @@
+{%- comment -%}
+  sorella-collection-grid — uniform catalog grid, solid cards, no blur/blob (§5.2).
+  Used on Collection AND Search. Empty-state when 0 products.
+{%- endcomment -%}
+{%- liquid
+  assign per_page = section.settings.per_page | default: 24
+  assign products = collection.products
+  assign source_url = collection.url
+  if template.name == 'search'
+    assign products = search.results
+    assign source_url = routes.search_url
+  endif
+-%}
+<section class="sorella-collection surface-ink section-pad-b" data-section-id="{{ section.id }}">
+  <div class="container container--catalog">
+    {%- paginate products by per_page -%}
+      {%- if products.size > 0 -%}
+        <div class="catalog-grid">
+          {%- for product in products -%}
+            {%- if product.object_type == nil or product.object_type == 'product' -%}
+              {% render 'sorella-product-card', product: product %}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {% render 'sorella-pagination', paginate: paginate %}
+      {%- else -%}
+        {% render 'sorella-empty-state',
+          heading: section.settings.empty_heading,
+          text: section.settings.empty_text,
+          cta_label: section.settings.empty_cta,
+          cta_url: routes.all_products_collection_url,
+          icon: 'droplet' %}
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    { "type": "range", "id": "per_page", "min": 8, "max": 48, "step": 4, "label": "Products per page", "default": 24 },
+    { "type": "text", "id": "empty_heading", "label": "Empty heading", "default": "Nothing here yet." },
+    { "type": "text", "id": "empty_text", "label": "Empty text", "default": "This collection is being restocked — explore the full range in the meantime." },
+    { "type": "text", "id": "empty_cta", "label": "Empty button label", "default": "Shop all fragrances" }
+  ],
+  "presets": [{ "name": "Product grid" }]
+}
+{% endschema %}

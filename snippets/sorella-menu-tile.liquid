@@ -1,0 +1,13 @@
+{%- comment -%}
+  sorella-menu-tile — mega-menu bento category tile (§9). Params:
+    link (url) · title (string) · image (image object) · subtitle (string)
+{%- endcomment -%}
+<a class="sorella-menu-tile" href="{{ link | default: '#' }}">
+  <div class="sorella-menu-tile__media media media--1x1">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 320 | image_tag: loading: 'lazy', alt: title | escape }}
+    {%- endif -%}
+  </div>
+  <span class="sorella-menu-tile__title t-caption-strong">{{ title }}</span>
+  {%- if subtitle != blank -%}<span class="t-caption text-mist">{{ subtitle }}</span>{%- endif -%}
+</a>

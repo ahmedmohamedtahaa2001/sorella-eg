@@ -1,0 +1,16 @@
+{%- comment -%}
+  sorella-testimonial-card — structured review, glass (§9).
+  Params: quote (string), author (string), date (string), rating (number), verified (boolean)
+{%- endcomment -%}
+{%- capture testimonial_inner -%}
+  {%- if rating -%}{% render 'sorella-star-rating', value: rating %}{%- endif -%}
+  <p class="sorella-testimonial__quote t-body">{{ quote }}</p>
+  <div class="sorella-testimonial__meta">
+    <span class="t-caption-strong">{{ author }}</span>
+    {%- if verified -%}
+      <span class="sorella-testimonial__verified t-caption">{% render 'sorella-icon', name: 'check', size: 14 %} Verified</span>
+    {%- endif -%}
+    {%- if date != blank -%}<span class="t-caption text-mist">· {{ date }}</span>{%- endif -%}
+  </div>
+{%- endcapture -%}
+{% render 'sorella-glass-panel', content: testimonial_inner, variant: 'card', class: 'sorella-testimonial' %}

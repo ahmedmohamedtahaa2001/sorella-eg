@@ -1,0 +1,10 @@
+{%- comment -%}
+  sorella-empty-state — branded empty / no-results (§9).
+  Params: heading (string), text (string), cta_label (string), cta_url (string), icon (string)
+{%- endcomment -%}
+<div class="sorella-empty-state">
+  {%- if icon != blank -%}<span class="sorella-empty-state__icon text-gold">{% render 'sorella-icon', name: icon, size: 40 %}</span>{%- endif -%}
+  {%- if heading != blank -%}<p class="t-display-md">{{ heading }}</p>{%- endif -%}
+  {%- if text != blank -%}<p class="t-body text-mist">{{ text }}</p>{%- endif -%}
+  {%- if cta_label != blank -%}{% render 'sorella-button', label: cta_label, href: cta_url | default: routes.all_products_collection_url, style: 'primary' %}{%- endif -%}
+</div>

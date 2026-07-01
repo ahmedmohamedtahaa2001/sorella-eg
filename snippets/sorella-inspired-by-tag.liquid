@@ -1,0 +1,12 @@
+{%- comment -%}
+  sorella-inspired-by-tag — gold-bordered pill (§9).
+  Sourced from a product metafield so it's never hardcoded copy.
+  Params:
+    name (string) — the fragrance it's inspired by (e.g. from product.metafields.sorella.inspired_by)
+{%- endcomment -%}
+{%- if name != blank -%}
+  <span class="sorella-inspired-by t-caption">
+    {%- render 'sorella-icon', name: 'sparkle', size: 13 -%}
+    {{ 'products.product.inspired_by' | t: name: name }}
+  </span>
+{%- endif -%}

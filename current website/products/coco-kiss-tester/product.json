@@ -1,0 +1,55 @@
+{
+  "id": 8389090083003,
+  "title": "Coco kiss tester",
+  "handle": "coco-kiss-tester",
+  "body_html": "<p class=\"p1\"><span class=\"s1\">A soft, cozy gourmand that smells like a warm coconut dessert melting into your skin.</span></p>\n<p class=\"p1\"><span class=\"s2\">What you’ll smell:</span><span class=\"s1\"><br>It opens creamy and milky with a toasted coconut vibe, slightly nutty and smooth—not overly sweet. As it settles, it turns into a warm vanilla with a hint of buttery richness, almost like coconut cream with a soft woody touch in the background. It’s subtle, comforting, and very “your skin but better.”</span></p>\n<p class=\"p1\"><span class=\"s2\">Notes:</span></p>\n<ul class=\"ul1\">\n<li class=\"li1\">\n<span class=\"s3\"></span><span class=\"s1\">Top: Coconut cream</span>\n</li>\n<li class=\"li1\">\n<span class=\"s3\"></span><span class=\"s1\">Heart: Toasted praline</span>\n</li>\n<li class=\"li1\">\n<span class=\"s3\"></span><span class=\"s1\">Base: Vanilla, warm woods</span>\n</li>\n</ul>\n<p class=\"p1\"><span class=\"s2\">Vibe:</span><span class=\"s1\"><br>Clean girl but cozy. Effortless, soft, and addictive—like warm skin after a beach shower.</span></p>\n<p class=\"p1\"><span class=\"s2\">When to wear:</span><span class=\"s1\"><br>Perfect for daytime, casual outings, gym, or layering with deeper vanillas at night. Best in spring/summer but honestly works year-round if you like soft gourmands.</span></p>\n<p class=\"p2\"> <strong>5ML</strong></p>",
+  "published_at": "2026-04-16T19:31:58+02:00",
+  "created_at": "2026-04-16T19:29:54+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47723235115195,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "80.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8389090083003,
+      "created_at": "2026-04-16T19:29:55+02:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42183711031483,
+      "created_at": "2026-04-16T19:33:03+02:00",
+      "position": 1,
+      "updated_at": "2026-04-16T19:33:04+02:00",
+      "product_id": 8389090083003,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-9249.png?v=1776360784",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

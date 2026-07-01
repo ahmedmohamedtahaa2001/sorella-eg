@@ -1,0 +1,28 @@
+{%- comment -%}
+  sorella-pagination — numbered pagination (§9).
+  Params:
+    paginate (object, required) — Shopify paginate drop
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="sorella-pagination" role="navigation" aria-label="Pagination">
+    {%- if paginate.previous -%}
+      <a class="sorella-pagination__link" href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+        {% render 'sorella-icon', name: 'chevron-left', size: 18 %}
+      </a>
+    {%- endif -%}
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a class="sorella-pagination__link t-caption" href="{{ part.url }}">{{ part.title }}</a>
+      {%- elsif part.title == paginate.current_page -%}
+        <span class="sorella-pagination__link is-current t-caption-strong" aria-current="page">{{ part.title }}</span>
+      {%- else -%}
+        <span class="sorella-pagination__ellipsis t-caption">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if paginate.next -%}
+      <a class="sorella-pagination__link" href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
+        {% render 'sorella-icon', name: 'chevron-right', size: 18 %}
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

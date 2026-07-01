@@ -1,0 +1,217 @@
+/* ==========================================================================
+   Sorella — global chrome (nav dock, drawers, mega-menu, footer, cart)
+   Loaded by the header section. Tokens from base.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Adaptive Nav Dock (Art Direction §9)
+   -------------------------------------------------------------------------- */
+.nav-dock {
+  position: fixed;
+  top: 12px; left: 50%;
+  transform: translateX(-50%) translateZ(0);
+  max-width: 920px;
+  width: calc(100% - 32px);
+  height: var(--nav-dock-height);
+  z-index: 100;
+  border-radius: var(--radius-pill);
+  background: var(--color-parchment-65);
+  -webkit-backdrop-filter: blur(var(--blur-dock));
+  backdrop-filter: blur(var(--blur-dock));
+  border: var(--border-hairline);
+  box-shadow: var(--shadow-dock);
+  color: var(--color-ink);
+  transition:
+    background var(--dur-dock) var(--ease-out),
+    -webkit-backdrop-filter var(--dur-dock) var(--ease-out),
+    backdrop-filter var(--dur-dock) var(--ease-out),
+    max-width var(--dur-dock) var(--ease-out),
+    height var(--dur-dock) var(--ease-out),
+    top var(--dur-dock) var(--ease-out),
+    border-radius var(--dur-dock) var(--ease-out),
+    color var(--dur-dock) var(--ease-out),
+    transform var(--dur-dock) var(--ease-out);
+}
+
+.nav-dock--top {
+  top: 0;
+  max-width: 100%;
+  width: 100%;
+  height: var(--nav-top-height);
+  border-radius: 0;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--color-parchment);
+  text-shadow: 0 1px 3px var(--color-ink-70);
+}
+
+.nav-dock--hidden { transform: translateX(-50%) translateY(-140%) translateZ(0); }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav-dock--docked { background: var(--color-ink-90); color: var(--color-parchment); }
+}
+
+.nav-dock__inner {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg);
+  height: 100%; width: 100%; max-width: var(--container-lock); margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+.nav-dock--top .nav-dock__inner { padding-inline: var(--space-xl); }
+
+.nav-dock__logo { display: inline-flex; align-items: center; flex: none; }
+.nav-dock__logo-full { display: block; }
+.nav-dock__logo-mark { display: none; width: 36px; height: auto; }
+.nav-dock--docked .nav-dock__logo-full { display: none; }
+.nav-dock--docked .nav-dock__logo-mark { display: block; }
+/* If no mark uploaded, keep wordmark visible (fallback handled in markup) */
+.nav-dock__wordmark { color: inherit; }
+
+.nav-dock__nav { flex: 1; display: flex; justify-content: center; }
+.nav-dock__links { display: flex; align-items: center; gap: var(--space-lg); }
+.nav-dock__item { position: relative; }
+.nav-dock__link {
+  display: inline-flex; align-items: center; gap: 4px; color: inherit;
+  padding: 8px 4px; transition: color var(--dur-hover) var(--ease-out);
+}
+.nav-dock__link:hover, .nav-dock__link[aria-current="page"] { color: var(--color-gold); }
+
+.nav-dock__utils { display: flex; align-items: center; gap: var(--space-sm); flex: none; }
+.nav-dock__icon {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; color: inherit; border-radius: var(--radius-full);
+  transition: color var(--dur-hover) var(--ease-out);
+}
+.nav-dock__icon:hover { color: var(--color-gold); }
+.nav-dock__icon--menu { display: none; }
+.sorella-badge--cart { position: absolute; top: 6px; inset-inline-end: 4px; }
+
+/* Mega-menu (drops as its own wide panel, independent of dock width) */
+.nav-dock__mega {
+  position: fixed; top: calc(var(--nav-dock-height) + 20px); left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: min(920px, calc(100% - 32px));
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out), visibility var(--dur-hover);
+  z-index: 99;
+}
+.nav-dock--top .nav-dock__mega { top: calc(var(--nav-top-height) + 4px); }
+.nav-dock__item.is-open .nav-dock__mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); }
+.nav-dock__mega .blob-field { border-radius: var(--radius-lg); }
+.nav-dock__mega-inner { position: relative; padding: var(--space-xl); color: var(--color-parchment); }
+.nav-dock__mega-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-lg); }
+.nav-dock__mega-link { display: block; color: var(--color-parchment); margin-block-end: var(--space-xs); }
+.nav-dock__mega-link:hover { color: var(--color-gold); }
+.nav-dock__mega-sub { display: flex; flex-direction: column; gap: 4px; }
+.nav-dock__mega-sub a:hover { color: var(--color-gold); }
+
+/* --------------------------------------------------------------------------
+   Drawers (mobile nav, search, cart) — glass slide-in panels
+   -------------------------------------------------------------------------- */
+.sorella-drawer { position: fixed; inset: 0; z-index: 110; pointer-events: none; }
+.sorella-drawer__panel {
+  position: absolute; display: flex; flex-direction: column;
+  pointer-events: auto; transition: transform var(--dur-drawer) var(--ease-out);
+  color: var(--color-parchment);
+}
+
+/* start = inline-start side (mobile nav) */
+.sorella-drawer--start .sorella-drawer__panel {
+  inset-block: 0; inset-inline-start: 0;
+  width: min(420px, 88vw); border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+  transform: translateX(-105%);
+}
+.sorella-drawer--start.is-open .sorella-drawer__panel { transform: translateX(0); }
+
+/* end = inline-end side (cart) */
+.sorella-drawer--end .sorella-drawer__panel {
+  inset-block: 0; inset-inline-end: 0;
+  width: min(440px, 92vw); border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  transform: translateX(105%);
+}
+.sorella-drawer--end.is-open .sorella-drawer__panel { transform: translateX(0); }
+
+/* top = search */
+.sorella-drawer--top .sorella-drawer__panel {
+  inset-block-start: 0; inset-inline: 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  transform: translateY(-105%);
+}
+.sorella-drawer--top.is-open .sorella-drawer__panel { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sorella-drawer__panel { transition: none; }
+}
+
+.sorella-drawer__head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-lg); border-block-end: var(--border-hairline); }
+.sorella-drawer__nav { flex: 1; overflow-y: auto; padding: var(--space-lg); }
+.sorella-drawer__nav > ul { display: flex; flex-direction: column; gap: var(--space-md); }
+.sorella-drawer__link { display: block; color: var(--color-parchment); }
+.sorella-drawer__link:hover { color: var(--color-gold); }
+.sorella-drawer__sub { display: flex; flex-direction: column; gap: var(--space-xs); padding-block-start: var(--space-xs); padding-inline-start: var(--space-md); }
+.sorella-drawer__foot { padding: var(--space-lg); border-block-start: var(--border-hairline); }
+
+.sorella-drawer__panel--search { padding: var(--space-lg); }
+.sorella-search-form { display: flex; align-items: center; gap: var(--space-sm); max-width: var(--container-lock); margin-inline: auto; width: 100%; }
+.sorella-search-form input[type="search"] {
+  flex: 1; padding: 12px var(--space-md); font-size: 16px; color: var(--color-parchment);
+  background: transparent; border: 1px solid var(--color-mist-40); border-radius: var(--radius-sm);
+}
+.sorella-search-form input::placeholder { color: var(--color-mist); }
+
+.sorella-socials { display: flex; gap: var(--space-md); }
+.sorella-socials a { display: inline-flex; color: inherit; transition: color var(--dur-hover) var(--ease-out); }
+.sorella-socials a:hover { color: var(--color-gold); }
+
+/* --------------------------------------------------------------------------
+   Cart drawer
+   -------------------------------------------------------------------------- */
+.sorella-cart__head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-lg); border-block-end: var(--border-hairline); }
+.sorella-cart__body { flex: 1; overflow-y: auto; padding: 0 var(--space-lg); }
+.sorella-cart__lines { display: flex; flex-direction: column; }
+.sorella-cart__progress { padding: var(--space-md) var(--space-lg); }
+.sorella-cart__progress-track { height: 6px; border-radius: var(--radius-pill); background: var(--color-mist-25); overflow: hidden; margin-block-start: var(--space-xs); }
+.sorella-cart__progress-fill { height: 100%; background: var(--color-gold); border-radius: var(--radius-pill); transition: width var(--dur-drawer) var(--ease-out); }
+.sorella-cart__foot { padding: var(--space-lg); border-block-start: var(--border-hairline); display: flex; flex-direction: column; gap: var(--space-md); }
+.sorella-cart__subtotal { display: flex; align-items: baseline; justify-content: space-between; }
+.sorella-cart__upsell { padding: var(--space-md) var(--space-lg); border-block-start: var(--border-hairline); }
+
+/* --------------------------------------------------------------------------
+   Footer — the one deliberately dense area (§4.3), no glass/blob
+   -------------------------------------------------------------------------- */
+.sorella-footer { background: var(--color-ink); color: var(--color-parchment); padding-block: var(--space-xxl) var(--space-xl); }
+.sorella-footer__grid {
+  display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--space-xl);
+  padding-block-end: var(--space-xl); border-block-end: var(--border-hairline);
+}
+.sorella-footer__brand { display: flex; flex-direction: column; gap: var(--space-sm); }
+.sorella-footer__col-title { color: var(--color-gold); margin-block-end: var(--space-md); }
+.sorella-footer__links { display: flex; flex-direction: column; gap: var(--space-sm); }
+.sorella-footer__links a:hover { color: var(--color-gold); }
+.sorella-footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-block-start: var(--space-lg); flex-wrap: wrap; }
+.sorella-footer__newsletter { margin-block-start: var(--space-md); }
+
+/* --------------------------------------------------------------------------
+   Responsive — nav → hamburger ≤ 833px (§11)
+   -------------------------------------------------------------------------- */
+@media (max-width: 833px) {
+  .nav-dock__nav { display: none; }
+  .nav-dock__icon--menu { display: inline-flex; }
+  .nav-dock__icon--account { display: none; }
+  .nav-dock {
+    max-width: 100%; width: 100%; top: 0; left: 0; transform: none; border-radius: 0;
+  }
+  .nav-dock--hidden { transform: translateY(-140%); }
+  .nav-dock--docked .nav-dock__logo-full { display: block; }
+  .nav-dock--docked .nav-dock__logo-mark { display: none; }
+}
+
+@media (max-width: 735px) {
+  .sorella-footer__grid { grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+  .sorella-footer__brand { grid-column: 1 / -1; }
+}
+@media (max-width: 419px) {
+  .sorella-footer__grid { grid-template-columns: 1fr; }
+}

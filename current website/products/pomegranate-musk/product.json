@@ -1,0 +1,55 @@
+{
+  "id": 8069036507323,
+  "title": "Pomegranate musk",
+  "handle": "pomegranate-musk",
+  "body_html": "<p><span>A bold fusion of tart elegance and soft sensuality. The juicy richness of ripe pomegranate meets the warm embrace of musk for a fragrance that's both striking and deeply alluring.</span></p>",
+  "published_at": "2025-04-29T20:13:20+03:00",
+  "created_at": "2025-04-29T20:11:08+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 46608089186491,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "300.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8069036507323,
+      "created_at": "2025-04-29T20:11:08+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42367773049019,
+      "created_at": "2026-05-11T17:36:24+03:00",
+      "position": 1,
+      "updated_at": "2026-05-11T17:36:26+03:00",
+      "product_id": 8069036507323,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5723.png?v=1778510186",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

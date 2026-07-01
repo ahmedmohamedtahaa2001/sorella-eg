@@ -1,0 +1,10 @@
+{%- comment -%}
+  sorella-note-tier — one tier of the notes pyramid (§9).
+  Params: tier ('top'|'heart'|'base'), label (string), notes (string — comma list)
+{%- endcomment -%}
+{%- if notes != blank -%}
+  <div class="sorella-note-tier sorella-note-tier--{{ tier }} glass-panel glass-panel--md">
+    <span class="sorella-note-tier__label t-eyebrow">{{ label }}</span>
+    <span class="sorella-note-tier__notes t-body">{{ notes }}</span>
+  </div>
+{%- endif -%}

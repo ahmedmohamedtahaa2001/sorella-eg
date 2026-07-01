@@ -1,0 +1,154 @@
+{
+  "url": "https://dossier.co/products/oud-rose-on-fire",
+  "name": "Oud & Rose on Fire",
+  "inspired_by": "Dossier Dossier Originals",
+  "meta": {
+    "og:title": "Oud & Rose on Fire",
+    "twitter:title": "Oud & Rose on Fire",
+    "description": "Dangerous liaisons meet intoxicating sophistication aroused by sizzling florals and allure. Oud & Rose on Fire combines notes of warm oud – extracted fr...",
+    "og:description": "Dangerous liaisons meet intoxicating sophistication aroused by sizzling florals and allure. Oud & Rose on Fire combines notes of warm oud – extracted fr...",
+    "twitter:description": "Dangerous liaisons meet intoxicating sophistication aroused by sizzling florals and allure. Oud & Rose on Fire combines notes of warm oud – extracted fr...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/oud-rose-on-fire",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Oud-_-Rose-on-Fire_c90ca921-e228-4f7e-a7de-3de4fe0c0ed7.jpg?v=1779275955",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Oud-_-Rose-on-Fire_c90ca921-e228-4f7e-a7de-3de4fe0c0ed7.jpg?v=1779275955",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Oud+%26+Rose+on+Fire"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Oud & Rose on Fire"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Dossier Originals"
+      },
+      "description": "Dangerous liaisons meet intoxicating sophistication aroused by sizzling florals and allure. Oud & Rose on Fire combines notes of warm oud – extracted fr...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Oud-_-Rose-on-Fire_c90ca921-e228-4f7e-a7de-3de4fe0c0ed7.jpg?v=1779275955"
+      ],
+      "name": "Oud & Rose on Fire",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "810086661497",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Oud+%26+Rose+on+Fire"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "810086661503",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Orchid+%26+Sandalwood+at+Dusk"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "39919425060931",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Caramelized+Lavender+%26+Hazelnut"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "39919425290307",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Sunny+Vetiver+%26+Neroli"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "39919425749059",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Fiery+Leather+%26+Rhubarb"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 0,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 0,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "69206b7075bb3",
+          "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=BF+Free"
+        }
+      ],
+      "sku": "810086661497",
+      "url": "https://dossier.co/products/oud-rose-on-fire?Genderless=Oud+%26+Rose+on+Fire"
+    }
+  ]
+}

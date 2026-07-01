@@ -1,0 +1,96 @@
+{%- comment -%}
+  sorella-seasonal-campaign — Seasonal Campaign Cell (Art Direction §7.3, §10).
+  A single SWAPPABLE 2×1 feature: background image + hero-scrim + ONE glass card
+  (eyebrow/heading/text/CTA) + ONE corner-anchored blob. Schema-driven so art,
+  copy and link swap without a code deploy. Disable via `enabled` to render nothing.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  if s.enabled == false
+    break
+  endif
+-%}
+{%- if s.enabled -%}
+  <section class="sorella-seasonal blob-scene surface-gradient section-pad" data-section-id="{{ section.id }}">
+    {%- if s.show_blob -%}
+      {% render 'sorella-blob', single: true, scheme: s.blob_scheme %}
+    {%- endif -%}
+
+    {%- if s.image != blank -%}
+      <div class="sorella-seasonal__media">
+        {{ s.image | image_url: width: 2000 | image_tag:
+          loading: 'lazy',
+          sizes: '100vw', widths: '800, 1200, 1600, 2000',
+          alt: s.heading | escape }}
+      </div>
+      <span class="sorella-seasonal__scrim" aria-hidden="true"></span>
+    {%- endif -%}
+
+    <div class="container container--bento sorella-seasonal__container">
+      <div class="sorella-seasonal__card glass-panel glass-panel--xl glass-panel--sheen">
+        {%- if s.eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ s.eyebrow }}</span>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="t-display-md">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.text != blank -%}<p class="t-body-lg">{{ s.text }}</p>{%- endif -%}
+        {%- if s.cta_label != blank -%}
+          <div class="sorella-seasonal__actions">
+            {% render 'sorella-button', label: s.cta_label, href: s.cta_link, style: 'primary' %}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .sorella-seasonal {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(360px, 48vh, 520px);
+  }
+  .sorella-seasonal__media { position: absolute; inset: 0; z-index: 0; }
+  .sorella-seasonal__media img { width: 100%; height: 100%; object-fit: cover; }
+  .sorella-seasonal__scrim { position: absolute; inset: 0; z-index: 0; background: var(--gradient-hero-scrim); }
+  .sorella-seasonal__container { position: relative; z-index: 1; width: 100%; }
+  .sorella-seasonal__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 560px;
+    padding: var(--space-xxl);
+    color: var(--color-parchment);
+  }
+  .sorella-seasonal__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-block-start: var(--space-sm); }
+  @media (max-width: 640px) {
+    .sorella-seasonal__card { padding: var(--space-xl) var(--space-lg); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Seasonal Campaign",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Enable section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Limited edition" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Ramadan Specials" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "A curated set of our warmest scents for the season of togetherness." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Explore the edit" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "header", "content": "Atmosphere" },
+    { "type": "checkbox", "id": "show_blob", "label": "Show blob", "default": true },
+    {
+      "type": "select", "id": "blob_scheme", "label": "Blob colours", "default": "rose",
+      "options": [
+        { "value": "gold", "label": "Gold" },
+        { "value": "slate", "label": "Slate" },
+        { "value": "rose", "label": "Rose" },
+        { "value": "gold-rose", "label": "Gold + Rose" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Seasonal campaign" }]
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+{
+  "id": 308720697531,
+  "title": "Musks",
+  "handle": "musks",
+  "description": "",
+  "published_at": "2025-06-05T15:46:45+03:00",
+  "updated_at": "2026-06-30T14:25:10+03:00",
+  "image": {
+    "id": 1624345051323,
+    "created_at": "2025-06-05T15:50:11+03:00",
+    "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/collections/IMG-9126_b951a953-caae-4278-a7e7-09500a4d553c.png?v=1749127811",
+    "alt": null
+  },
+  "products_count": 14,
+  "product_handles": [
+    "ocean-musk",
+    "berries-musk",
+    "powder-musk",
+    "pomegranate-musk",
+    "pineapple-musk-🍍",
+    "berries-musk-perfume",
+    "powder-musk-perfume",
+    "ocean-musk-perfume",
+    "peach-musk",
+    "watermelon-musk",
+    "musk-flora",
+    "candy-musk",
+    "lavender-musk",
+    "watermelon-musk-perfume"
+  ]
+}

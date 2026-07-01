@@ -1,0 +1,98 @@
+{
+  "url": "https://dossier.co/products/citrus-marine",
+  "name": "Citrus Marine",
+  "inspired_by": "Dossier Inspired by Dolce & Gabbana's Light Blue Men",
+  "meta": {
+    "og:title": "Dolce & Gabbana's Light Blue Dupe Perfume: Citrus Marine - Dossier Perfumes",
+    "twitter:title": "Dolce & Gabbana's Light Blue Dupe Perfume: Citrus Marine - Dossier Perfumes",
+    "description": "Inspired by Dolce & Gabbana's Light Blue fragrance without the hefty price tag.",
+    "og:description": "Inspired by Dolce & Gabbana's Light Blue fragrance without the hefty price tag.",
+    "twitter:description": "Inspired by Dolce & Gabbana's Light Blue fragrance without the hefty price tag.",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/citrus-marine",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Marine_8f5ca325-6121-4023-8eb6-c5f9b2a7492f.jpg?v=1779191100",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Marine_8f5ca325-6121-4023-8eb6-c5f9b2a7492f.jpg?v=1779191100",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/citrus-marine?Pack=Fragrance+50ml%2F1.7oz"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Citrus Marine"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Dolce & Gabbana's Light Blue Men"
+      },
+      "description": "Inspired by Dolce & Gabbana's Light Blue fragrance without the hefty price tag.",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Marine_8f5ca325-6121-4023-8eb6-c5f9b2a7492f.jpg?v=1779191100"
+      ],
+      "name": "Citrus Marine",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 26.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 29,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50CMAUS",
+          "url": "https://dossier.co/products/citrus-marine?Pack=Fragrance+50ml%2F1.7oz"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 26.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 29,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DOSWA50CMA",
+          "url": "https://dossier.co/products/citrus-marine?Pack=50ML+2.0+RETAIL"
+        }
+      ],
+      "sku": "DI50CMAUS",
+      "url": "https://dossier.co/products/citrus-marine?Pack=Fragrance+50ml%2F1.7oz"
+    }
+  ]
+}

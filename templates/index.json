@@ -1,0 +1,86 @@
+{
+  "sections": {
+    "hero": {
+      "type": "sorella-hero",
+      "settings": {
+        "eyebrow": "Egyptian fragrance house",
+        "heading": "From our bond to your senses",
+        "subheading": "Fragrances crafted by two sisters — made fresh in Egypt.",
+        "cta_label": "Shop best sellers",
+        "cta2_label": "Discover the story",
+        "show_blobs": true,
+        "blob_scheme": "gold-slate",
+        "content_align": "start"
+      }
+    },
+    "trust": {
+      "type": "sorella-trust-bar",
+      "blocks": {
+        "b1": { "type": "cell", "settings": { "icon": "gift", "heading": "Free 5ml gift", "text": "On every order over 1,100 LE." } },
+        "b2": { "type": "cell", "settings": { "icon": "leaf", "heading": "Made fresh in Egypt", "text": "Small-batch, crafted by two sisters." } },
+        "b3": { "type": "cell", "settings": { "icon": "truck", "heading": "Fast local shipping", "text": "Delivered across Egypt in 5–8 days." } }
+      },
+      "block_order": ["b1", "b2", "b3"],
+      "settings": { "use_glass": false }
+    },
+    "collections": {
+      "type": "sorella-bento-collections",
+      "blocks": {
+        "c1": { "type": "cell", "settings": { "heading": "For Her", "cta": "Shop", "span": "1x1" } },
+        "c2": { "type": "cell", "settings": { "heading": "For Him", "cta": "Shop", "span": "1x1" } },
+        "c3": { "type": "cell", "settings": { "heading": "Unisex", "cta": "Shop", "span": "1x2" } },
+        "c4": { "type": "cell", "settings": { "heading": "Perfume Oil", "cta": "Shop", "span": "1x1" } },
+        "c5": { "type": "cell", "settings": { "heading": "Bundles", "cta": "Shop", "span": "1x1" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"],
+      "settings": { "eyebrow": "Collections", "heading": "Shop by mood" }
+    },
+    "seasonal": {
+      "type": "sorella-seasonal-campaign",
+      "settings": {
+        "enabled": true,
+        "eyebrow": "Limited edition",
+        "heading": "Ramadan Specials",
+        "text": "A curated set of our warmest scents for the season of togetherness.",
+        "cta_label": "Explore the edit",
+        "show_blob": true,
+        "blob_scheme": "rose"
+      }
+    },
+    "story": {
+      "type": "sorella-brand-story",
+      "blocks": {
+        "p1": { "type": "panel", "settings": { "eyebrow": "Get to know us", "heading": "Two sisters, one bond", "text": "<p>At Sorella, we believe the best bonds are the ones we share. We're two sisters, connected not just by family but by a love for fragrance and the memories scents create.</p>", "side": "start", "blob_scheme": "gold" } }
+      },
+      "block_order": ["p1"],
+      "settings": {}
+    },
+    "bestsellers": {
+      "type": "sorella-product-carousel",
+      "settings": {
+        "eyebrow": "Loved by many",
+        "heading": "Best sellers",
+        "product_count": 8,
+        "card_variant": "default",
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "layout": "rail"
+      }
+    },
+    "reviews": {
+      "type": "sorella-testimonials",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "quote": "i got Baklava btesbat awiii w rehtha gedeeda ITS THE BEST! 😍", "author": "Verified buyer", "rating": 5, "verified": true } },
+        "r2": { "type": "review", "settings": { "quote": "Zay el original bezabt, w bytebat 3ala el hodoom yomين. Batlobha tany akeed.", "author": "Verified buyer", "rating": 5, "verified": true } },
+        "r3": { "type": "review", "settings": { "quote": "Rehtha helwa awy w el shipping kan sari3. Sorella ba2et el brand el mofadal 3andi.", "author": "Verified buyer", "rating": 5, "verified": true } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": { "eyebrow": "Reviews", "heading": "Our customers tell it better than we do", "summary_rating": "4.9", "summary_label": "Excellent", "show_summary": true }
+    },
+    "newsletter": {
+      "type": "sorella-newsletter",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "trust", "collections", "seasonal", "story", "bestsellers", "reviews", "newsletter"]
+}

@@ -1,0 +1,27 @@
+{%- comment -%}
+  sorella-form-field — text / email / tel / textarea (§9).
+  Params:
+    type (string) — 'text' (default) | 'email' | 'tel' | 'textarea' | 'password'
+    id (string, required) · name (string, required) · label (string, required)
+    value (string) · required (boolean) · placeholder (string) · autocomplete (string) · rows (number)
+{%- endcomment -%}
+{%- liquid
+  assign field_type = type | default: 'text'
+  assign field_rows = rows | default: 5
+-%}
+<div class="sorella-field">
+  <label class="sorella-field__label t-caption-strong" for="{{ id }}">
+    {{ label }}{% if required %} <span aria-hidden="true">*</span>{% endif %}
+  </label>
+  {%- if field_type == 'textarea' -%}
+    <textarea id="{{ id }}" name="{{ name }}" rows="{{ field_rows }}"
+      {% if required %}required{% endif %}
+      {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}>{{ value }}</textarea>
+  {%- else -%}
+    <input type="{{ field_type }}" id="{{ id }}" name="{{ name }}"
+      value="{{ value }}"
+      {% if required %}required{% endif %}
+      {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}
+      {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}>
+  {%- endif -%}
+</div>

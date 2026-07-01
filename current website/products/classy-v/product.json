@@ -1,0 +1,77 @@
+{
+  "id": 8043112333499,
+  "title": "Classy V.",
+  "handle": "classy-v",
+  "body_html": "<p>Classy V. is a warm, soft, and effortlessly classy fragrance, perfect for a woman who exudes elegance and sophistication. Its rich blend of sweet and warm notes creates an aura of comfort and luxury, making it a timeless scent for any occasion. <span>This scent is warm, inviting, and effortlessly chic, making it a must-have for any classy woman’s collection.</span></p>\n<p><strong>Fragrance Notes:</strong><br>Top Notes: Vanilla Orchid, Jasmine<br>Heart Notes: Brown Sugar, Tonka Bean<br>Base Notes: Amber, Musk, Patchouli</p>\n<p><strong>When to Wear It:</strong><br>Everyday Elegance – Perfect for casual outings when you want a soft, cozy scent.</p>\n<p>Romantic Evenings – Its warm vanilla and amber make it ideal for date nights.</p>\n<p> Work &amp; Meetings – Sophisticated yet subtle, it adds a touch of confidence.</p>\n<p>Cozy Nights In – A comforting scent for relaxed evenings and self-care moments.</p>\n<p>Special Occasions – Its classy sweetness makes it perfect for elegant gatherings.</p>\n<p> </p>",
+  "published_at": "2025-10-13T14:27:30+03:00",
+  "created_at": "2025-03-21T19:25:58+02:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [
+    "free-gift-5ml"
+  ],
+  "variants": [
+    {
+      "id": 46647351705787,
+      "title": "50ml",
+      "option1": "50ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "850.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8043112333499,
+      "created_at": "2025-05-21T10:45:34+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    },
+    {
+      "id": 46916730519739,
+      "title": "30ml",
+      "option1": "30ml",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "640.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 2,
+      "product_id": 8043112333499,
+      "created_at": "2025-08-30T15:24:22+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42339189751995,
+      "created_at": "2026-05-06T15:29:56+03:00",
+      "position": 1,
+      "updated_at": "2026-05-06T15:29:57+03:00",
+      "product_id": 8043112333499,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5600.png?v=1778070597",
+      "width": 896,
+      "height": 1195
+    }
+  ],
+  "options": [
+    {
+      "name": "Size",
+      "position": 1,
+      "values": [
+        "50ml",
+        "30ml"
+      ]
+    }
+  ]
+}

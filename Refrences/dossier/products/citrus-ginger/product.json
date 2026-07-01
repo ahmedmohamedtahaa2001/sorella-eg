@@ -1,0 +1,112 @@
+{
+  "url": "https://dossier.co/products/citrus-ginger",
+  "name": "Citrus Ginger",
+  "inspired_by": "Dossier Inspired by Chanel's Bleu de Chanel",
+  "meta": {
+    "og:title": "Bleu de Chanel Dupe Perfume : Citrus Ginger Perfume - Dossier Perfumes",
+    "twitter:title": "Bleu de Chanel Dupe Perfume : Citrus Ginger Perfume - Dossier Perfumes",
+    "description": "Buy ➔ Citrus Ginger Perfume Online ✔️ Inspired by Chanel's Bleu de Chanel ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Buy ➔ Citrus Ginger Perfume Online ✔️ Inspired by Chanel's Bleu de Chanel ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:description": "Buy ➔ Citrus Ginger Perfume Online ✔️ Inspired by Chanel's Bleu de Chanel ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/citrus-ginger",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Ginger_44573734-8c66-4326-acec-ce773ba18593.jpg?v=1781022727",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Ginger_44573734-8c66-4326-acec-ce773ba18593.jpg?v=1781022727",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/citrus-ginger?Pack=Fragrance+50ml%2F1.7oz"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Citrus Ginger"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Inspired by Chanel's Bleu de Chanel"
+      },
+      "description": "Buy ➔ Citrus Ginger Perfume Online ✔️ Inspired by Chanel's Bleu de Chanel ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Citrus_Ginger_44573734-8c66-4326-acec-ce773ba18593.jpg?v=1781022727"
+      ],
+      "name": "Citrus Ginger",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 26.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 29,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DI50CGIUS",
+          "url": "https://dossier.co/products/citrus-ginger?Pack=Fragrance+50ml%2F1.7oz"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/OutOfStock",
+          "price": 0,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 0,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "16",
+          "url": "https://dossier.co/products/citrus-ginger?Pack=BF+Free"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 26.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 29,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "DOSWA50CGI",
+          "url": "https://dossier.co/products/citrus-ginger?Pack=50ml+2.0+retail"
+        }
+      ],
+      "sku": "DI50CGIUS",
+      "url": "https://dossier.co/products/citrus-ginger?Pack=Fragrance+50ml%2F1.7oz"
+    }
+  ]
+}

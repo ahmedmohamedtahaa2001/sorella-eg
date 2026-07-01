@@ -1,0 +1,21 @@
+{%- comment -%}
+  sorella-badge — cart-count (gold) / "Sold out" pill / generic tag (§9).
+  Params:
+    variant (string) — 'cart' | 'sold-out' | 'sale' | 'tag'
+    label   (string) — text
+    count   (number) — for cart variant
+    hidden  (boolean)
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: 'tag'
+-%}
+{%- case v -%}
+  {%- when 'cart' -%}
+    <span class="sorella-badge sorella-badge--cart" data-cart-count{% if count == 0 %} hidden{% endif %}>{{ count | default: 0 }}</span>
+  {%- when 'sold-out' -%}
+    <span class="sorella-badge sorella-badge--sold-out t-caption-strong">{{ label | default: 'products.product.sold_out' | t }}</span>
+  {%- when 'sale' -%}
+    <span class="sorella-badge sorella-badge--sale t-caption-strong">{{ label | default: 'products.product.sale' | t }}</span>
+  {%- else -%}
+    <span class="sorella-badge sorella-badge--tag t-caption">{{ label }}</span>
+{%- endcase -%}

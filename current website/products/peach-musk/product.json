@@ -1,0 +1,55 @@
+{
+  "id": 8109360382139,
+  "title": "Peach musk",
+  "handle": "peach-musk",
+  "body_html": "<p>A soft, sun-kissed blend of juicy peach and creamy musk — delicate, dreamy, and effortlessly feminine. This scent wraps you in warmth like golden hour on your skin. 🍑✨ #PeachMusk #SorellaScents</p>",
+  "published_at": "2025-07-13T11:12:44+03:00",
+  "created_at": "2025-07-13T11:11:18+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 46763284758715,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "300.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8109360382139,
+      "created_at": "2025-07-13T11:11:18+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42367752241339,
+      "created_at": "2026-05-11T17:26:14+03:00",
+      "position": 1,
+      "updated_at": "2026-05-11T17:26:15+03:00",
+      "product_id": 8109360382139,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5720.png?v=1778509575",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

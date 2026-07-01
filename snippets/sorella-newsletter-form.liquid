@@ -1,0 +1,21 @@
+{%- comment -%}
+  sorella-newsletter-form — inline / stacked email capture (§9).
+  Uses Shopify customer form (newsletter tag). Params:
+    layout (string) — 'inline' (default) | 'stacked'
+    button_label (string)
+{%- endcomment -%}
+<div class="sorella-newsletter-form sorella-newsletter-form--{{ layout | default: 'inline' }}">
+  {%- form 'customer', class: 'sorella-newsletter-form__form' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    {%- if form.posted_successfully? -%}
+      <p class="t-body-strong text-gold sorella-newsletter-form__success">{{ 'general.newsletter.success' | t }}</p>
+    {%- else -%}
+      <div class="sorella-field sorella-newsletter-form__field">
+        <label class="visually-hidden" for="newsletter-email">{{ 'general.newsletter.label' | t }}</label>
+        <input type="email" id="newsletter-email" name="contact[email]" required
+          placeholder="{{ 'general.newsletter.placeholder' | t }}" autocomplete="email">
+      </div>
+      {% render 'sorella-button', label: button_label | default: 'general.newsletter.submit' | t, style: 'primary', type: 'submit' %}
+    {%- endif -%}
+  {%- endform -%}
+</div>

@@ -1,0 +1,116 @@
+{
+  "url": "https://dossier.co/collections/sbt-fruity-perfumes",
+  "name": "Fruity Perfumes : Best Fruity Fragrances with Fruity notes & scents",
+  "meta": {
+    "og:title": "Fruity Perfumes : Best Fruity Fragrances with Fruity notes & scents",
+    "description": "Fruity Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Fruity Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-fruity-perfumes",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-fruity-perfumes"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Offers - Fruity Perfumes"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Fruity Perfumes : Best Fruity Fragrances with Fruity notes & scents",
+      "description": "Fruity Perfumes Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-fruity-perfumes",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/fruity-almond"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/ambery-cherry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/gourmand-white-flowers"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/fruity-brown-sugar"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/fruity-honey"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/fruity-jasmine"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/floral-pear"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/fruity-neroli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/floral-rhubarb"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/woody-raspberry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "/products/fruity-orange"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "/products/fruity-oakmoss"
+          }
+        ]
+      }
+    }
+  ]
+}

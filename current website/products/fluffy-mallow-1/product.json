@@ -1,0 +1,55 @@
+{
+  "id": 8070200295611,
+  "title": "Fluffy mallow perfume oil",
+  "handle": "fluffy-mallow-1",
+  "body_html": "<p><span>Fluffy, sweet, and totally boujee — Fluffy mallow</span><span> wraps you in dreamy notes of </span><strong data-start=\"92\" data-end=\"160\">marshmallow, whipped cream, raspberry , vanilla, and cotton candy</strong><span>. A playful, edible scent made for </span><strong data-start=\"195\" data-end=\"227\">soft girls and sweet moments</strong><span>.</span></p>\n<p> </p>\n<p><strong>Top Notes:</strong></p>\n<p>Italian lemon,Apple,Nectarine blossom </p>\n<p><br><strong>Heart Notes:</strong></p>\n<p>Marshmallow,Strawberry,Coconut,Orange blossom </p>\n<p><br><strong>Base Notes:</strong></p>\n<p>Whipped Cream, Sugar, Vanilla,Musk,Raspberry </p>\n<p><strong> </strong></p>",
+  "published_at": "2025-10-13T13:02:35+03:00",
+  "created_at": "2025-05-02T14:48:26+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47095424975035,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "380.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8070200295611,
+      "created_at": "2025-10-13T13:11:24+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 37924520231099,
+      "created_at": "2025-05-02T14:48:59+03:00",
+      "position": 1,
+      "updated_at": "2025-05-02T14:49:00+03:00",
+      "product_id": 8070200295611,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-9239.jpg?v=1746186540",
+      "width": 3464,
+      "height": 3464
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

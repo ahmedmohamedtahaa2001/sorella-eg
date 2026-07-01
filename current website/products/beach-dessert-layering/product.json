@@ -1,0 +1,55 @@
+{
+  "id": 8440308498619,
+  "title": "Beach dessert layering",
+  "handle": "beach-dessert-layering",
+  "body_html": "<p data-start=\"0\" data-end=\"31\"><strong data-start=\"0\" data-end=\"31\">Beach Dessert Bundle 🥥🍦☀️</strong></p>\n<p data-start=\"33\" data-end=\"215\">Who wouldn’t want to smell like a refreshing coconut-vanilla drink on the beach? This delicious layering combo blends creamy coconut with sweet vanilla for the ultimate summer scent.</p>\n<p data-start=\"217\" data-end=\"334\">Layer <strong data-start=\"223\" data-end=\"248\">Coco Kiss Perfume Oil</strong> and <strong data-start=\"253\" data-end=\"274\">Coco Kiss Perfume</strong> with <strong data-start=\"280\" data-end=\"290\">Sundae</strong> for the dreamiest summer morning fragrance.</p>\n<p data-start=\"336\" data-end=\"410\"><strong data-start=\"336\" data-end=\"349\">Includes:</strong><br>• Sundae 50ml<br data-start=\"363\" data-end=\"366\">• Coco Kiss 30ml<br data-start=\"382\" data-end=\"385\">• Coco Kiss Perfume Oil</p>\n<p data-start=\"412\" data-end=\"436\">✨ Buy 3 &amp; get 15% off. ✨</p>\n<p data-start=\"438\" data-end=\"493\" data-is-last-node=\"\" data-is-only-node=\"\">Sweet, creamy, tropical, and impossible to forget. 🤍🌴</p>",
+  "published_at": "2026-06-20T23:38:03+03:00",
+  "created_at": "2026-06-09T16:18:34+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 47939258450107,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": true,
+      "price": "1589.00",
+      "grams": 0,
+      "compare_at_price": "1870.00",
+      "position": 1,
+      "product_id": 8440308498619,
+      "created_at": "2026-06-09T16:18:34+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42609850712251,
+      "created_at": "2026-06-09T16:18:58+03:00",
+      "position": 1,
+      "updated_at": "2026-06-09T16:19:00+03:00",
+      "product_id": 8440308498619,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-7091.png?v=1781011140",
+      "width": 1080,
+      "height": 1920
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

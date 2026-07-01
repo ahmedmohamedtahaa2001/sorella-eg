@@ -1,0 +1,46 @@
+{%- comment -%} Customer login + password recovery (surface-gradient, glass card) {%- endcomment -%}
+<section class="sorella-account surface-gradient">
+  <div class="container container--read">
+    <div class="glass-panel glass-panel--xl sorella-account__card" id="login">
+      <div class="sorella-account__head">
+        <span class="t-eyebrow text-gold">{{ shop.name }}</span>
+        <h1 class="t-display-md">{{ 'customer.login.title' | t }}</h1>
+      </div>
+
+      {%- form 'customer_login', novalidate: 'novalidate', class: 'sorella-account__form' -%}
+        {%- if form.errors -%}
+          <div class="sorella-account__error t-caption">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="sorella-field">
+          <label class="sorella-field__label t-caption-strong" for="customer_email">{{ 'customer.login.email' | t }}</label>
+          <input type="email" name="customer[email]" id="customer_email" autocomplete="email" required>
+        </div>
+        <div class="sorella-field">
+          <label class="sorella-field__label t-caption-strong" for="customer_password">{{ 'customer.login.password' | t }}</label>
+          <input type="password" name="customer[password]" id="customer_password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">{{ 'customer.login.submit' | t }}</button>
+        <div class="sorella-account__links t-caption">
+          <a href="#recover">{{ 'customer.login.forgot' | t }}</a>
+          <a href="{{ routes.account_register_url }}">{{ 'customer.login.create' | t }}</a>
+        </div>
+      {%- endform -%}
+    </div>
+
+    <div class="glass-panel glass-panel--xl sorella-account__card" id="recover" style="margin-block-start: var(--space-lg);">
+      <div class="sorella-account__head">
+        <h2 class="t-headline">{{ 'customer.login.forgot' | t }}</h2>
+      </div>
+      {%- form 'recover_customer_password', class: 'sorella-account__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="t-body text-gold">{{ 'general.newsletter.success' | t }}</p>
+        {%- endif -%}
+        <div class="sorella-field">
+          <label class="sorella-field__label t-caption-strong" for="recover_email">{{ 'customer.login.email' | t }}</label>
+          <input type="email" name="email" id="recover_email" autocomplete="email" required>
+        </div>
+        <button type="submit" class="btn btn--ghost">{{ 'customer.login.submit' | t }}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>

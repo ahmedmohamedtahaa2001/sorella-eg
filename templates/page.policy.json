@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "header": {
+      "type": "sorella-page-header",
+      "settings": {
+        "surface": "surface-parchment",
+        "show_blob": false,
+        "text_align": "start"
+      }
+    },
+    "body": {
+      "type": "sorella-rich-text",
+      "settings": {
+        "source": "page_content",
+        "width": "read",
+        "align": "start",
+        "surface": "surface-parchment"
+      }
+    }
+  },
+  "order": ["header", "body"]
+}

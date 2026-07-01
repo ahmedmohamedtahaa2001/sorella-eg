@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "main": {
+      "type": "sorella-product-info",
+      "settings": {
+        "show_vendor": false,
+        "show_short_desc": true,
+        "show_blob": true,
+        "blob_scheme": "slate"
+      },
+      "blocks": {
+        "t1": { "type": "trust", "settings": { "icon": "gift", "text": "Free 5ml gift over 1,100 LE" } },
+        "t2": { "type": "trust", "settings": { "icon": "truck", "text": "Ships across Egypt in 5–8 days" } },
+        "t3": { "type": "trust", "settings": { "icon": "leaf", "text": "Made fresh in Egypt" } }
+      },
+      "block_order": ["t1", "t2", "t3"]
+    },
+    "notes": {
+      "type": "sorella-notes-pyramid",
+      "settings": { "eyebrow": "The notes", "heading": "How it unfolds", "show_blob": true }
+    },
+    "details": {
+      "type": "sorella-product-accordion",
+      "blocks": {
+        "d1": { "type": "description", "settings": { "heading": "Description" } },
+        "d2": { "type": "item", "settings": { "heading": "Shipping", "content": "<p>Orders ship in 5–8 business days across Egypt. Please don't open your parcel until the courier hands it to you.</p>" } },
+        "d3": { "type": "item", "settings": { "heading": "How to wear it", "content": "<p>Spray onto pulse points — wrists, neck, behind the ears. Layer with the matching oil for longer wear.</p>" } }
+      },
+      "block_order": ["d1", "d2", "d3"],
+      "settings": { "heading": "Good to know", "open_first": true }
+    },
+    "reviews": {
+      "type": "sorella-testimonials",
+      "settings": { "eyebrow": "Reviews", "heading": "What buyers say", "show_summary": false },
+      "blocks": {
+        "r1": { "type": "review", "settings": { "quote": "Zay el original bezabt, w bytebat 3ala el hodoom. Batlobha tany akeed.", "author": "Verified buyer", "rating": 5, "verified": true } },
+        "r2": { "type": "review", "settings": { "quote": "Rehtha helwa awy w el sabat momtaz. Highly recommend.", "author": "Verified buyer", "rating": 5, "verified": true } }
+      },
+      "block_order": ["r1", "r2"]
+    },
+    "related": {
+      "type": "sorella-product-carousel",
+      "settings": {
+        "eyebrow": "Complete the set",
+        "heading": "You may also love",
+        "product_count": 8,
+        "card_variant": "default",
+        "show_view_all": false,
+        "layout": "rail"
+      }
+    }
+  },
+  "order": ["main", "notes", "details", "reviews", "related"]
+}

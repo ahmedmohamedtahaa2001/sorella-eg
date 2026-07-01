@@ -1,0 +1,24 @@
+{%- comment -%}
+  sorella-bento-cell — photographic category tile, single CTA, gold hover border (§9).
+  Params:
+    image (image object) · heading (string) · subheading (string) · link (url) · cta (string)
+    eyebrow (string)
+{%- endcomment -%}
+<a class="sorella-bento-cell" href="{{ link | default: '#' }}">
+  <div class="sorella-bento-cell__media">
+    {%- if image != blank -%}
+      {{ image | image_url: width: 900 | image_tag:
+        loading: 'lazy', sizes: '(max-width: 735px) 100vw, 40vw',
+        widths: '400, 600, 900, 1200', alt: heading | default: image.alt | escape }}
+    {%- else -%}
+      {{ 'collection-1' | placeholder_svg_tag: 'media__placeholder' }}
+    {%- endif -%}
+  </div>
+  <span class="sorella-bento-cell__scrim" aria-hidden="true"></span>
+  <div class="sorella-bento-cell__content">
+    {%- if eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ eyebrow }}</span>{%- endif -%}
+    {%- if heading != blank -%}<span class="t-display-md">{{ heading }}</span>{%- endif -%}
+    {%- if subheading != blank -%}<span class="t-body-sm">{{ subheading }}</span>{%- endif -%}
+    {%- if cta != blank -%}<span class="t-caption-strong text-gold sorella-bento-cell__cta">{{ cta }} {% render 'sorella-icon', name: 'arrow-right', size: 15 %}</span>{%- endif -%}
+  </div>
+</a>

@@ -1,0 +1,55 @@
+{
+  "id": 8070202065083,
+  "title": "Citrus Rush",
+  "handle": "citrus-rush",
+  "body_html": "<p>Citrus rush gives off a vibe that’s clean, modern, and effortlessly confident. It’s fresh at first with a hint of citrus, then settles into something soft, woody, and <br>slightly sensual.</p>\n<p><strong>When to wear it:</strong><br>Perfect for daytime, whether it’s a work meeting, a brunch, or a casual date. It’s also versatile enough for evenings out when you want to smell polished but not overdone. Ideal for spring and summer, but works year-round for those who love a fresh-woody balance.</p>\n<p><strong>Top Notes:</strong><br>Calabrian Bergamot<br><strong>Heart Notes:</strong><br>Tunisian Orange Blossom<br><strong>Base Notes:</strong><br>Patchouli<br>Woodsy notes</p>",
+  "published_at": "2025-05-02T15:13:26+03:00",
+  "created_at": "2025-05-02T15:11:31+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 46611904266427,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": false,
+      "featured_image": null,
+      "available": true,
+      "price": "850.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8070202065083,
+      "created_at": "2025-05-02T15:11:31+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 37924543889595,
+      "created_at": "2025-05-02T15:12:22+03:00",
+      "position": 1,
+      "updated_at": "2025-05-02T15:12:23+03:00",
+      "product_id": 8070202065083,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-6076.jpg?v=1746187943",
+      "width": 2250,
+      "height": 2250
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{%- comment -%}
+  sorella-blob — decorative organic light field (Art Direction §7).
+  Renders an aria-hidden, pointer-events:none field with 1–2 blobs.
+  Never carries content. Capped at 2 concurrent visible per viewport (§7.7).
+  Params:
+    scheme (string) — 'gold-slate' (default) | 'gold' | 'slate' | 'rose' | 'gold-rose'
+    drift  (boolean) — enable ambient drift (default true; auto-off w/ reduced motion)
+    single (boolean) — render only one blob (corner-anchored)
+{%- endcomment -%}
+{%- liquid
+  assign scheme = scheme | default: 'gold-slate'
+  assign do_drift = drift
+  if drift == nil
+    assign do_drift = true
+  endif
+  assign drift_a = ''
+  assign drift_b = ''
+  if do_drift
+    assign drift_a = ' blob--drift-a'
+    assign drift_b = ' blob--drift-b'
+  endif
+-%}
+<div class="blob-field" aria-hidden="true">
+  {%- if single -%}
+    <span class="blob blob--corner blob--{{ scheme }}{{ drift_a }}"></span>
+  {%- else -%}
+    {%- case scheme -%}
+      {%- when 'gold' -%}
+        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
+        <span class="blob blob--b blob--gold blob--br{{ drift_b }}"></span>
+      {%- when 'slate' -%}
+        <span class="blob blob--slate blob--tl{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+      {%- when 'rose' -%}
+        <span class="blob blob--rose blob--tl{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+      {%- when 'gold-rose' -%}
+        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
+        <span class="blob blob--b blob--rose blob--br{{ drift_b }}"></span>
+      {%- else -%}
+        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+    {%- endcase -%}
+  {%- endif -%}
+</div>

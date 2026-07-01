@@ -1,0 +1,99 @@
+{%- comment -%}
+  sorella-contact-form — Contact form on a parchment reading surface (Page Templates Report §4.2).
+  Uses Shopify {% form 'contact' %}. Fields rendered via sorella-form-field snippet.
+  On successful post, shows the localized success message instead of the form.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="sorella-contact surface-parchment section-pad" data-section-id="{{ section.id }}">
+  <div class="container container--read">
+    {%- if s.heading != blank -%}
+      <h2 class="sorella-contact__heading t-display-md">{{ s.heading }}</h2>
+    {%- endif -%}
+
+    <div class="sorella-contact__card">
+      {%- form 'contact', class: 'sorella-contact__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="sorella-contact__success t-body-lg" role="status">
+            {{ 'sections.contact.success' | t }}
+          </p>
+        {%- else -%}
+          {% render 'sorella-form-field',
+            type: 'text',
+            id: 'contact-name',
+            name: 'contact[Name]',
+            label: 'sections.contact.name' | t,
+            autocomplete: 'name' %}
+
+          {% render 'sorella-form-field',
+            type: 'email',
+            id: 'contact-email',
+            name: 'contact[email]',
+            label: 'sections.contact.email' | t,
+            required: true,
+            autocomplete: 'email' %}
+
+          {%- if s.show_phone -%}
+            {% render 'sorella-form-field',
+              type: 'tel',
+              id: 'contact-phone',
+              name: 'contact[Phone]',
+              label: 'sections.contact.phone' | t,
+              autocomplete: 'tel' %}
+          {%- endif -%}
+
+          {% render 'sorella-form-field',
+            type: 'textarea',
+            id: 'contact-body',
+            name: 'contact[body]',
+            label: 'sections.contact.message' | t %}
+
+          <div class="sorella-contact__actions">
+            {% render 'sorella-button', label: 'sections.contact.submit' | t, style: 'primary', type: 'submit' %}
+          </div>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
+    {%- if s.note != blank or s.show_socials -%}
+      <div class="sorella-contact__aside">
+        {%- if s.note != blank -%}
+          <div class="sorella-contact__note rte t-body">{{ s.note }}</div>
+        {%- endif -%}
+        {%- if s.show_socials -%}
+          {% render 'sorella-social-links' %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .sorella-contact__heading { margin-block-end: var(--space-lg); }
+  .sorella-contact__card {
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xxl);
+  }
+  .sorella-contact__form { display: flex; flex-direction: column; gap: var(--space-lg); }
+  .sorella-contact__actions { margin-block-start: var(--space-sm); }
+  .sorella-contact__aside {
+    display: flex; flex-direction: column; gap: var(--space-lg);
+    margin-block-start: var(--space-xl);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "checkbox", "id": "show_phone", "label": "Show phone field", "default": true },
+    { "type": "richtext", "id": "note", "label": "Note", "default": "<p>We reply within 1–2 business days. Orders ship across Egypt in 5–8 days.</p>" },
+    { "type": "checkbox", "id": "show_socials", "label": "Show social links", "default": true }
+  ],
+  "presets": [{ "name": "Contact form" }]
+}
+{% endschema %}

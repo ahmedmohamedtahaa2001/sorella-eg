@@ -1,0 +1,140 @@
+{
+  "url": "https://dossier.co/products/slice-of-heaven",
+  "name": "Slice of Heaven",
+  "inspired_by": "Dossier Dossier Originals",
+  "meta": {
+    "og:title": "Slice of Heaven",
+    "twitter:title": "Slice of Heaven",
+    "description": "Relish in a Slice of Heaven to smell like decadent caramel vanilla latte cake, coated in a luscious floral glacé. This fragrance epitomizes indulgence w...",
+    "og:description": "Relish in a Slice of Heaven to smell like decadent caramel vanilla latte cake, coated in a luscious floral glacé. This fragrance epitomizes indulgence w...",
+    "twitter:description": "Relish in a Slice of Heaven to smell like decadent caramel vanilla latte cake, coated in a luscious floral glacé. This fragrance epitomizes indulgence w...",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/products/slice-of-heaven",
+    "og:image:url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Slice_Of_Heaven_10e0a4d9-be2b-4613-bec9-7f7ce13e4847.jpg?v=1779275951",
+    "og:image:secure_url": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Slice_Of_Heaven_10e0a4d9-be2b-4613-bec9-7f7ce13e4847.jpg?v=1779275951",
+    "og:image:type": "image/jpeg",
+    "og:image:width": "1500",
+    "og:image:height": "1500"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Slice+of+Heaven"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Products",
+          "item": "https://dossier.co/products"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Slice of Heaven"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "brand": {
+        "@type": "Brand",
+        "name": "Dossier Dossier Originals"
+      },
+      "description": "Relish in a Slice of Heaven to smell like decadent caramel vanilla latte cake, coated in a luscious floral glacé. This fragrance epitomizes indulgence w...",
+      "image": [
+        "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Slice_Of_Heaven_10e0a4d9-be2b-4613-bec9-7f7ce13e4847.jpg?v=1779275951"
+      ],
+      "name": "Slice of Heaven",
+      "offers": [
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "41570632073283",
+          "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Slice+of+Heaven"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "41570584133699",
+          "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Fruits+of+Love"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "41570582528067",
+          "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Zest+for+Life"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "42316178718787",
+          "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Call+Me+Vanilla"
+        },
+        {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "price": 35.1,
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": 39,
+            "priceCurrency": "USD",
+            "priceType": "ListPrice"
+          },
+          "sku": "BLFY050ORUSP2XX",
+          "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Blooming+For+You"
+        }
+      ],
+      "sku": "41570632073283",
+      "url": "https://dossier.co/products/slice-of-heaven?Slice+of+Heaven=Slice+of+Heaven"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "url": "https://dossier.co/collections/sbt-green-perfume",
+  "name": "Green Perfume : Best Green Fragrances with Green notes & scents",
+  "meta": {
+    "og:title": "Green Perfume : Best Green Fragrances with Green notes & scents",
+    "description": "Green Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Green Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-green-perfume",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-green-perfume"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Offers - Green Perfume"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Green Perfume : Best Green Fragrances with Green notes & scents",
+      "description": "Green Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-green-perfume",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/woody-sage"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/citrus-tea"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/fruity-honey"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/musky-green-tea"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/fruity-jasmine"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/floral-pear"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/floral-rhubarb"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/green-verbena"
+          }
+        ]
+      }
+    }
+  ]
+}

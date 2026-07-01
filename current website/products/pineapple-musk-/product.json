@@ -1,0 +1,55 @@
+{
+  "id": 8069036015803,
+  "title": "Pineapple musk 🍍",
+  "handle": "pineapple-musk-🍍",
+  "body_html": "<p><span>A tropical allure meets velvety depth. Juicy, sun-ripened pineapple blends seamlessly with creamy musk for a scent that's vibrant, smooth, and irresistibly sensual.</span></p>",
+  "published_at": "2025-04-29T20:10:44+03:00",
+  "created_at": "2025-04-29T20:05:41+03:00",
+  "updated_at": "2026-07-01T16:46:28+03:00",
+  "vendor": "Sorella",
+  "product_type": "",
+  "tags": [],
+  "variants": [
+    {
+      "id": 46608087613627,
+      "title": "Default Title",
+      "option1": "Default Title",
+      "option2": null,
+      "option3": null,
+      "sku": null,
+      "requires_shipping": true,
+      "taxable": true,
+      "featured_image": null,
+      "available": false,
+      "price": "300.00",
+      "grams": 0,
+      "compare_at_price": null,
+      "position": 1,
+      "product_id": 8069036015803,
+      "created_at": "2025-04-29T20:05:41+03:00",
+      "updated_at": "2026-07-01T16:46:28+03:00"
+    }
+  ],
+  "images": [
+    {
+      "id": 42367757484219,
+      "created_at": "2026-05-11T17:28:32+03:00",
+      "position": 1,
+      "updated_at": "2026-05-11T17:28:33+03:00",
+      "product_id": 8069036015803,
+      "variant_ids": [],
+      "src": "https://cdn.shopify.com/s/files/1/0636/7045/2411/files/IMG-5721.png?v=1778509713",
+      "width": 923,
+      "height": 1152
+    }
+  ],
+  "options": [
+    {
+      "name": "Title",
+      "position": 1,
+      "values": [
+        "Default Title"
+      ]
+    }
+  ]
+}

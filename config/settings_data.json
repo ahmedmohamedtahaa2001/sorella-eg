@@ -1,0 +1,23 @@
+{
+  "current": {
+    "brand_name": "Sorella",
+    "brand_tagline": "From our bond to your senses",
+    "logo_width": 140,
+    "social_instagram": "https://www.instagram.com/sorella.fragrances",
+    "social_tiktok": "https://www.tiktok.com/@sorella.fragrances",
+    "cart_drawer_enabled": true,
+    "free_gift_threshold": 1100,
+    "card_image_ratio": "media--4x5",
+    "card_quick_add": true,
+    "currency_code_enabled": true
+  },
+  "presets": {
+    "Sorella": {
+      "brand_name": "Sorella",
+      "brand_tagline": "From our bond to your senses",
+      "free_gift_threshold": 1100,
+      "card_image_ratio": "media--4x5",
+      "card_quick_add": true
+    }
+  }
+}

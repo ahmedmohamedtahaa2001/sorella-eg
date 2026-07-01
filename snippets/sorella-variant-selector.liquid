@@ -1,0 +1,33 @@
+{%- comment -%}
+  sorella-variant-selector — swatch (single option) / dropdown (§9).
+  Renders one control per product option. Must live inside a form that has a
+  hidden input[name="id"] with [data-variant-id]. Updates handled in theme.js.
+  Params: product (object, required)
+{%- endcomment -%}
+{%- unless product.has_only_default_variant -%}
+  <div class="sorella-variants" data-variant-selector>
+    {%- for option in product.options_with_values -%}
+      <div class="sorella-variants__group">
+        <span class="sorella-variants__label t-caption-strong">{{ option.name }}</span>
+        <div class="sorella-variants__options" role="radiogroup" aria-label="{{ option.name | escape }}">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign opt_id = 'opt-' | append: option.position | append: '-' | append: forloop.index
+              assign checked = false
+              if option.selected_value == value
+                assign checked = true
+              endif
+            -%}
+            <input class="visually-hidden sorella-variants__input" type="radio"
+              name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+              data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
+            <label class="sorella-variants__chip t-caption" for="{{ opt_id }}">{{ value }}</label>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endfor -%}
+    <script type="application/json" data-variant-data>
+      {{ product.variants | json }}
+    </script>
+  </div>
+{%- endunless -%}

@@ -1,0 +1,29 @@
+User-agent: *
+Disallow: /admin
+Disallow: /cart
+Disallow: /orders
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /account
+Disallow: /*?ref=*
+Disallow: /*search?q=*
+Disallow: *{search_term}*
+Disallow: /*?direction=next&cursor=*search?q=*
+Disallow: /*?direction=prev&cursor=*search?q=*
+Disallow: *?yoReviews*
+Disallow: *?gf_*
+Disallow: *?yoReviews*
+Disallow: *?gf_*
+
+Sitemap: https://dossier.co/sitemap.xml
+
+# Google adsbot ignores robots.txt unless specifically named!
+User-agent: adsbot-google
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /orders
+
+User-agent: Pinterest
+Crawl-delay: 1

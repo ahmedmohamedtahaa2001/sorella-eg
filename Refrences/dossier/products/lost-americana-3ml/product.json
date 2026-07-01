@@ -1,0 +1,122 @@
+{
+  "url": "https://dossier.co/products/lost-americana-3ml",
+  "name": "Lost Americana (3ml sample)",
+  "inspired_by": null,
+  "meta": {
+    "og:title": "All Perfumes",
+    "twitter:title": "All Perfumes",
+    "description": "Luxury fragrances. Premium quality, not pricing. ",
+    "og:description": "Luxury fragrances. Premium quality, not pricing. ",
+    "twitter:description": "Luxury fragrances. Premium quality, not pricing. ",
+    "twitter:site": "@shopify",
+    "twitter:creator": "@shopify",
+    "og:url": "https://dossier.co/collections/all-perfumes",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/all-perfumes"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "All Perfumes"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "All Perfumes",
+      "description": "",
+      "url": "/collections/all-perfumes",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/ambery-saffron"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/floral-marshmallow"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/ambery-vanilla"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/woody-sandalwood"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "/products/aromatic-ginger"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "/products/musky-oakmoss"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "/products/fougere-oud"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "/products/spicy-star-anise"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "/products/ambery-sage"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "/products/floral-raspberry"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "/products/gourmand-caramel"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "/products/gourmand-strawberry"
+          }
+        ]
+      }
+    }
+  ],
+  "note": "No standalone product page on dossier.co — this URL renders a collection listing (3ml sample) or is a utility SKU. Name derived from URL handle."
+}

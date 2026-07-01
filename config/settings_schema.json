@@ -1,0 +1,143 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Sorella",
+    "theme_version": "1.0.0",
+    "theme_author": "Sorella",
+    "theme_documentation_url": "https://sorella-eg.com",
+    "theme_support_url": "https://sorella-eg.com/pages/contact"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo (full wordmark)"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_mark",
+        "label": "Logo mark (compact icon)"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 80,
+        "max": 240,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 140
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand name",
+        "default": "Sorella"
+      },
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Tagline",
+        "default": "From our bond to your senses"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      },
+      {
+        "type": "select",
+        "id": "text_direction",
+        "label": "Text direction",
+        "options": [
+          { "value": "ltr", "label": "Left to right" },
+          { "value": "rtl", "label": "Right to left (Arabic)" }
+        ],
+        "default": "ltr"
+      }
+    ]
+  },
+  {
+    "name": "Social links",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/sorella.fragrances"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok URL",
+        "default": "https://www.tiktok.com/@sorella.fragrances"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Contact email"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_enabled",
+        "label": "Use cart drawer",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "free_gift_threshold",
+        "min": 0,
+        "max": 5000,
+        "step": 50,
+        "unit": "LE",
+        "label": "Free 5ml gift threshold",
+        "default": 1100
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Card image ratio",
+        "options": [
+          { "value": "media--1x1", "label": "Square (1:1)" },
+          { "value": "media--4x5", "label": "Portrait (4:5)" },
+          { "value": "media--3x4", "label": "Portrait (3:4)" }
+        ],
+        "default": "media--4x5"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Show quick-add on hover",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Currency",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency code (e.g. LE)",
+        "default": true
+      }
+    ]
+  }
+]

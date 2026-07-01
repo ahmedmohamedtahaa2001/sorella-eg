@@ -1,0 +1,76 @@
+{
+  "url": "https://dossier.co/collections/sbt-vetiver-perfume",
+  "name": "Vetiver Perfume : Best Vetiver Fragrances with Vetiver notes & scents",
+  "meta": {
+    "og:title": "Vetiver Perfume : Best Vetiver Fragrances with Vetiver notes & scents",
+    "description": "Vetiver Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:description": "Vetiver Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+    "og:url": "https://dossier.co/collections/sbt-vetiver-perfume",
+    "og:image:type": "image/jpeg"
+  },
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dossier",
+      "logo": "https://cdn.shopify.com/s/files/1/0047/4067/7699/files/Dossier_Logo.svg?v=1712571901",
+      "sameAs": [
+        "https://x.com/dossierperfume",
+        "https://www.facebook.com/p/Dossier-100069542283354/",
+        "https://www.instagram.com/dossierperfumes/?hl=en",
+        "https://www.youtube.com/@dossierperfumes/",
+        "https://www.tiktok.com/@dossierperfumes?lang=en"
+      ],
+      "url": "https://dossier.co/collections/sbt-vetiver-perfume"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Collections",
+          "item": "dossier.co/collections"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Theme - Scents - Vetiver Perfume"
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Vetiver Perfume : Best Vetiver Fragrances with Vetiver notes & scents",
+      "description": "Vetiver Perfume Online ✔️ Fair alternative to luxury perfumes ⚡ Free shipping ❤️ Vegan & Cruelty-free ⭐ Fragrance for the 99%",
+      "url": "/collections/sbt-vetiver-perfume",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/products/ambery-vetiver"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "/products/sunny-vetiver-neroli"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "/products/spicy-vetiver"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "/products/woody-ginger"
+          }
+        ]
+      }
+    }
+  ]
+}

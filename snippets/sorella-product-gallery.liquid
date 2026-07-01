@@ -1,0 +1,32 @@
+{%- comment -%}
+  sorella-product-gallery — PDP media (thumbs + main). Rendered inside sorella-product-info.
+  Product render sits on a surface with the one allowed product shadow (§8.1).
+  Params: product (object, required)
+{%- endcomment -%}
+<div class="sorella-gallery" data-gallery>
+  <div class="sorella-gallery__main media media--4x5">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 1200 | image_tag:
+        loading: 'eager', fetchpriority: 'high',
+        sizes: '(max-width: 990px) 100vw, 55vw', widths: '600, 900, 1200, 1600',
+        class: 'sorella-gallery__img', id: 'gallery-main',
+        alt: product.featured_media.alt | default: product.title | escape }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'media__placeholder' }}
+    {%- endif -%}
+  </div>
+
+  {%- if product.media.size > 1 -%}
+    <ul class="sorella-gallery__thumbs">
+      {%- for media in product.media -%}
+        <li>
+          <button type="button" class="sorella-gallery__thumb media media--1x1{% if forloop.first %} is-active{% endif %}"
+            data-gallery-thumb data-full="{{ media | image_url: width: 1200 }}"
+            aria-label="{{ 'general.accessibility.next' | t }} {{ forloop.index }}">
+            {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: media.alt | default: product.title | escape }}
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>

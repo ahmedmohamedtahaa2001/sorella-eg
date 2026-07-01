@@ -1,0 +1,42 @@
+{%- comment -%}
+  sorella-price — regular / sale / from (Design System §9, "sorella-price").
+  Params:
+    product (object) — for "from" ranges & compare_at
+    variant (object) — overrides product for a specific variant price
+    price   (number) — raw price fallback
+    context (string) — 'card' | 'pdp' | 'cart' (affects size class)
+    on_dark (boolean) — Parchment price on dark, else Gold on light
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product
+  assign show_from = false
+  if variant == blank and product and product.price_varies
+    assign show_from = true
+  endif
+
+  if variant
+    assign current = variant.price
+    assign compare = variant.compare_at_price
+  elsif product
+    assign current = product.price
+    assign compare = product.compare_at_price
+  else
+    assign current = price
+    assign compare = null
+  endif
+
+  assign price_color_class = 'text-gold'
+  if on_dark
+    assign price_color_class = ''
+  endif
+-%}
+<span class="sorella-price sorella-price--{{ context | default: 'card' }}{% if compare and compare > current %} sorella-price--on-sale{% endif %}">
+  {%- if show_from -%}
+    <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: current | money }}</span>
+  {%- else -%}
+    <span class="t-price {{ price_color_class }} sorella-price__current">{{ current | money }}</span>
+    {%- if compare and compare > current -%}
+      <s class="t-caption text-mist sorella-price__compare">{{ compare | money }}</s>
+    {%- endif -%}
+  {%- endif -%}
+</span>
