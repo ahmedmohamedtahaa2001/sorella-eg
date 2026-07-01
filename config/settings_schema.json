@@ -63,19 +63,19 @@
     "name": "Social links",
     "settings": [
       {
-        "type": "url",
+        "type": "text",
         "id": "social_instagram",
         "label": "Instagram URL",
         "default": "https://www.instagram.com/sorella.fragrances"
       },
       {
-        "type": "url",
+        "type": "text",
         "id": "social_tiktok",
         "label": "TikTok URL",
         "default": "https://www.tiktok.com/@sorella.fragrances"
       },
       {
-        "type": "url",
+        "type": "text",
         "id": "social_facebook",
         "label": "Facebook URL"
       },

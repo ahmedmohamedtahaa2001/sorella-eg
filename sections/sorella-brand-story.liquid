@@ -21,7 +21,8 @@
       assign side = block.settings.side
       if side == blank
         assign side = 'start'
-        if forloop.index0 | modulo: 2 != 0
+        assign side_parity = forloop.index0 | modulo: 2
+        if side_parity != 0
           assign side = 'end'
         endif
       endif
