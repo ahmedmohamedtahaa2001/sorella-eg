@@ -32,6 +32,14 @@
       "title": "This page drifted off.",
       "subtext": "The page you’re after doesn’t exist — but our best sellers do.",
       "cta": "Shop best sellers"
+    },
+    "meta": {
+      "page": "Page {{ page }}"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Your {{ value }} gift card for {{ shop }}"
     }
   },
   "products": {

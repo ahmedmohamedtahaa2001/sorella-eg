@@ -5,10 +5,8 @@
 {%- liquid
   assign per_page = section.settings.per_page | default: 24
   assign products = collection.products
-  assign source_url = collection.url
   if template.name == 'search'
     assign products = search.results
-    assign source_url = routes.search_url
   endif
 -%}
 <section class="sorella-collection surface-ink section-pad-b" data-section-id="{{ section.id }}">

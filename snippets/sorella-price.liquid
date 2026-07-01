@@ -8,7 +8,6 @@
     on_dark (boolean) — Parchment price on dark, else Gold on light
 {%- endcomment -%}
 {%- liquid
-  assign target = variant | default: product
   assign show_from = false
   if variant == blank and product and product.price_varies
     assign show_from = true
