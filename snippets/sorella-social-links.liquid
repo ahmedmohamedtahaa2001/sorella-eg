@@ -1,12 +1,12 @@
-{%- comment -%} sorella-social-links — theme-setting driven social icon row {%- endcomment -%}
+{%- comment -%} sorella-social-links — theme-setting driven social icon row (40px circular buttons) {%- endcomment -%}
 <ul class="sorella-socials">
   {%- if settings.social_instagram != blank -%}
-    <li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'sorella-icon', name: 'instagram', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.instagram' | t }}">{% render 'sorella-icon', name: 'instagram', size: 20 %}</a></li>
   {%- endif -%}
   {%- if settings.social_tiktok != blank -%}
-    <li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">{% render 'sorella-icon', name: 'tiktok', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.tiktok' | t }}">{% render 'sorella-icon', name: 'tiktok', size: 20 %}</a></li>
   {%- endif -%}
   {%- if settings.social_facebook != blank -%}
-    <li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'sorella-icon', name: 'facebook', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook' | t }}">{% render 'sorella-icon', name: 'facebook', size: 20 %}</a></li>
   {%- endif -%}
 </ul>

@@ -22,7 +22,7 @@
         <li>
           <button type="button" class="sorella-gallery__thumb media media--1x1{% if forloop.first %} is-active{% endif %}"
             data-gallery-thumb data-full="{{ media | image_url: width: 1200 }}"
-            aria-label="{{ 'general.accessibility.next' | t }} {{ forloop.index }}">
+            aria-label="{{ 'general.accessibility.view_image' | t: number: forloop.index }}">
             {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: media.alt | default: product.title | escape }}
           </button>
         </li>

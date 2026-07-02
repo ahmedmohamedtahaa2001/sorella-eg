@@ -43,6 +43,17 @@
 {% stylesheet %}
   .sorella-list-collections__cell { display: flex; }
   .sorella-list-collections__cell .sorella-bento-cell { min-block-size: 100%; inline-size: 100%; }
+  /* Stronger bottom scrim so labels stay legible on bright photography —
+     also pins the hover state (base scrim fades on hover elsewhere). */
+  .sorella-list-collections__cell .sorella-bento-cell__scrim,
+  .sorella-list-collections__cell .sorella-bento-cell:hover .sorella-bento-cell__scrim {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--color-navy) 35%, transparent) 55%,
+      color-mix(in srgb, var(--color-navy) 75%, transparent) 100%
+    );
+  }
 {% endstylesheet %}
 
 {% schema %}

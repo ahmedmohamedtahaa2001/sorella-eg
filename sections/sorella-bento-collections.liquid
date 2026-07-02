@@ -13,7 +13,7 @@
     {%- if s.eyebrow != blank or s.heading != blank -%}
       <div class="section-head">
         {%- if s.eyebrow != blank -%}<span class="t-eyebrow section-head__eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
-        {%- if s.heading != blank -%}<h2 class="t-display-lg">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="t-display-md">{{ s.heading }}</h2>{%- endif -%}
       </div>
     {%- endif -%}
 
@@ -33,7 +33,8 @@
             subheading: b.subheading,
             link: link,
             cta: b.cta,
-            eyebrow: b.eyebrow %}
+            eyebrow: b.eyebrow,
+            variant: b.variant %}
         </div>
       {%- endfor -%}
     </div>
@@ -65,6 +66,14 @@
         { "type": "text", "id": "cta", "label": "CTA label", "default": "Shop" },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
         {
+          "type": "select", "id": "variant", "label": "Style", "default": "default",
+          "options": [
+            { "value": "default", "label": "Photo tile" },
+            { "value": "panel", "label": "Split panel (image + text block)" },
+            { "value": "campaign", "label": "Campaign (badge + centered)" }
+          ]
+        },
+        {
           "type": "select", "id": "span", "label": "Span", "default": "1x1",
           "options": [
             { "value": "1x1", "label": "1×1" },
@@ -82,7 +91,8 @@
       "blocks": [
         { "type": "cell", "settings": { "heading": "For Her", "span": "1x1" } },
         { "type": "cell", "settings": { "heading": "For Him", "span": "1x1" } },
-        { "type": "cell", "settings": { "heading": "Unisex", "span": "1x2" } },
+        { "type": "cell", "settings": { "heading": "Unisex", "span": "1x2", "variant": "panel", "subheading": "Shared skin scents that blur the line.", "cta": "Shop Unisex" } },
+        { "type": "cell", "settings": { "heading": "The Seasonal Edit", "span": "2x1", "variant": "campaign", "eyebrow": "Limited Edition", "subheading": "A rotating capsule for the season.", "cta": "Shop the Edit" } },
         { "type": "cell", "settings": { "heading": "Perfume Oil", "span": "1x1" } },
         { "type": "cell", "settings": { "heading": "Bundles", "span": "1x1" } }
       ]

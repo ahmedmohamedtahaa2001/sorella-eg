@@ -24,9 +24,10 @@
         {%- if settings.free_gift_threshold > 0 -%}
           <div class="sorella-cart__progress">
             {%- if remaining > 0 -%}
-              <span class="t-caption">{{ 'cart.general.free_gift_progress' | t: amount: remaining | money }}</span>
+              {%- assign remaining_money = remaining | money -%}
+              <span class="t-caption">{{ 'cart.general.free_gift_progress' | t: amount: remaining_money }}</span>
             {%- else -%}
-              <span class="t-caption text-gold">{{ 'cart.general.free_gift_unlocked' | t }}</span>
+              <span class="t-body-strong text-gold">{{ 'cart.general.free_gift_unlocked' | t }}</span>
             {%- endif -%}
             <div class="sorella-cart__progress-track">
               {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
@@ -46,7 +47,7 @@
             <span class="t-body-strong">{{ 'cart.general.subtotal' | t }}</span>
             <span class="t-price text-gold">{{ cart.total_price | money }}</span>
           </div>
-          <span class="t-fine-print text-mist">{{ 'cart.general.taxes_shipping' | t }}</span>
+          <span class="t-caption sorella-cart__legal">{{ 'cart.general.taxes_shipping' | t }}</span>
           <button type="submit" name="checkout" class="btn btn--primary btn--full">{{ 'cart.general.checkout' | t }}</button>
         </div>
       </form>
@@ -60,6 +61,7 @@
 .sorella-main-cart__form { display: flex; flex-direction: column; gap: var(--space-lg); }
 .sorella-main-cart__lines { max-inline-size: var(--container-read); }
 .sorella-main-cart__foot { max-inline-size: var(--container-read); padding: var(--space-lg); }
+.sorella-cart__legal { color: var(--color-parchment-65); }
 {% endstylesheet %}
 
 {% schema %}

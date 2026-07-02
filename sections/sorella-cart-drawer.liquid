@@ -6,11 +6,11 @@
   assign threshold = settings.free_gift_threshold | times: 100
   assign remaining = threshold | minus: cart.total_price
 -%}
-<aside class="sorella-drawer sorella-drawer--end" id="cart-drawer" data-panel data-scrim="[data-shared-scrim]" aria-hidden="true" aria-label="{{ 'cart.general.title' | t }}">
+<aside class="sorella-drawer sorella-drawer--end" id="cart-drawer" data-panel data-scrim="[data-shared-scrim]" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title">
   <div class="sorella-drawer__panel glass-panel glass-panel--xl">
     <div data-cart-contents>
       <div class="sorella-cart__head">
-        <span class="t-title">{{ 'cart.general.title' | t }} ({{ cart.item_count }})</span>
+        <span class="t-title" id="cart-drawer-title">{{ 'cart.general.title' | t }} ({{ cart.item_count }})</span>
         <button class="nav-dock__icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t }}">
           {% render 'sorella-icon', name: 'close', size: 22 %}
         </button>
@@ -20,9 +20,10 @@
         {%- if settings.free_gift_threshold > 0 -%}
           <div class="sorella-cart__progress">
             {%- if remaining > 0 -%}
-              <span class="t-caption">{{ 'cart.general.free_gift_progress' | t: amount: remaining | money }}</span>
+              {%- assign remaining_money = remaining | money -%}
+              <span class="t-caption">{{ 'cart.general.free_gift_progress' | t: amount: remaining_money }}</span>
             {%- else -%}
-              <span class="t-caption text-gold">{{ 'cart.general.free_gift_unlocked' | t }}</span>
+              <span class="t-body-strong text-gold">{{ 'cart.general.free_gift_unlocked' | t }}</span>
             {%- endif -%}
             <div class="sorella-cart__progress-track">
               {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
@@ -54,7 +55,7 @@
             <span class="t-body-strong">{{ 'cart.general.subtotal' | t }}</span>
             <span class="t-price text-gold">{{ cart.total_price | money }}</span>
           </div>
-          <span class="t-fine-print text-mist">{{ 'cart.general.taxes_shipping' | t }}</span>
+          <span class="t-caption sorella-cart__legal">{{ 'cart.general.taxes_shipping' | t }}</span>
           <button type="submit" name="checkout" class="btn btn--primary btn--full">{{ 'cart.general.checkout' | t }}</button>
         </form>
       {%- else -%}
@@ -71,6 +72,17 @@
     </div>
   </div>
 </aside>
+
+{% stylesheet %}
+  /* Guaranteed dark under-layer so parchment text never sits on parchment-through-glass (§9.6) */
+  .sorella-drawer__panel.glass-panel {
+    background-color: var(--color-navy-low);
+    background-image: linear-gradient(var(--color-parchment-12), var(--color-parchment-12));
+  }
+  .sorella-cart__legal { color: var(--color-parchment-65); }
+  /* 44px touch targets for line-item controls (hooks also styled in components.css) */
+  .sorella-line__hit { display: inline-flex; align-items: center; justify-content: center; min-inline-size: 44px; min-block-size: 44px; }
+{% endstylesheet %}
 
 {% schema %}
 {

@@ -10,20 +10,22 @@
   </a>
   <div class="sorella-line__body">
     <div class="sorella-line__top">
-      <a class="sorella-line__title t-body-strong" href="{{ line.url }}">{{ line.product.title }}</a>
-      <a class="sorella-line__remove" href="{{ line.url_to_remove }}"
+      <a class="sorella-line__title t-body-strong" href="{{ line.url }}" dir="auto">{{ line.product.title }}</a>
+      <a class="sorella-line__remove sorella-line__hit" href="{{ line.url_to_remove }}"
          data-line="{{ index }}" data-line-change="0" aria-label="{{ 'cart.general.remove' | t }}">
         {% render 'sorella-icon', name: 'close', size: 16 %}
       </a>
     </div>
     {%- unless line.product.has_only_default_variant -%}
-      <span class="t-caption text-mist">{{ line.variant.title }}</span>
+      <span class="t-caption text-mist" dir="auto">{{ line.variant.title }}</span>
     {%- endunless -%}
     <div class="sorella-line__bottom">
+      {%- assign qty_down = line.quantity | minus: 1 -%}
+      {%- assign qty_up = line.quantity | plus: 1 -%}
       <div class="sorella-line__qty">
-        <a href="{{ line.url }}" data-line="{{ index }}" data-line-change="{{ line.quantity | minus: 1 }}" aria-label="{{ 'products.product.decrease_quantity' | t }}">{% render 'sorella-icon', name: 'minus', size: 14 %}</a>
-        <span class="t-caption-strong">{{ line.quantity }}</span>
-        <a href="{{ line.url }}" data-line="{{ index }}" data-line-change="{{ line.quantity | plus: 1 }}" aria-label="{{ 'products.product.increase_quantity' | t }}">{% render 'sorella-icon', name: 'plus', size: 14 %}</a>
+        <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_down }}" data-line="{{ index }}" data-line-change="{{ qty_down }}" aria-label="{{ 'products.product.decrease_quantity' | t }}">{% render 'sorella-icon', name: 'minus', size: 14 %}</a>
+        <span class="sorella-line__qty-value t-caption-strong">{{ line.quantity }}</span>
+        <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_up }}" data-line="{{ index }}" data-line-change="{{ qty_up }}" aria-label="{{ 'products.product.increase_quantity' | t }}">{% render 'sorella-icon', name: 'plus', size: 14 %}</a>
       </div>
       <span class="t-price text-gold">{{ line.final_line_price | money }}</span>
     </div>

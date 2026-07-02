@@ -13,7 +13,7 @@
 {%- if notes_top != blank or notes_heart != blank or notes_base != blank -%}
   <section class="sorella-notes-pyramid blob-scene surface-gradient section-pad" data-section-id="{{ section.id }}">
     {%- if s.show_blob -%}
-      {% render 'sorella-blob', scheme: 'slate', single: true %}
+      {% render 'sorella-blob', scheme: s.blob_scheme, single: true %}
     {%- endif -%}
 
     <div class="container container--read sorella-notes-pyramid__inner">
@@ -53,7 +53,16 @@
     { "type": "text", "id": "label_heart", "label": "Heart notes label", "default": "Heart notes" },
     { "type": "text", "id": "label_base", "label": "Base notes label", "default": "Base notes" },
     { "type": "header", "content": "Atmosphere" },
-    { "type": "checkbox", "id": "show_blob", "label": "Show blob", "default": true }
+    { "type": "checkbox", "id": "show_blob", "label": "Show blob", "default": false, "info": "The product page allows one blob — the product info section keeps it by default." },
+    {
+      "type": "select", "id": "blob_scheme", "label": "Blob colour", "default": "slate",
+      "options": [
+        { "value": "gold", "label": "Gold" },
+        { "value": "slate", "label": "Slate" },
+        { "value": "rose", "label": "Rose" },
+        { "value": "gold-rose", "label": "Gold + Rose" }
+      ]
+    }
   ],
   "presets": [{ "name": "Notes pyramid" }]
 }

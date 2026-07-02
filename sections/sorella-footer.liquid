@@ -1,4 +1,18 @@
-{%- comment -%} sorella-footer — dense IA area, no glass/blob (§4.3) {%- endcomment -%}
+{%- comment -%}
+  sorella-footer — dense IA area, no glass/blob (§4.3).
+  Menu columns with an unassigned/empty linklist are suppressed; the last
+  column also hosts the contact email + social links (Customer Care).
+{%- endcomment -%}
+{%- liquid
+  assign has_socials = false
+  if settings.social_instagram != blank or settings.social_tiktok != blank or settings.social_facebook != blank
+    assign has_socials = true
+  endif
+  assign has_contact = false
+  if settings.contact_email != blank
+    assign has_contact = true
+  endif
+-%}
 <footer class="sorella-footer" role="contentinfo">
   <div class="container container--lock">
     <div class="sorella-footer__grid">
@@ -6,10 +20,9 @@
         {%- if settings.logo != blank -%}
           <img src="{{ settings.logo | image_url: width: 320 }}" width="{{ settings.logo_width }}" height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio | round }}" alt="{{ shop.name | escape }}" style="width: {{ settings.logo_width }}px; height: auto;">
         {%- else -%}
-          <span class="t-title">{{ settings.brand_name | default: shop.name }}</span>
+          <span class="sorella-footer__wordmark">{{ settings.brand_name | default: shop.name }}</span>
         {%- endif -%}
         {%- if section.settings.tagline != blank -%}<p class="t-body-sm text-mist">{{ section.settings.tagline }}</p>{%- endif -%}
-        {% render 'sorella-social-links' %}
         {%- if section.settings.show_newsletter -%}
           <div class="sorella-footer__newsletter">
             <p class="t-caption-strong">{{ section.settings.newsletter_heading }}</p>
@@ -20,21 +33,65 @@
 
       {%- for block in section.blocks -%}
         {%- if block.type == 'menu_column' -%}
-          <div class="sorella-footer__col" {{ block.shopify_attributes }}>
-            <p class="sorella-footer__col-title t-eyebrow">{{ block.settings.heading }}</p>
-            <ul class="sorella-footer__links t-body-sm">
-              {%- for link in block.settings.menu.links -%}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {%- endfor -%}
-            </ul>
-          </div>
+          {%- liquid
+            assign hosts_extras = false
+            if forloop.last
+              if has_socials or has_contact
+                assign hosts_extras = true
+              endif
+            endif
+          -%}
+          {%- if block.settings.menu.links.size > 0 or hosts_extras -%}
+            <div class="sorella-footer__col" {{ block.shopify_attributes }}>
+              <p class="sorella-footer__col-title t-eyebrow">{{ block.settings.heading }}</p>
+              {%- if block.settings.menu.links.size > 0 -%}
+                <ul class="sorella-footer__links t-body-sm">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+              {%- if hosts_extras -%}
+                {%- if has_contact -%}
+                  <a class="sorella-footer__contact t-body-sm" href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a>
+                {%- endif -%}
+                {%- if has_socials -%}
+                  {% render 'sorella-social-links' %}
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
 
     <div class="sorella-footer__bottom">
-      <span class="t-fine-print text-mist">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_extra }}</span>
-      <span class="t-fine-print text-mist">{{ powered_by_link }}</span>
+      <span class="sorella-footer__legal t-caption">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_extra }}</span>
+      <div class="sorella-footer__localization">
+        {%- if section.settings.show_locale_selector and localization.available_languages.size > 1 -%}
+          {%- form 'localization', id: 'FooterLanguageForm', class: 'sorella-footer__loc-form' -%}
+            <label class="visually-hidden" for="FooterLanguageSelect">{{ section.settings.language_label }}</label>
+            <select class="sorella-footer__loc-select" id="FooterLanguageSelect" name="locale_code" onchange="this.form.submit()">
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym }}</option>
+              {%- endfor -%}
+            </select>
+            <noscript><button class="sorella-footer__loc-select" type="submit">{{ section.settings.selector_apply_label }}</button></noscript>
+          {%- endform -%}
+        {%- endif -%}
+        {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
+          {%- form 'localization', id: 'FooterCountryForm', class: 'sorella-footer__loc-form' -%}
+            <label class="visually-hidden" for="FooterCountrySelect">{{ section.settings.country_label }}</label>
+            <select class="sorella-footer__loc-select" id="FooterCountrySelect" name="country_code" onchange="this.form.submit()">
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
+              {%- endfor -%}
+            </select>
+            <noscript><button class="sorella-footer__loc-select" type="submit">{{ section.settings.selector_apply_label }}</button></noscript>
+          {%- endform -%}
+        {%- endif -%}
+      </div>
+      <span class="sorella-footer__legal t-caption">{{ powered_by_link }}</span>
     </div>
   </div>
 </footer>
@@ -46,7 +103,13 @@
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "From our bond to your senses." },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter signup", "default": true },
     { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Join our list for offers & new drops" },
-    { "type": "text", "id": "copyright_extra", "label": "Copyright note", "default": "Made fresh in Egypt." }
+    { "type": "text", "id": "copyright_extra", "label": "Copyright note", "default": "Made fresh in Egypt." },
+    { "type": "header", "content": "Localization" },
+    { "type": "checkbox", "id": "show_locale_selector", "label": "Show language selector", "default": true, "info": "Shown when the store has more than one language." },
+    { "type": "text", "id": "language_label", "label": "Language selector label", "default": "Language" },
+    { "type": "checkbox", "id": "show_country_selector", "label": "Show country/currency selector", "default": true, "info": "Shown when the store has more than one market." },
+    { "type": "text", "id": "country_label", "label": "Country selector label", "default": "Country/region" },
+    { "type": "text", "id": "selector_apply_label", "label": "Selector apply button label", "default": "Update", "info": "Only shown when JavaScript is disabled." }
   ],
   "blocks": [
     {
@@ -54,7 +117,7 @@
       "name": "Menu column",
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
-        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer", "info": "Intended menus — footer-shop: For Her, For Him, Unisex, Perfume Oils, Musks, 5ml Testers, Bundles. footer-brand: About Us, Contact. footer-care: Shipping, Refund, Privacy and Terms policies. Columns with an empty or missing menu are hidden (the last column still shows contact email and social links)." }
       ]
     }
   ],

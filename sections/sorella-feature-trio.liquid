@@ -8,13 +8,13 @@
 -%}
 <section class="sorella-feature-trio blob-scene {{ s.surface | default: 'surface-ink--well' }} section-pad" data-section-id="{{ section.id }}">
   {%- if s.show_blob -%}
-    {% render 'sorella-blob', scheme: s.blob_scheme, single: true %}
+    {% render 'sorella-blob', scheme: s.blob_scheme, single: true, position: s.blob_position, size: s.blob_size %}
   {%- endif -%}
 
   <div class="container container--bento sorella-feature-trio__inner">
     {%- if s.eyebrow != blank or s.heading != blank -%}
       <div class="section-head section-head--center">
-        {%- if s.eyebrow != blank -%}<span class="section-head__eyebrow t-eyebrow text-gold">{{ s.eyebrow }}</span>{%- endif -%}
+        {%- if s.eyebrow != blank -%}<span class="section-head__eyebrow t-eyebrow t-eyebrow--wide text-gold">{{ s.eyebrow }}</span>{%- endif -%}
         {%- if s.heading != blank -%}<h2 class="t-display-lg">{{ s.heading }}</h2>{%- endif -%}
       </div>
     {%- endif -%}
@@ -24,7 +24,7 @@
         {%- assign b = block.settings -%}
         <article class="sorella-feature-trio__card glass-panel glass-panel--md glass-panel--sheen{% if b.emphasis %} is-emphasis{% endif %}" {{ block.shopify_attributes }}>
           {%- if b.badge != blank or b.icon != blank -%}
-            <span class="sorella-feature-trio__badge">
+            <span class="sorella-feature-trio__badge t-headline">
               {%- if b.icon != blank -%}{% render 'sorella-icon', name: b.icon, size: 22 %}{%- else -%}{{ b.badge }}{%- endif -%}
             </span>
           {%- endif -%}
@@ -47,7 +47,9 @@
   }
   .sorella-feature-trio__grid--connected::before {
     content: ""; position: absolute; inset-inline: 6%; inset-block-start: 50%;
-    height: 1px; background: var(--color-gold-40); z-index: 0;
+    height: 1px; z-index: 0;
+    background: var(--color-gold-15);
+    background: color-mix(in srgb, var(--color-gold) 20%, transparent);
   }
   @media (max-width: 767px) { .sorella-feature-trio__grid--connected::before { display: none; } }
   .sorella-feature-trio__card {
@@ -62,7 +64,7 @@
     display: inline-flex; align-items: center; justify-content: center;
     width: 64px; height: 64px; border-radius: var(--radius-full);
     background: var(--color-gold-15); border: 1px solid var(--color-gold-40);
-    color: var(--color-gold); font-family: var(--font-display); font-size: 20px;
+    color: var(--color-gold);
     margin-block-end: var(--space-xs);
   }
   .sorella-feature-trio__card.is-emphasis .sorella-feature-trio__badge { background: rgba(199,156,90,0.22); border-color: var(--color-gold); }
@@ -93,8 +95,25 @@
       "type": "select", "id": "blob_scheme", "label": "Blob colour", "default": "slate",
       "options": [
         { "value": "gold", "label": "Gold" },
-        { "value": "slate", "label": "Slate" },
-        { "value": "gold-slate", "label": "Gold + Slate" }
+        { "value": "slate", "label": "Slate" }
+      ]
+    },
+    {
+      "type": "select", "id": "blob_position", "label": "Blob position", "default": "bl",
+      "options": [
+        { "value": "tl", "label": "Top left" },
+        { "value": "tr", "label": "Top right" },
+        { "value": "bl", "label": "Bottom left" },
+        { "value": "br", "label": "Bottom right" },
+        { "value": "mr", "label": "Right edge" }
+      ]
+    },
+    {
+      "type": "select", "id": "blob_size", "label": "Blob size", "default": "large",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
       ]
     }
   ],

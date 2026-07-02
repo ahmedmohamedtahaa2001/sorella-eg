@@ -4,8 +4,8 @@
       "type": "sorella-page-header",
       "settings": {
         "eyebrow": "Contact",
-        "heading": "We'd love to hear from you",
-        "subheading": "<p>Questions about a scent, an order, or the free 5ml offer? Send us a note.</p>",
+        "heading": "Get in touch — we're here to help",
+        "subheading": "<p>Your satisfaction is our top priority. Reach out with any question, concern, or feedback — we're just a message away.</p>",
         "surface": "surface-gradient",
         "show_blob": true,
         "blob_scheme": "gold",
@@ -17,7 +17,7 @@
       "settings": {
         "heading": "Send a message",
         "show_phone": true,
-        "note": "<p>We reply within 1–2 business days. Orders ship across Egypt in 5–8 days.</p>",
+        "note": "<p>We reply within 1–2 business days. Orders ship across Egypt in 3–7 working days.</p>",
         "show_socials": true
       }
     }

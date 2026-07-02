@@ -13,9 +13,11 @@
   {%- when 'cart' -%}
     <span class="sorella-badge sorella-badge--cart" data-cart-count{% if count == 0 %} hidden{% endif %}>{{ count | default: 0 }}</span>
   {%- when 'sold-out' -%}
-    <span class="sorella-badge sorella-badge--sold-out t-caption-strong">{{ label | default: 'products.product.sold_out' | t }}</span>
+    {%- assign sold_out_label = 'products.product.sold_out' | t -%}
+    <span class="sorella-badge sorella-badge--sold-out t-caption-strong">{{ label | default: sold_out_label }}</span>
   {%- when 'sale' -%}
-    <span class="sorella-badge sorella-badge--sale t-caption-strong">{{ label | default: 'products.product.sale' | t }}</span>
+    {%- assign sale_label = 'products.product.sale' | t -%}
+    <span class="sorella-badge sorella-badge--sale t-caption-strong">{{ label | default: sale_label }}</span>
   {%- else -%}
     <span class="sorella-badge sorella-badge--tag t-caption">{{ label }}</span>
 {%- endcase -%}

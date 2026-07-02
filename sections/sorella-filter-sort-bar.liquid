@@ -17,7 +17,8 @@
         {% render 'sorella-icon', name: 'filter', size: 16 %} {{ 'products.facets.filter' | t }}
       </button>
       {%- if results.results_count or results.products_count -%}
-        <span class="t-caption text-mist">{{ 'products.facets.results_count' | t: count: results.products_count | default: results.results_count }}</span>
+        {%- assign rc = results.products_count | default: results.results_count -%}
+        <span class="t-caption text-mist">{{ 'products.facets.results_count' | t: count: rc }}</span>
       {%- endif -%}
     </div>
 
@@ -44,10 +45,14 @@
               <legend class="t-caption-strong">{{ filter.label }}</legend>
               {%- case filter.type -%}
                 {%- when 'price_range' -%}
+                  {%- liquid
+                    assign range_min_units = filter.range_min | divided_by: 100
+                    assign range_max_units = filter.range_max | divided_by: 100.0 | ceil
+                  -%}
                   <div class="sorella-filterbar__price">
-                    <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ filter.range_min | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency }}">
+                    <input type="number" name="{{ filter.min_value.param_name }}"{% if filter.min_value.value %} value="{{ filter.min_value.value | divided_by: 100 }}"{% endif %} placeholder="{{ range_min_units }}" min="0" max="{{ range_max_units }}">
                     <span aria-hidden="true">–</span>
-                    <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency }}">
+                    <input type="number" name="{{ filter.max_value.param_name }}"{% if filter.max_value.value %} value="{{ filter.max_value.value | divided_by: 100.0 | ceil }}"{% endif %} placeholder="{{ range_max_units }}" min="0" max="{{ range_max_units }}">
                   </div>
                 {%- else -%}
                   <ul class="sorella-filterbar__values">
@@ -85,7 +90,7 @@
   .sorella-filterbar__select option { color: var(--color-ink); }
   .sorella-filterbar__panel {
     display: none; position: absolute; inset-inline: 0; inset-block-start: calc(100% + var(--space-xs));
-    background: var(--color-ink-90); -webkit-backdrop-filter: blur(var(--blur-panel)); backdrop-filter: blur(var(--blur-panel));
+    background: var(--color-ink-90);
     border: var(--border-hairline); border-radius: var(--radius-lg); padding: var(--space-lg);
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-lg);
   }

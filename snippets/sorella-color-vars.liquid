@@ -1,0 +1,37 @@
+{%- comment -%}
+  Merchant-editable palette override — emits :root custom properties from theme
+  settings (config/settings_schema.json → "Colors"). Defaults mirror assets/base.css,
+  which remains the fallback; this inline :root block wins the cascade when a merchant
+  changes a colour. Alpha variants are derived with color_modify so translucent
+  surfaces follow the base colour. Rendered in <head> after base.css.
+{%- endcomment -%}
+<style>
+  :root {
+    --color-ink: {{ settings.colors_ink | default: '#1C1F24' }};
+    --color-slate: {{ settings.colors_slate | default: '#3A4452' }};
+    --color-mist: {{ settings.colors_mist | default: '#9AA3AD' }};
+    --color-parchment: {{ settings.colors_parchment | default: '#F2EEE7' }};
+    --color-gold: {{ settings.colors_gold | default: '#C79C5A' }};
+    --color-navy: {{ settings.colors_navy | default: '#0a1420' }};
+    --color-navy-lowest: {{ settings.colors_navy_lowest | default: '#050f1b' }};
+    --color-navy-low: {{ settings.colors_navy_low | default: '#121c29' }};
+    --color-navy-container: {{ settings.colors_navy_container | default: '#16202d' }};
+    --color-navy-high: {{ settings.colors_navy_high | default: '#212b38' }};
+    --color-navy-bright: {{ settings.colors_navy_bright | default: '#2b3543' }};
+    {%- assign c_ink = settings.colors_ink | default: '#1C1F24' -%}
+    {%- assign c_parchment = settings.colors_parchment | default: '#F2EEE7' -%}
+    {%- assign c_mist = settings.colors_mist | default: '#9AA3AD' -%}
+    {%- assign c_gold = settings.colors_gold | default: '#C79C5A' %}
+    --color-ink-90: {{ c_ink | color_modify: 'alpha', 0.90 }};
+    --color-ink-70: {{ c_ink | color_modify: 'alpha', 0.70 }};
+    --color-ink-60: {{ c_ink | color_modify: 'alpha', 0.60 }};
+    --color-ink-35: {{ c_ink | color_modify: 'alpha', 0.35 }};
+    --color-parchment-65: {{ c_parchment | color_modify: 'alpha', 0.65 }};
+    --color-parchment-12: {{ c_parchment | color_modify: 'alpha', 0.12 }};
+    --color-parchment-08: {{ c_parchment | color_modify: 'alpha', 0.08 }};
+    --color-mist-25: {{ c_mist | color_modify: 'alpha', 0.25 }};
+    --color-mist-40: {{ c_mist | color_modify: 'alpha', 0.40 }};
+    --color-gold-15: {{ c_gold | color_modify: 'alpha', 0.15 }};
+    --color-gold-40: {{ c_gold | color_modify: 'alpha', 0.40 }};
+  }
+</style>

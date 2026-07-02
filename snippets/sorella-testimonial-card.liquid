@@ -1,16 +1,36 @@
 {%- comment -%}
   sorella-testimonial-card — structured review, glass (§9).
-  Params: quote (string), author (string), date (string), rating (number), verified (boolean)
+  Params:
+    quote (string), author (string), date (string), rating (number),
+    verified (boolean), role (string), avatar (image, optional)
+  Quotes mix Arabic + Latin, so the quote renders with dir="auto".
 {%- endcomment -%}
 {%- capture testimonial_inner -%}
-  {%- if rating -%}{% render 'sorella-star-rating', value: rating %}{%- endif -%}
-  <p class="sorella-testimonial__quote t-body">{{ quote }}</p>
-  <div class="sorella-testimonial__meta">
-    <span class="t-caption-strong">{{ author }}</span>
+  <div class="sorella-testimonial__top">
+    {%- if rating -%}{% render 'sorella-star-rating', value: rating %}{%- endif -%}
     {%- if verified -%}
-      <span class="sorella-testimonial__verified t-caption">{% render 'sorella-icon', name: 'check', size: 14 %} Verified</span>
+      <span class="sorella-testimonial__verified t-caption">{% render 'sorella-icon', name: 'check', size: 14 %} {{ 'testimonials.verified' | t }}</span>
     {%- endif -%}
-    {%- if date != blank -%}<span class="t-caption text-mist">· {{ date }}</span>{%- endif -%}
+  </div>
+  <p class="sorella-testimonial__quote" dir="auto">{{ quote }}</p>
+  <div class="sorella-testimonial__meta">
+    {%- if avatar != blank -%}
+      <img
+        class="sorella-testimonial__avatar"
+        src="{{ avatar | image_url: width: 80 }}"
+        alt="{{ avatar.alt | default: author | escape }}"
+        width="40"
+        height="40"
+        loading="lazy"
+      >
+    {%- endif -%}
+    <div class="sorella-testimonial__person">
+      <span class="t-caption-strong">{{ author }}</span>
+      {%- if role != blank and role != author -%}
+        <span class="t-caption text-mist">{{ role }}</span>
+      {%- endif -%}
+      {%- if date != blank -%}<span class="t-caption text-mist">{{ date }}</span>{%- endif -%}
+    </div>
   </div>
 {%- endcapture -%}
 {% render 'sorella-glass-panel', content: testimonial_inner, variant: 'card', class: 'sorella-testimonial' %}

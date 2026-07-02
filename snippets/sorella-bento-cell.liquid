@@ -3,8 +3,14 @@
   Params:
     image (image object) · heading (string) · subheading (string) · link (url) · cta (string)
     eyebrow (string)
+    variant (string) — 'default' (photo tile, scrim + bottom content)
+                       | 'panel'    (top-half image, bottom-half content panel, outlined pill CTA)
+                       | 'campaign' (badge eyebrow, heavy blurred overlay, centered content, text-link CTA)
 {%- endcomment -%}
-<a class="sorella-bento-cell" href="{{ link | default: '#' }}">
+{%- liquid
+  assign cell_variant = variant | default: 'default'
+-%}
+<a class="sorella-bento-cell sorella-bento-cell--{{ cell_variant }}" href="{{ link | default: '#' }}">
   <div class="sorella-bento-cell__media">
     {%- if image != blank -%}
       {{ image | image_url: width: 900 | image_tag:
@@ -13,12 +19,32 @@
     {%- else -%}
       {{ 'collection-1' | placeholder_svg_tag: 'media__placeholder' }}
     {%- endif -%}
+    {%- unless cell_variant == 'panel' -%}
+      <span class="sorella-bento-cell__scrim" aria-hidden="true"></span>
+    {%- endunless -%}
   </div>
-  <span class="sorella-bento-cell__scrim" aria-hidden="true"></span>
-  <div class="sorella-bento-cell__content">
-    {%- if eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ eyebrow }}</span>{%- endif -%}
-    {%- if heading != blank -%}<span class="t-display-md">{{ heading }}</span>{%- endif -%}
-    {%- if subheading != blank -%}<span class="t-body-sm">{{ subheading }}</span>{%- endif -%}
-    {%- if cta != blank -%}<span class="t-caption-strong text-gold sorella-bento-cell__cta">{{ cta }} {% render 'sorella-icon', name: 'arrow-right', size: 15 %}</span>{%- endif -%}
-  </div>
+
+  {%- case cell_variant -%}
+    {%- when 'panel' -%}
+      <div class="sorella-bento-cell__panel">
+        {%- if eyebrow != blank -%}<span class="t-eyebrow t-eyebrow--micro text-gold">{{ eyebrow }}</span>{%- endif -%}
+        {%- if heading != blank -%}<span class="t-headline">{{ heading }}</span>{%- endif -%}
+        {%- if subheading != blank -%}<span class="t-body-sm text-mist">{{ subheading }}</span>{%- endif -%}
+        {%- if cta != blank -%}<span class="sorella-bento-cell__btn">{{ cta }}</span>{%- endif -%}
+      </div>
+    {%- when 'campaign' -%}
+      <div class="sorella-bento-cell__content sorella-bento-cell__content--center">
+        {%- if eyebrow != blank -%}<span class="sorella-bento-cell__badge">{{ eyebrow }}</span>{%- endif -%}
+        {%- if heading != blank -%}<span class="t-display-md">{{ heading }}</span>{%- endif -%}
+        {%- if subheading != blank -%}<span class="t-body-sm">{{ subheading }}</span>{%- endif -%}
+        {%- if cta != blank -%}<span class="t-caption-strong sorella-bento-cell__cta-link">{{ cta }} {% render 'sorella-icon', name: 'arrow-right', size: 15 %}</span>{%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="sorella-bento-cell__content">
+        {%- if eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ eyebrow }}</span>{%- endif -%}
+        {%- if heading != blank -%}<span class="t-display-md">{{ heading }}</span>{%- endif -%}
+        {%- if subheading != blank -%}<span class="t-body-sm">{{ subheading }}</span>{%- endif -%}
+        {%- if cta != blank -%}<span class="t-caption-strong text-gold sorella-bento-cell__cta">{{ cta }} {% render 'sorella-icon', name: 'arrow-right', size: 15 %}</span>{%- endif -%}
+      </div>
+  {%- endcase -%}
 </a>

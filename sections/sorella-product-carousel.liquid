@@ -10,14 +10,30 @@
   assign source_products = s.collection.products
   assign source_url = s.collection.url
 
-  if s.collection == blank and product != blank
-    assign fallback_collection = product.collections.first
-    assign source_products = fallback_collection.products
-    assign source_url = fallback_collection.url
+  assign wants_recommendations = false
+  if s.collection == blank
+    if product != blank or recommendations.performed
+      assign wants_recommendations = true
+    endif
+  endif
+
+  if wants_recommendations
+    if recommendations.performed and recommendations.products_count > 0
+      assign source_products = recommendations.products
+      assign source_url = blank
+    elsif product != blank
+      assign fallback_collection = product.collections.first
+      assign source_products = fallback_collection.products
+      assign source_url = fallback_collection.url
+    endif
   endif
 -%}
 {%- if source_products.size > 0 -%}
-  <section class="sorella-carousel surface-ink" data-section-id="{{ section.id }}">
+  <section class="sorella-carousel surface-ink" data-section-id="{{ section.id }}"
+    {%- if wants_recommendations %}
+    data-recommendations
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ s.product_count | at_most: 10 }}"
+    {%- endif %}>
     <div class="container container--catalog section-pad">
       <div class="section-head sorella-carousel__head">
         <div class="sorella-carousel__head-text">
@@ -30,7 +46,7 @@
         </div>
         {%- if s.show_view_all and s.view_all_label != blank and source_url != blank -%}
           <div class="sorella-carousel__head-action">
-            {% render 'sorella-button', label: s.view_all_label, href: source_url, style: 'ghost', size: 'sm' %}
+            {% render 'sorella-button', label: s.view_all_label, href: source_url, style: 'text-link' %}
           </div>
         {%- endif -%}
       </div>
@@ -61,7 +77,9 @@
 {%- endif -%}
 
 {% stylesheet %}
-  .sorella-carousel__head {
+  /* .section-head in components.css loads later and re-sets flex-direction;
+     double the class specificity so this row layout wins the cascade. */
+  .section-head.sorella-carousel__head {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
@@ -70,9 +88,11 @@
   .sorella-carousel__head-text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    text-align: start;
     gap: var(--space-sm);
   }
-  .sorella-carousel__head-action { flex: none; }
+  .sorella-carousel__head-action { flex: none; padding-block-end: 4px; }
 
   .sorella-carousel__track {
     display: flex;
@@ -98,7 +118,7 @@
   }
 
   @media (max-width: 640px) {
-    .sorella-carousel__head {
+    .section-head.sorella-carousel__head {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -118,7 +138,8 @@
       "type": "select", "id": "card_variant", "label": "Card variant", "default": "default",
       "options": [
         { "value": "default", "label": "Default" },
-        { "value": "quick-add", "label": "Quick add" }
+        { "value": "quick-add", "label": "Quick add" },
+        { "value": "compact", "label": "Compact (impulse / testers)" }
       ]
     },
     { "type": "checkbox", "id": "show_view_all", "label": "Show \"View all\" link", "default": true },

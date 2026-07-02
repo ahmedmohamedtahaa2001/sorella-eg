@@ -27,7 +27,13 @@
         endif
       endif
     -%}
-    <div class="sorella-brand-story__panel blob-scene" {{ block.shopify_attributes }}>
+    {%- liquid
+      assign panel_classes = 'sorella-brand-story__panel blob-scene'
+      if block.settings.image == blank
+        assign panel_classes = panel_classes | append: ' sorella-brand-story__panel--no-media'
+      endif
+    -%}
+    <div class="{{ panel_classes }}" {{ block.shopify_attributes }}>
       {%- if block.settings.image != blank -%}
         <div class="sorella-brand-story__media" aria-hidden="true">
           {{ block.settings.image | image_url: width: 2000 | image_tag:
@@ -35,16 +41,38 @@
             sizes: '100vw', widths: '800, 1200, 1600, 2000',
             alt: block.settings.heading | escape }}
         </div>
+        <span class="sorella-brand-story__scrim" aria-hidden="true"></span>
+      {%- else -%}
+        <div class="sorella-brand-story__fallback" aria-hidden="true">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'sorella-brand-story__placeholder' }}
+        </div>
       {%- endif -%}
-      <span class="sorella-brand-story__scrim" aria-hidden="true"></span>
 
-      {% render 'sorella-blob', single: true, scheme: block.settings.blob_scheme %}
+      {%- liquid
+        assign blob_pos = 'mr'
+        if side == 'end'
+          assign blob_pos = 'tl'
+        endif
+        assign blob_size = 'medium'
+        assign blob_soft = false
+        if block.settings.image == blank
+          assign blob_size = 'large'
+        else
+          assign blob_soft = true
+        endif
+      -%}
+      {% render 'sorella-blob', single: true, scheme: block.settings.blob_scheme, position: blob_pos, size: blob_size, soft: blob_soft %}
 
       <div class="container container--lock sorella-brand-story__inner sorella-brand-story__inner--{{ side }}">
         <div class="sorella-brand-story__card glass-panel glass-panel--xl glass-panel--sheen">
           {%- if block.settings.eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ block.settings.eyebrow }}</span>{%- endif -%}
           {%- if block.settings.heading != blank -%}<h3 class="t-display-lg">{{ block.settings.heading }}</h3>{%- endif -%}
           {%- if block.settings.text != blank -%}<div class="rte t-body-lg">{{ block.settings.text }}</div>{%- endif -%}
+          {%- if block.settings.cta_label != blank and block.settings.cta_link != blank -%}
+            <div class="sorella-brand-story__cta">
+              {% render 'sorella-button', label: block.settings.cta_label, href: block.settings.cta_link, style: 'primary' %}
+            </div>
+          {%- endif -%}
         </div>
       </div>
     </div>
@@ -67,6 +95,19 @@
   .sorella-brand-story__media { position: absolute; inset: 0; z-index: 0; }
   .sorella-brand-story__media img { width: 100%; height: 100%; object-fit: cover; }
   .sorella-brand-story__scrim { position: absolute; inset: 0; z-index: 0; background: var(--gradient-hero-scrim); }
+  .sorella-brand-story__panel--no-media { min-height: clamp(340px, 46vh, 520px); }
+  .sorella-brand-story__fallback {
+    position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    background:
+      radial-gradient(120% 100% at 18% 12%, var(--color-navy-bright) 0%, transparent 52%),
+      radial-gradient(100% 90% at 85% 92%, var(--color-navy-high) 0%, transparent 58%),
+      var(--gradient-surface);
+    border-block: var(--border-hairline);
+  }
+  .sorella-brand-story__placeholder {
+    width: 100%; height: 100%;
+    opacity: 0.05;
+  }
   .sorella-brand-story__inner { position: relative; z-index: 1; width: 100%; display: flex; }
   .sorella-brand-story__inner--start { justify-content: flex-start; }
   .sorella-brand-story__inner--end { justify-content: flex-end; }
@@ -99,6 +140,8 @@
         { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
         { "type": "text", "id": "heading", "label": "Heading" },
         { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "cta_label", "label": "Button label" },
+        { "type": "url", "id": "cta_link", "label": "Button link" },
         {
           "type": "select", "id": "side", "label": "Card side", "default": "start",
           "options": [
@@ -150,6 +193,16 @@
             "text": "<p>Our love for perfume isn't only about beautiful scents — it's about telling stories and inspiring connection. Each fragrance reflects the closeness we share, made fresh in Egypt.</p>",
             "side": "start",
             "blob_scheme": "rose"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "eyebrow": "Our promise",
+            "heading": "Made with care",
+            "text": "<p>Small batches, skin-safe oils, and no animal testing — we make every bottle the way we'd make it for each other.</p>",
+            "side": "end",
+            "blob_scheme": "gold-rose"
           }
         }
       ]

@@ -3,9 +3,14 @@
   Renders an aria-hidden, pointer-events:none field with 1–2 blobs.
   Never carries content. Capped at 2 concurrent visible per viewport (§7.7).
   Params:
-    scheme (string) — 'gold-slate' (default) | 'gold' | 'slate' | 'rose' | 'gold-rose'
-    drift  (boolean) — enable ambient drift (default true; auto-off w/ reduced motion)
-    single (boolean) — render only one blob (corner-anchored)
+    scheme   (string)  — 'gold-slate' (default) | 'gold' | 'slate' | 'rose' | 'gold-rose'
+                         (in single mode, combined schemes resolve to their first color)
+    drift    (boolean) — enable ambient drift (default true; auto-off w/ reduced motion)
+    single   (boolean) — render only one blob
+    position (string)  — single mode anchor: 'tl' | 'tr' (default) | 'bl' | 'br' | 'mr'
+                         ('mr' = right edge at ~40% height, hero reference)
+    size     (string)  — single mode footprint: 'small' (default, ~250px) | 'medium' | 'large' (~700–800px)
+    soft     (boolean) — cap gradient peak alpha at 0.20 (behind menus / glass panels)
 {%- endcomment -%}
 {%- liquid
   assign scheme = scheme | default: 'gold-slate'
@@ -19,27 +24,64 @@
     assign drift_a = ' blob--drift-a'
     assign drift_b = ' blob--drift-b'
   endif
+  assign soft_class = ''
+  if soft
+    assign soft_class = ' blob--soft'
+  endif
 -%}
 <div class="blob-field" aria-hidden="true">
   {%- if single -%}
-    <span class="blob blob--corner blob--{{ scheme }}{{ drift_a }}"></span>
+    {%- liquid
+      comment
+        Combined schemes have no single-blob CSS class; map to first color.
+      endcomment
+      case scheme
+        when 'slate'
+          assign single_color = 'slate'
+        when 'rose'
+          assign single_color = 'rose'
+        else
+          assign single_color = 'gold'
+      endcase
+
+      assign pos_class = 'blob--tr'
+      case position
+        when 'tl'
+          assign pos_class = 'blob--tl'
+        when 'bl'
+          assign pos_class = 'blob--bl'
+        when 'br'
+          assign pos_class = 'blob--br'
+        when 'mr'
+          assign pos_class = 'blob--mr'
+      endcase
+
+      assign size_class = 'blob--sm'
+      case size
+        when 'medium'
+          assign size_class = 'blob--md'
+        when 'large'
+          assign size_class = 'blob--lg'
+      endcase
+    -%}
+    <span class="blob blob--{{ single_color }} {{ pos_class }} {{ size_class }}{{ soft_class }}{{ drift_a }}"></span>
   {%- else -%}
     {%- case scheme -%}
       {%- when 'gold' -%}
-        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
-        <span class="blob blob--b blob--gold blob--br{{ drift_b }}"></span>
+        <span class="blob blob--gold blob--tl{{ soft_class }}{{ drift_a }}"></span>
+        <span class="blob blob--b blob--gold blob--br{{ soft_class }}{{ drift_b }}"></span>
       {%- when 'slate' -%}
-        <span class="blob blob--slate blob--tl{{ drift_a }}"></span>
-        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+        <span class="blob blob--slate blob--tl{{ soft_class }}{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ soft_class }}{{ drift_b }}"></span>
       {%- when 'rose' -%}
-        <span class="blob blob--rose blob--tl{{ drift_a }}"></span>
-        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+        <span class="blob blob--rose blob--tl{{ soft_class }}{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ soft_class }}{{ drift_b }}"></span>
       {%- when 'gold-rose' -%}
-        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
-        <span class="blob blob--b blob--rose blob--br{{ drift_b }}"></span>
+        <span class="blob blob--gold blob--tl{{ soft_class }}{{ drift_a }}"></span>
+        <span class="blob blob--b blob--rose blob--br{{ soft_class }}{{ drift_b }}"></span>
       {%- else -%}
-        <span class="blob blob--gold blob--tl{{ drift_a }}"></span>
-        <span class="blob blob--b blob--slate blob--br{{ drift_b }}"></span>
+        <span class="blob blob--gold blob--tl{{ soft_class }}{{ drift_a }}"></span>
+        <span class="blob blob--b blob--slate blob--br{{ soft_class }}{{ drift_b }}"></span>
     {%- endcase -%}
   {%- endif -%}
 </div>

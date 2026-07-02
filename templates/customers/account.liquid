@@ -13,7 +13,8 @@
         {%- if customer.default_address -%}
           <p class="t-body-sm text-mist">{{ customer.default_address | format_address }}</p>
         {%- endif -%}
-        {% render 'sorella-button', label: 'customer.account.addresses' | t, href: routes.account_addresses_url, style: 'ghost', size: 'sm' %}
+        {%- assign addresses_label = 'customer.account.addresses' | t -%}
+        {% render 'sorella-button', label: addresses_label, href: routes.account_addresses_url, style: 'ghost', size: 'sm' %}
       </aside>
 
       <div class="glass-panel sorella-account__card">
@@ -21,7 +22,7 @@
         {%- if customer.orders.size > 0 -%}
           <table class="sorella-account__table t-caption">
             <thead>
-              <tr><th>Order</th><th>Date</th><th>Total</th><th>Status</th></tr>
+              <tr><th>{{ 'customer.account.order' | t }}</th><th>{{ 'customer.account.date' | t }}</th><th>{{ 'customer.account.total' | t }}</th><th>{{ 'customer.account.status' | t }}</th></tr>
             </thead>
             <tbody>
               {%- for order in customer.orders -%}
@@ -35,7 +36,9 @@
             </tbody>
           </table>
         {%- else -%}
-          {% render 'sorella-empty-state', heading: 'No orders yet.', cta_label: 'general.404.cta' | t, cta_url: routes.all_products_collection_url, icon: 'bag' %}
+          {%- assign no_orders_heading = 'customer.account.no_orders' | t -%}
+          {%- assign no_orders_cta = 'general.404.cta' | t -%}
+          {% render 'sorella-empty-state', heading: no_orders_heading, cta_label: no_orders_cta, cta_url: routes.all_products_collection_url, icon: 'bag' %}
         {%- endif -%}
       </div>
     </div>

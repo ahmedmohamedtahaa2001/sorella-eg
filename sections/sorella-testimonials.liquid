@@ -2,9 +2,20 @@
   sorella-testimonials — structured reviews, 3-up glass cards (Art Direction §10).
   Reused on homepage + PDP reviews. Renders sorella-testimonial-card per block.
   Zero hardcoded content — all values come from section/block settings.
+  Product context: product.metafields.sorella.reviews (list of metaobjects OR a
+  JSON list with quote/author/rating/verified/role fields) takes precedence over
+  section blocks; blocks remain the demo/default fallback.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
+
+  assign metafield_reviews = blank
+  if product
+    assign reviews_field = product.metafields.sorella.reviews
+    if reviews_field != blank
+      assign metafield_reviews = reviews_field.value
+    endif
+  endif
 -%}
 <section class="sorella-testimonials surface-ink section-pad" data-section-id="{{ section.id }}">
   <div class="container container--lock">
@@ -17,9 +28,10 @@
           <h2 class="t-display-md">{{ s.heading }}</h2>
         {%- endif -%}
         {%- if s.show_summary and s.summary_rating != blank -%}
+          {%- assign summary_value = s.summary_rating | times: 1.0 -%}
           <div class="sorella-testimonials__summary">
             <span class="t-display-md text-gold">{{ s.summary_rating }}</span>
-            {% render 'sorella-star-rating', value: 5 %}
+            {% render 'sorella-star-rating', value: summary_value %}
             {%- if s.summary_label != blank -%}
               <span class="t-body-strong">{{ s.summary_label }}</span>
             {%- endif -%}
@@ -28,16 +40,40 @@
       </div>
     {%- endif -%}
 
-    {%- if section.blocks.size > 0 -%}
+    {%- if metafield_reviews != blank and metafield_reviews.size > 0 -%}
+      <div class="sorella-testimonials__grid">
+        {%- for item in metafield_reviews -%}
+          {%- liquid
+            assign r_quote = item.quote.value | default: item.quote
+            assign r_author = item.author.value | default: item.author
+            assign r_role = item.role.value | default: item.role
+            assign r_rating = item.rating.value | default: item.rating | default: 5
+            assign r_verified = item.verified.value | default: item.verified, allow_false: true
+            assign r_avatar = item.avatar.value | default: item.avatar
+          -%}
+          <div class="sorella-testimonials__item">
+            {% render 'sorella-testimonial-card',
+              quote: r_quote,
+              author: r_author,
+              role: r_role,
+              rating: r_rating,
+              verified: r_verified,
+              avatar: r_avatar %}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- elsif section.blocks.size > 0 -%}
       <div class="sorella-testimonials__grid">
         {%- for block in section.blocks -%}
           <div class="sorella-testimonials__item" {{ block.shopify_attributes }}>
             {% render 'sorella-testimonial-card',
               quote: block.settings.quote,
               author: block.settings.author,
+              role: block.settings.role,
               date: block.settings.date,
               rating: block.settings.rating,
-              verified: block.settings.verified %}
+              verified: block.settings.verified,
+              avatar: block.settings.avatar %}
           </div>
         {%- endfor -%}
       </div>
@@ -58,6 +94,33 @@
   }
   .sorella-testimonials__item { display: flex; }
   .sorella-testimonials__item > * { width: 100%; }
+  .sorella-testimonial:hover,
+  .sorella-testimonial:focus-within {
+    border-color: var(--color-gold-40);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sorella-testimonial { transition: border-color 0.3s ease; }
+  }
+  .sorella-testimonial__top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: var(--space-sm);
+  }
+  .sorella-testimonial__quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .sorella-testimonial__avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .sorella-testimonial__person {
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
   @media (max-width: 735px) {
     .sorella-testimonials__grid { grid-template-columns: 1fr; }
   }
@@ -73,8 +136,9 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Our customers tell it better than we do" },
     { "type": "header", "content": "Summary" },
     { "type": "checkbox", "id": "show_summary", "label": "Show summary rating", "default": true },
-    { "type": "text", "id": "summary_rating", "label": "Summary rating", "default": "4.9" },
-    { "type": "text", "id": "summary_label", "label": "Summary label", "default": "Excellent" }
+    { "type": "text", "id": "summary_rating", "label": "Summary rating", "default": "5.0" },
+    { "type": "text", "id": "summary_label", "label": "Summary label", "default": "Excellent" },
+    { "type": "paragraph", "content": "On product pages, reviews stored in the product metafield sorella.reviews (a list of metaobjects, or a JSON list of objects with quote, author, rating, verified and role fields) automatically replace the blocks below. The blocks are used as the fallback when that metafield is empty." }
   ],
   "blocks": [
     {
@@ -83,6 +147,8 @@
       "settings": [
         { "type": "textarea", "id": "quote", "label": "Quote" },
         { "type": "text", "id": "author", "label": "Author", "default": "Verified buyer" },
+        { "type": "image_picker", "id": "avatar", "label": "Avatar" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Verified buyer" },
         { "type": "text", "id": "date", "label": "Date" },
         { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
         { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true }
@@ -105,7 +171,7 @@
         {
           "type": "review",
           "settings": {
-            "quote": "Zay el original bezabt, w bytebat 3ala el hodoom yومين. Batlobha tany akeed.",
+            "quote": "I got dahab I love el sabat it lasted on el lebs for 3 days",
             "author": "Verified buyer",
             "rating": 5,
             "verified": true
@@ -114,7 +180,7 @@
         {
           "type": "review",
           "settings": {
-            "quote": "Rehتها helwa awy w el shipping kان sari3. Sorella ba2et el brand el mofadal 3andi.",
+            "quote": "Bordeaux zay el original bezabt",
             "author": "Verified buyer",
             "rating": 5,
             "verified": true

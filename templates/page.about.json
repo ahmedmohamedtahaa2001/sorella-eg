@@ -15,24 +15,102 @@
     "story": {
       "type": "sorella-brand-story",
       "blocks": {
-        "p1": { "type": "panel", "settings": { "eyebrow": "Get to know us", "heading": "Two sisters, one bond", "text": "<p>At Sorella, we believe the best bonds are the ones we share. We're two sisters, connected not just by family but by a love for fragrance and the memories scents create. Our journey began with a simple wish: to bring people closer through scent.</p>", "side": "start", "blob_scheme": "gold" } },
-        "p2": { "type": "panel", "settings": { "eyebrow": "Why Sorella", "heading": "A name that means sister", "text": "<p>The name Sorella reflects our sisterly bond, and it's our mission to share that connection with you. Every fragrance is crafted to evoke emotion, hold memory, and celebrate the moments that make life special.</p>", "side": "end", "blob_scheme": "slate" } },
-        "p3": { "type": "panel", "settings": { "eyebrow": "Fragrance with a story", "heading": "Made fresh in Egypt", "text": "<p>Our love for perfume isn't only about beautiful scents — it's about telling stories and inspiring connection. Each fragrance reflects the closeness we share, made fresh in Egypt.</p>", "side": "start", "blob_scheme": "rose" } }
+        "p1": {
+          "type": "panel",
+          "settings": {
+            "eyebrow": "Get to know us",
+            "heading": "Two sisters, one bond",
+            "text": "<p>At Sorella, we believe the best bonds are the ones we share. We're two sisters, connected not just by family but by a love for fragrance and the memories scents create. Our journey began with a simple wish: to bring people closer through scent.</p>",
+            "side": "start",
+            "blob_scheme": "gold"
+          }
+        },
+        "p2": {
+          "type": "panel",
+          "settings": {
+            "eyebrow": "Why Sorella",
+            "heading": "A name that means sister",
+            "text": "<p>The name Sorella reflects our sisterly bond, and it's our mission to share that connection with you. Every fragrance is crafted to evoke emotion, hold memory, and celebrate the moments that make life special.</p>",
+            "side": "end",
+            "blob_scheme": "slate"
+          }
+        },
+        "p3": {
+          "type": "panel",
+          "settings": {
+            "eyebrow": "Fragrance with a story",
+            "heading": "Made fresh in Egypt",
+            "text": "<p>Our love for perfume isn't only about beautiful scents — it's about telling stories and inspiring connection. Each fragrance reflects the closeness we share, made fresh in Egypt.</p>",
+            "side": "start",
+            "blob_scheme": "rose",
+            "image": "shopify://shop_images/aa832f5037679e24ba84f70f383c39c1.png"
+          }
+        },
+        "p4": {
+          "type": "panel",
+          "settings": {
+            "eyebrow": "Our promise",
+            "heading": "Made with care",
+            "text": "<p>Small batches, skin-safe oils, and no animal testing — we make every bottle the way we'd make it for each other.</p>",
+            "side": "end",
+            "blob_scheme": "gold-rose"
+          }
+        }
       },
-      "block_order": ["p1", "p2", "p3"],
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
       "settings": {}
     },
     "trust": {
       "type": "sorella-trust-bar",
       "blocks": {
-        "b1": { "type": "cell", "settings": { "icon": "gift", "heading": "Free 5ml gift", "text": "On every order over 1,100 LE." } },
-        "b2": { "type": "cell", "settings": { "icon": "leaf", "heading": "Made fresh in Egypt", "text": "Small-batch, crafted by two sisters." } },
-        "b3": { "type": "cell", "settings": { "icon": "truck", "heading": "Fast local shipping", "text": "Delivered across Egypt in 5–8 days." } }
+        "b1": {
+          "type": "cell",
+          "settings": {
+            "icon": "gift",
+            "heading": "Free 5ml gift",
+            "text": "On every order over 1,100 LE."
+          }
+        },
+        "b2": {
+          "type": "cell",
+          "settings": {
+            "icon": "leaf",
+            "heading": "Made fresh in Egypt",
+            "text": "Small-batch, crafted by two sisters."
+          }
+        },
+        "b3": {
+          "type": "cell",
+          "settings": {
+            "icon": "truck",
+            "heading": "Fast local shipping",
+            "text": "Delivered to every governorate in Egypt in 3–7 working days."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3"],
-      "settings": { "use_glass": true }
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "use_glass": true
+      }
     },
-    "newsletter": { "type": "sorella-newsletter", "settings": {} }
+    "newsletter": {
+      "type": "sorella-newsletter",
+      "settings": {}
+    }
   },
-  "order": ["header", "story", "trust", "newsletter"]
+  "order": [
+    "header",
+    "story",
+    "trust",
+    "newsletter"
+  ]
 }

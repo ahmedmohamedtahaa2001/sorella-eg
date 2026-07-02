@@ -40,6 +40,7 @@
         "type": "text",
         "id": "brand_tagline",
         "label": "Tagline",
+        "info": "Used as the homepage meta description when no page description is set.",
         "default": "From our bond to your senses"
       },
       {
@@ -82,7 +83,91 @@
       {
         "type": "text",
         "id": "contact_email",
-        "label": "Contact email"
+        "label": "Contact email",
+        "info": "Shown in the footer and on the contact page."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Core palette"
+      },
+      {
+        "type": "paragraph",
+        "content": "Defaults match the Sorella navy design system. Changing these updates the whole theme — translucent glass surfaces follow automatically."
+      },
+      {
+        "type": "color",
+        "id": "colors_navy",
+        "label": "Canvas (navy)",
+        "default": "#0a1420"
+      },
+      {
+        "type": "color",
+        "id": "colors_parchment",
+        "label": "Text (parchment)",
+        "default": "#F2EEE7"
+      },
+      {
+        "type": "color",
+        "id": "colors_gold",
+        "label": "Accent (gold)",
+        "default": "#C79C5A"
+      },
+      {
+        "type": "color",
+        "id": "colors_ink",
+        "label": "Ink (footer, text on gold, photo overlays)",
+        "default": "#1C1F24"
+      },
+      {
+        "type": "color",
+        "id": "colors_slate",
+        "label": "Slate (secondary surfaces)",
+        "default": "#3A4452"
+      },
+      {
+        "type": "color",
+        "id": "colors_mist",
+        "label": "Mist (muted text, hairlines)",
+        "default": "#9AA3AD"
+      },
+      {
+        "type": "header",
+        "content": "Navy elevation scale"
+      },
+      {
+        "type": "color",
+        "id": "colors_navy_lowest",
+        "label": "Navy — deepest wells",
+        "default": "#050f1b"
+      },
+      {
+        "type": "color",
+        "id": "colors_navy_low",
+        "label": "Navy — low containers",
+        "default": "#121c29"
+      },
+      {
+        "type": "color",
+        "id": "colors_navy_container",
+        "label": "Navy — cards & panels",
+        "default": "#16202d"
+      },
+      {
+        "type": "color",
+        "id": "colors_navy_high",
+        "label": "Navy — raised containers",
+        "default": "#212b38"
+      },
+      {
+        "type": "color",
+        "id": "colors_navy_bright",
+        "label": "Navy — media placeholder",
+        "default": "#2b3543"
       }
     ]
   },
@@ -136,6 +221,7 @@
         "type": "checkbox",
         "id": "currency_code_enabled",
         "label": "Show currency code (e.g. LE)",
+        "info": "Applies to all prices rendered by the theme (product cards, product page, cart).",
         "default": true
       }
     ]

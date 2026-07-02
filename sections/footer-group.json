@@ -1,41 +1,41 @@
 {
-  "type": "footer",
-  "name": "Footer group",
-  "sections": {
-    "footer": {
-      "type": "sorella-footer",
-      "settings": {},
-      "blocks": {
-        "shop": {
-          "type": "menu_column",
-          "settings": {
-            "heading": "Shop",
-            "menu": "footer-shop"
-          }
-        },
-        "brand": {
-          "type": "menu_column",
-          "settings": {
-            "heading": "Brand",
-            "menu": "footer-brand"
-          }
-        },
-        "care": {
-          "type": "menu_column",
-          "settings": {
-            "heading": "Customer Care",
-            "menu": "footer-care"
-          }
-        }
-      },
-      "block_order": [
-        "shop",
-        "brand",
-        "care"
-      ]
+ "type": "footer",
+ "name": "Footer group",
+ "sections": {
+  "footer": {
+   "type": "sorella-footer",
+   "settings": {},
+   "blocks": {
+    "shop": {
+     "type": "menu_column",
+     "settings": {
+      "heading": "Shop",
+      "menu": "footer-shop"
+     }
+    },
+    "brand": {
+     "type": "menu_column",
+     "settings": {
+      "heading": "Brand",
+      "menu": "footer-brand"
+     }
+    },
+    "care": {
+     "type": "menu_column",
+     "settings": {
+      "heading": "Customer Care",
+      "menu": "footer-care"
+     }
     }
-  },
-  "order": [
-    "footer"
-  ]
+   },
+   "block_order": [
+    "shop",
+    "brand",
+    "care"
+   ]
+  }
+ },
+ "order": [
+  "footer"
+ ]
 }

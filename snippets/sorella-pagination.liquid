@@ -4,7 +4,8 @@
     paginate (object, required) — Shopify paginate drop
 {%- endcomment -%}
 {%- if paginate.pages > 1 -%}
-  <nav class="sorella-pagination" role="navigation" aria-label="Pagination">
+  {%- assign current_page_title = paginate.current_page | append: '' -%}
+  <nav class="sorella-pagination" role="navigation" aria-label="{{ 'general.accessibility.pagination' | t }}">
     {%- if paginate.previous -%}
       <a class="sorella-pagination__link" href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
         {% render 'sorella-icon', name: 'chevron-left', size: 18 %}
@@ -12,11 +13,11 @@
     {%- endif -%}
     {%- for part in paginate.parts -%}
       {%- if part.is_link -%}
-        <a class="sorella-pagination__link t-caption" href="{{ part.url }}">{{ part.title }}</a>
-      {%- elsif part.title == paginate.current_page -%}
-        <span class="sorella-pagination__link is-current t-caption-strong" aria-current="page">{{ part.title }}</span>
+        <a class="sorella-pagination__link t-caption" href="{{ part.url }}" aria-label="{{ 'general.meta.page' | t: page: part.title }}">{{ part.title }}</a>
+      {%- elsif part.title == current_page_title -%}
+        <span class="sorella-pagination__link is-current t-caption-strong" aria-current="page" aria-label="{{ 'general.meta.page' | t: page: part.title }}">{{ part.title }}</span>
       {%- else -%}
-        <span class="sorella-pagination__ellipsis t-caption">{{ part.title }}</span>
+        <span class="sorella-pagination__ellipsis t-caption" aria-hidden="true">{{ part.title }}</span>
       {%- endif -%}
     {%- endfor -%}
     {%- if paginate.next -%}

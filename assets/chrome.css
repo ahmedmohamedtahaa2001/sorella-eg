@@ -7,6 +7,7 @@
    Adaptive Nav Dock (Art Direction §9)
    -------------------------------------------------------------------------- */
 .nav-dock {
+  --dock-dur: 600ms; /* reference glide: slower than base --dur-dock */
   position: fixed;
   top: 12px; left: 50%;
   transform: translateX(-50%) translateZ(0);
@@ -16,25 +17,33 @@
   z-index: 100;
   border-radius: var(--radius-pill);
   background: var(--color-parchment-65);
+  background: color-mix(in srgb, var(--color-parchment) 90%, transparent);
   -webkit-backdrop-filter: blur(var(--blur-dock));
   backdrop-filter: blur(var(--blur-dock));
   border: var(--border-hairline);
-  box-shadow: var(--shadow-dock);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   color: var(--color-ink);
   transition:
-    background var(--dur-dock) var(--ease-out),
-    -webkit-backdrop-filter var(--dur-dock) var(--ease-out),
-    backdrop-filter var(--dur-dock) var(--ease-out),
-    max-width var(--dur-dock) var(--ease-out),
-    height var(--dur-dock) var(--ease-out),
-    top var(--dur-dock) var(--ease-out),
-    border-radius var(--dur-dock) var(--ease-out),
-    color var(--dur-dock) var(--ease-out),
-    transform var(--dur-dock) var(--ease-out);
+    background var(--dock-dur) var(--ease-out),
+    -webkit-backdrop-filter var(--dock-dur) var(--ease-out),
+    backdrop-filter var(--dock-dur) var(--ease-out),
+    max-width var(--dock-dur) var(--ease-out),
+    height var(--dock-dur) var(--ease-out),
+    top var(--dock-dur) var(--ease-out),
+    border-radius var(--dock-dur) var(--ease-out),
+    color var(--dock-dur) var(--ease-out),
+    box-shadow var(--dock-dur) var(--ease-out),
+    transform var(--dock-dur) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-dock { transition: none; }
 }
 
 .nav-dock--top {
-  top: 0;
+  /* Sit below the announcement bar while at the top of the page; the docked
+     state (top: 12px) naturally collapses the offset once scrolled. */
+  top: var(--announcement-height, 0px);
   max-width: 100%;
   width: 100%;
   height: var(--nav-top-height);
@@ -49,6 +58,10 @@
 }
 
 .nav-dock--hidden { transform: translateX(-50%) translateY(-140%) translateZ(0); }
+
+/* No-hero templates: while the in-flow announcement bar is visible at the very
+   top of the page, the docked pill sits below it instead of covering it. */
+.nav-dock--docked.nav-dock--offset { top: calc(var(--announcement-height, 0px) + 12px); }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nav-dock--docked { background: var(--color-ink-90); color: var(--color-parchment); }
@@ -67,16 +80,28 @@
 .nav-dock--docked .nav-dock__logo-full { display: none; }
 .nav-dock--docked .nav-dock__logo-mark { display: block; }
 /* If no mark uploaded, keep wordmark visible (fallback handled in markup) */
-.nav-dock__wordmark { color: inherit; }
+.nav-dock__wordmark {
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
 
 .nav-dock__nav { flex: 1; display: flex; justify-content: center; }
 .nav-dock__links { display: flex; align-items: center; gap: var(--space-lg); }
 .nav-dock__item { position: relative; }
 .nav-dock__link {
   display: inline-flex; align-items: center; gap: 4px; color: inherit;
-  padding: 8px 4px; transition: color var(--dur-hover) var(--ease-out);
+  font-family: var(--font-body); font-size: 12px; font-weight: 600; line-height: 1;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  opacity: 0.8; /* parchment @80% over hero; ink @80% when docked */
+  padding: 8px 4px;
+  transition: color var(--dur-hover) var(--ease-out), opacity var(--dur-hover) var(--ease-out);
 }
-.nav-dock__link:hover, .nav-dock__link[aria-current="page"] { color: var(--color-gold); }
+.nav-dock__link:hover, .nav-dock__link[aria-current="page"] { color: var(--color-gold); opacity: 1; }
 
 .nav-dock__utils { display: flex; align-items: center; gap: var(--space-sm); flex: none; }
 .nav-dock__icon {
@@ -97,7 +122,7 @@
   transition: opacity var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out), visibility var(--dur-hover);
   z-index: 99;
 }
-.nav-dock--top .nav-dock__mega { top: calc(var(--nav-top-height) + 4px); }
+.nav-dock--top .nav-dock__mega { top: calc(var(--nav-top-height) + var(--announcement-height, 0px) + 4px); }
 .nav-dock__item.is-open .nav-dock__mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); }
 .nav-dock__mega .blob-field { border-radius: var(--radius-lg); }
 .nav-dock__mega-inner { position: relative; padding: var(--space-xl); color: var(--color-parchment); }
@@ -161,9 +186,21 @@
 }
 .sorella-search-form input::placeholder { color: var(--color-mist); }
 
-.sorella-socials { display: flex; gap: var(--space-md); }
-.sorella-socials a { display: inline-flex; color: inherit; transition: color var(--dur-hover) var(--ease-out); }
-.sorella-socials a:hover { color: var(--color-gold); }
+.sorella-socials { display: flex; gap: var(--space-sm); }
+.sorella-socials a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; color: inherit;
+  border: 1px solid var(--color-mist-40); border-radius: var(--radius-full);
+  transition:
+    color var(--dur-hover) var(--ease-out),
+    background-color var(--dur-hover) var(--ease-out),
+    border-color var(--dur-hover) var(--ease-out);
+}
+.sorella-socials a:hover {
+  color: var(--color-ink);
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
 
 /* --------------------------------------------------------------------------
    Cart drawer
@@ -183,14 +220,34 @@
    -------------------------------------------------------------------------- */
 .sorella-footer { background: var(--color-ink); color: var(--color-parchment); padding-block: var(--space-xxl) var(--space-xl); }
 .sorella-footer__grid {
-  display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--space-xl);
+  display: grid; grid-template-columns: 4fr 2fr 2fr 4fr; gap: var(--space-xl);
   padding-block-end: var(--space-xl); border-block-end: var(--border-hairline);
 }
 .sorella-footer__brand { display: flex; flex-direction: column; gap: var(--space-sm); }
+.sorella-footer__wordmark {
+  font-family: var(--font-display); font-size: 24px; font-weight: 500; line-height: 1.1;
+  color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.1em;
+}
 .sorella-footer__col-title { color: var(--color-gold); margin-block-end: var(--space-md); }
 .sorella-footer__links { display: flex; flex-direction: column; gap: var(--space-sm); }
 .sorella-footer__links a:hover { color: var(--color-gold); }
+.sorella-footer__contact { display: block; margin-block-start: var(--space-md); }
+.sorella-footer__contact:hover { color: var(--color-gold); }
+.sorella-footer__col .sorella-socials { margin-block-start: var(--space-md); }
 .sorella-footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-block-start: var(--space-lg); flex-wrap: wrap; }
+.sorella-footer__legal { color: var(--color-parchment-65); }
+.sorella-footer__localization { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+.sorella-footer__loc-form { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.sorella-footer__loc-select {
+  font-family: var(--font-body); font-size: 11px; font-weight: 600; line-height: 1;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-parchment); background: transparent;
+  border: 1px solid var(--color-mist-40); border-radius: var(--radius-sm);
+  padding: 10px var(--space-sm); cursor: pointer;
+  transition: border-color var(--dur-hover) var(--ease-out);
+}
+.sorella-footer__loc-select:hover { border-color: var(--color-gold); }
+.sorella-footer__loc-select option { color: var(--color-ink); background: var(--color-parchment); }
 .sorella-footer__newsletter { margin-block-start: var(--space-md); }
 
 /* --------------------------------------------------------------------------
@@ -203,6 +260,7 @@
   .nav-dock {
     max-width: 100%; width: 100%; top: 0; left: 0; transform: none; border-radius: 0;
   }
+  .nav-dock--top { top: var(--announcement-height, 0px); }
   .nav-dock--hidden { transform: translateY(-140%); }
   .nav-dock--docked .nav-dock__logo-full { display: block; }
   .nav-dock--docked .nav-dock__logo-mark { display: none; }

@@ -3,17 +3,26 @@
   Uses Shopify customer form (newsletter tag). Params:
     layout (string) — 'inline' (default) | 'stacked'
     button_label (string)
+    field_id (string) — unique input id when several forms share a page
 {%- endcomment -%}
+{%- assign nl_field_id = field_id | default: 'newsletter-email' -%}
 <div class="sorella-newsletter-form sorella-newsletter-form--{{ layout | default: 'inline' }}">
   {%- form 'customer', class: 'sorella-newsletter-form__form' -%}
     <input type="hidden" name="contact[tags]" value="newsletter">
     {%- if form.posted_successfully? -%}
-      <p class="t-body-strong text-gold sorella-newsletter-form__success">{{ 'general.newsletter.success' | t }}</p>
+      <p class="t-body-strong text-gold sorella-newsletter-form__success" role="status">{{ 'general.newsletter.success' | t }}</p>
     {%- else -%}
+      {%- if form.errors -%}
+        <p class="t-body-sm text-gold sorella-newsletter-form__error" role="alert">
+          {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+        </p>
+      {%- endif -%}
       <div class="sorella-field sorella-newsletter-form__field">
-        <label class="visually-hidden" for="newsletter-email">{{ 'general.newsletter.label' | t }}</label>
-        <input type="email" id="newsletter-email" name="contact[email]" required
-          placeholder="{{ 'general.newsletter.placeholder' | t }}" autocomplete="email">
+        <label class="visually-hidden" for="{{ nl_field_id }}">{{ 'general.newsletter.label' | t }}</label>
+        <input type="email" id="{{ nl_field_id }}" name="contact[email]" required
+          class="sorella-newsletter-form__input"
+          placeholder="{{ 'general.newsletter.placeholder' | t }}" autocomplete="email"
+          {%- if form.errors %} aria-invalid="true" autofocus{% endif %}>
       </div>
       {%- if button_label != blank -%}
         {%- assign newsletter_submit_label = button_label -%}
@@ -24,3 +33,7 @@
     {%- endif -%}
   {%- endform -%}
 </div>
+{% style %}
+  .sorella-newsletter-form__form { flex-wrap: wrap; }
+  .sorella-newsletter-form__error, .sorella-newsletter-form__success { flex-basis: 100%; }
+{% endstyle %}

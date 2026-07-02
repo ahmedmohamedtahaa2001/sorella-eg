@@ -66,40 +66,83 @@
   box-shadow: var(--shadow-card-hover);
   transform: translateY(-2px);
 }
+.sorella-card__media-wrap { position: relative; }
+.sorella-card__link { display: block; }
 .sorella-card__media { border-radius: 0; }
-.sorella-card__media img { transition: transform 400ms var(--ease-out); }
-.sorella-card:hover .sorella-card__media img { transform: scale(1.04); }
+@media (prefers-reduced-motion: no-preference) {
+  .sorella-card__media img { transition: transform 900ms var(--ease-out); }
+  .sorella-card:hover .sorella-card__media img { transform: scale(1.08); }
+}
 .sorella-card__badges {
   position: absolute; inset-block-start: var(--space-sm); inset-inline-start: var(--space-sm);
-  display: flex; gap: var(--space-xs); flex-wrap: wrap;
+  display: flex; gap: var(--space-xs); flex-wrap: wrap; z-index: 1;
 }
 .sorella-card__body {
   display: flex; flex-direction: column; gap: var(--space-xs);
-  padding: var(--space-md); padding-block-end: var(--space-sm);
+  padding: var(--space-md);
   align-items: flex-start;
 }
-.sorella-card__title { font-size: 18px; line-height: 1.2; }
-.sorella-card__title a { color: inherit; }
-.sorella-card__actions { padding: 0 var(--space-md) var(--space-md); margin-block-start: auto; }
-.sorella-card__form { width: 100%; }
 
-/* Quick-add reveals on hover (pointer devices) */
-@media (hover: hover) and (min-width: 736px) {
-  .sorella-card--default .sorella-card__actions {
-    opacity: 0; transform: translateY(6px);
+/* Meta row — title + notes on the left, gold price on the right */
+.sorella-card__meta {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-sm); width: 100%;
+}
+.sorella-card__id { min-width: 0; }
+.sorella-card__title { line-height: 1.2; } /* scale from .t-headline (24) */
+.sorella-card__title a { color: inherit; unicode-bidi: plaintext; }
+.sorella-card__notes {
+  margin: var(--space-xxs) 0 0;
+  font-family: var(--font-body); font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.4;
+  color: color-mix(in srgb, var(--color-parchment) 40%, transparent);
+}
+.sorella-card__price { flex: none; }
+.sorella-card__price .sorella-price { color: var(--color-gold); }
+
+/* Quick add — parchment pill floating bottom-center of the media */
+.sorella-card__actions {
+  position: absolute; inset-block-end: var(--space-sm); inset-inline: 0;
+  display: flex; justify-content: center; z-index: 2;
+}
+.sorella-card__actions > * { width: 85%; }
+.sorella-card__form { width: 85%; }
+.sorella-card__actions .btn {
+  width: 100%; min-height: 44px;
+  background: var(--color-parchment); color: var(--color-ink); border: 0;
+}
+.sorella-card__actions .btn:hover { background: var(--color-gold); }
+
+/* Reveal on hover/focus for pointer devices; always visible on touch */
+@media (hover: hover) {
+  .sorella-card:not(.sorella-card--compact) .sorella-card__actions { opacity: 0; }
+  .sorella-card:hover .sorella-card__actions,
+  .sorella-card:focus-within .sorella-card__actions { opacity: 1; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .sorella-card:not(.sorella-card--compact) .sorella-card__actions {
+    transform: translateY(16px);
     transition: opacity var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out);
   }
-  .sorella-card--default:hover .sorella-card__actions,
-  .sorella-card--default:focus-within .sorella-card__actions { opacity: 1; transform: none; }
+  .sorella-card:hover .sorella-card__actions,
+  .sorella-card:focus-within .sorella-card__actions { transform: none; }
 }
 
-/* Sold-out demotion (§9) — ~55% opacity, desaturated, labelled */
-.sorella-card--sold-out { opacity: 0.85; }
-.sorella-card--sold-out .sorella-card__media img { filter: grayscale(0.6) opacity(0.7); }
+/* Sold-out demotion (§9) — content dims toward 0.55, badge pill stays legible */
+.sorella-card--sold-out .sorella-card__media img { opacity: 0.55; filter: grayscale(0.6); }
+.sorella-card--sold-out .sorella-card__body { opacity: 0.55; }
 
-/* Quick-add compact variant */
+/* Quick-add variant — tighter body */
 .sorella-card--quick-add .sorella-card__body { padding: var(--space-sm); }
-.sorella-card--quick-add .sorella-card__title { font-size: 15px; }
+.sorella-card--quick-add .sorella-card__title { font-size: 17px; }
+
+/* Compact variant — impulse SKUs: small footprint, price emphasized, one-tap add */
+.sorella-card--compact .sorella-card__body { padding: var(--space-sm); }
+.sorella-card--compact .sorella-card__title {
+  font-family: var(--font-body); font-size: 15px; font-weight: 600; letter-spacing: -0.1px;
+}
+.sorella-card--compact .sorella-card__notes { display: none; }
+.sorella-card--compact .sorella-card__price .t-price { font-size: 19px; }
 
 /* --------------------------------------------------------------------------
    Pagination (§9)
@@ -135,23 +178,87 @@
    Bento category cell (§9)
    -------------------------------------------------------------------------- */
 .sorella-bento-cell {
-  position: relative; display: block; overflow: hidden;
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   min-height: 240px;
-  transition: border-color var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out);
+  color: var(--color-parchment);
+  transition: border-color var(--dur-hover) var(--ease-out);
 }
 .bento__cell--1x2 .sorella-bento-cell, .bento__cell--2x2 .sorella-bento-cell { min-height: 100%; }
 .sorella-bento-cell:hover { border-color: var(--color-gold-40); }
-.sorella-bento-cell__media { position: absolute; inset: 0; }
-.sorella-bento-cell__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms var(--ease-out); }
-.sorella-bento-cell:hover .sorella-bento-cell__media img { transform: scale(1.05); }
-.sorella-bento-cell__scrim { position: absolute; inset: 0; background: var(--gradient-hero-scrim); }
+.sorella-bento-cell__media { position: absolute; inset: 0; overflow: hidden; }
+.sorella-bento-cell__media img { width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: no-preference) {
+  .sorella-bento-cell__media img { transition: transform 1000ms var(--ease-out); }
+  .sorella-bento-cell:hover .sorella-bento-cell__media img { transform: scale(1.08); }
+}
+.sorella-bento-cell__scrim {
+  position: absolute; inset: 0;
+  background: var(--color-ink-60);
+  transition: background-color var(--dur-drawer) var(--ease-out);
+}
+.sorella-bento-cell:hover .sorella-bento-cell__scrim {
+  background: color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
 .sorella-bento-cell__content {
-  position: relative; z-index: 1; height: 100%;
+  position: relative; z-index: 1; flex: 1;
   display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-xs);
   padding: var(--space-lg); color: var(--color-parchment);
 }
+
+/* Panel variant — top-half image, bottom-half content panel */
+.sorella-bento-cell--panel .sorella-bento-cell__media {
+  position: relative; inset: auto; flex: 1 1 50%; min-height: 0;
+}
+.sorella-bento-cell--panel .sorella-bento-cell__media img,
+.sorella-bento-cell--panel .sorella-bento-cell__media .media__placeholder {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.sorella-bento-cell__panel {
+  position: relative; z-index: 1; flex: 1 1 50%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-xs);
+  padding: var(--space-lg);
+  background: color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+.sorella-bento-cell__btn {
+  display: flex; width: 100%; min-height: 44px;
+  align-items: center; justify-content: center;
+  margin-block-start: auto; padding: 10px 18px;
+  border: 1px solid var(--color-gold); border-radius: var(--radius-pill);
+  color: var(--color-gold);
+  font-family: var(--font-body); font-size: 14px; font-weight: 600; letter-spacing: -0.1px;
+  transition: background-color var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out);
+}
+.sorella-bento-cell--panel:hover .sorella-bento-cell__btn,
+.sorella-bento-cell--panel:focus-visible .sorella-bento-cell__btn {
+  background: var(--color-gold); color: var(--color-ink);
+}
+
+/* Campaign variant — badge eyebrow, heavy blurred overlay, centered content */
+.sorella-bento-cell--campaign .sorella-bento-cell__scrim,
+.sorella-bento-cell--campaign:hover .sorella-bento-cell__scrim {
+  background: var(--color-ink-70);
+  backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);
+}
+.sorella-bento-cell__content--center { justify-content: center; }
+.sorella-bento-cell__badge {
+  display: inline-flex; align-self: flex-start;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  background: var(--color-gold); color: var(--color-ink);
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.4;
+  margin-block-end: var(--space-xs);
+}
+.sorella-bento-cell__cta-link {
+  display: inline-flex; align-items: center; gap: var(--space-xs);
+  align-self: flex-start; margin-block-start: var(--space-xs);
+  padding-block-end: 3px;
+  color: var(--color-gold);
+  border-block-end: 1px solid var(--color-gold-40);
+  transition: border-color var(--dur-hover) var(--ease-out);
+}
+.sorella-bento-cell--campaign:hover .sorella-bento-cell__cta-link { border-color: var(--color-gold); }
 
 /* --------------------------------------------------------------------------
    Testimonial glass card (§9)
@@ -268,7 +375,27 @@
 .sorella-line__remove { color: var(--color-mist); flex: none; }
 .sorella-line__remove:hover { color: var(--color-gold); }
 .sorella-line__bottom { display: flex; align-items: center; justify-content: space-between; margin-block-start: var(--space-xs); }
-.sorella-line__qty { display: inline-flex; align-items: center; gap: var(--space-sm); border: 1px solid var(--color-mist-25); border-radius: var(--radius-pill); padding: 4px 10px; }
+.sorella-line__qty { display: inline-flex; align-items: center; gap: var(--space-xxs); border: 1px solid var(--color-mist-25); border-radius: var(--radius-pill); padding: 0 var(--space-xxs); }
+.sorella-line__qty a,
+.sorella-line__qty button {
+  min-width: 44px; min-height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Quiet text link button (§9) — carousel "View all", underlined, gold on hover
+   -------------------------------------------------------------------------- */
+.btn--text-link {
+  min-height: auto; padding: 2px 0 4px; border-radius: 0;
+  background: transparent;
+  color: var(--color-parchment-65);
+  border-block-end: 1px solid var(--color-parchment-12);
+  font-weight: 500;
+  transition: color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
+}
+.btn--text-link:hover { color: var(--color-gold); border-color: var(--color-gold-40); }
+.btn--text-link:active { transform: none; }
 
 /* --------------------------------------------------------------------------
    Mega-menu tile (§9)

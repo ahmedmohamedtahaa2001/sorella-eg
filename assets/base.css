@@ -37,11 +37,12 @@
   --gradient-surface:    linear-gradient(165deg, var(--color-navy) 0%, var(--color-navy-lowest) 100%);
   --gradient-hero-scrim: linear-gradient(180deg, var(--color-ink-70) 0%, transparent 40%, var(--color-ink-70) 100%);
   --gradient-card-sheen: linear-gradient(135deg, var(--color-parchment-08) 0%, transparent 60%);
-  --gradient-blob-gold:  radial-gradient(circle, rgba(199,156,90,0.28) 0%, transparent 70%);
-  --gradient-blob-slate: radial-gradient(circle, rgba(154,163,173,0.16) 0%, transparent 70%);
+  --gradient-blob-gold:  radial-gradient(circle, rgba(199,156,90,0.25) 0%, transparent 70%);
+  --gradient-blob-slate: radial-gradient(circle, rgba(154,163,173,0.15) 0%, transparent 70%);
   --gradient-blob-rose:  radial-gradient(circle, rgba(199,140,120,0.20) 0%, transparent 70%);
+  --gradient-blob-gold-soft: radial-gradient(circle, rgba(199,156,90,0.20) 0%, transparent 70%);
 
-  /* Typography — families (see also font_face in css-variables snippet) */
+  /* Typography — families (webfonts loaded by snippets/sorella-fonts.liquid in the layout) */
   --font-display: "Fraunces", "Canela", Georgia, "Times New Roman", serif;
   --font-body:    "Inter", "General Sans", system-ui, -apple-system, sans-serif;
 
@@ -56,7 +57,7 @@
   --radius-blob-b: 40% 60% 65% 35% / 55% 40% 60% 45%;
 
   /* Elevation */
-  --shadow-glass:      0 8px 32px var(--color-ink-35);
+  --shadow-glass:      0 8px 32px rgba(0,0,0,0.2);
   --shadow-dock:       0 8px 24px rgba(28,31,36,0.25);
   --shadow-product:    0 5px 30px rgba(28,31,36,0.22);
   --shadow-card-hover: 0 4px 20px rgba(28,31,36,0.18);
@@ -64,7 +65,7 @@
   --border-hairline:   1px solid var(--color-mist-25);
 
   /* Glass / blur */
-  --blur-panel: 14px;
+  --blur-panel: 16px;
   --blur-dock:  18px;
   --blur-blob-edge: 3px;
 
@@ -74,7 +75,7 @@
   --dur-hover:     180ms;
   --dur-press:     120ms;
   --dur-drawer:    300ms;
-  --dur-blob-drift: 11000ms;
+  --dur-blob-drift: 18000ms;
 
   /* Layout */
   --container-bento: 1280px;
@@ -137,6 +138,12 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   outline-offset: 2px;
 }
 
+/* Text selection — gold wash, ink text */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
 /* --------------------------------------------------------------------------
    Surfaces — alternating Ink / Parchment full-bleed is the divider (§8.1)
    -------------------------------------------------------------------------- */
@@ -162,7 +169,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 /* --------------------------------------------------------------------------
    Typography scale (§3.2) — bundled size/weight/line-height/tracking per token
    -------------------------------------------------------------------------- */
-.t-display-hero { font-family: var(--font-display); font-size: clamp(38px, 6vw, 60px); font-weight: 400; line-height: 1.05; letter-spacing: -0.5px; }
+.t-display-hero { font-family: var(--font-display); font-size: clamp(32px, 6vw, 60px); font-weight: 400; line-height: 0.98; letter-spacing: -0.5px; }
 .t-display-lg   { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 44px); font-weight: 400; line-height: 1.08; letter-spacing: -0.4px; }
 .t-display-md   { font-family: var(--font-display); font-size: clamp(26px, 3vw, 32px); font-weight: 500; line-height: 1.15; letter-spacing: -0.3px; }
 .t-headline     { font-family: var(--font-display); font-size: 24px; font-weight: 500; line-height: 1.2; letter-spacing: -0.2px; }
@@ -176,6 +183,8 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .t-caption-strong { font-family: var(--font-body); font-size: 14px; font-weight: 600; line-height: 1.3; letter-spacing: -0.1px; }
 .t-price        { font-family: var(--font-body); font-size: 17px; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .t-eyebrow      { font-family: var(--font-body); font-size: 12px; font-weight: 600; line-height: 1; letter-spacing: 1.2px; text-transform: uppercase; }
+.t-eyebrow--wide  { letter-spacing: 0.35em; }   /* hero + centered section eyebrows */
+.t-eyebrow--micro { font-size: 10px; letter-spacing: 0.1em; }  /* card-level micro-eyebrows */
 .t-nav-link     { font-family: var(--font-body); font-size: 15px; font-weight: 500; line-height: 1; letter-spacing: -0.1px; }
 .t-fine-print   { font-family: var(--font-body); font-size: 12px; font-weight: 400; line-height: 1.4; }
 .t-micro-legal  { font-family: var(--font-body); font-size: 10px; font-weight: 400; line-height: 1.3; }
@@ -185,8 +194,8 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 
 /* Rich-text (merchant HTML) reading rhythm */
 .rte > * + * { margin-block-start: var(--space-md); }
-.rte h2 { font-family: var(--font-display); font-size: 28px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; margin-block-start: var(--space-xl); }
-.rte h3 { font-family: var(--font-display); font-size: 22px; font-weight: 500; line-height: 1.25; margin-block-start: var(--space-lg); }
+.rte h2 { font-family: var(--font-display); font-size: 32px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; margin-block-start: var(--space-xl); }
+.rte h3 { font-family: var(--font-display); font-size: 24px; font-weight: 500; line-height: 1.25; margin-block-start: var(--space-lg); }
 .rte a { color: var(--color-gold); text-decoration: underline; text-underline-offset: 3px; }
 .rte ul, .rte ol { padding-inline-start: 1.25em; }
 .rte ul { list-style: disc; }
@@ -237,15 +246,26 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   filter: blur(70px);            /* soft atmospheric glow (StitchDesign §7) */
   pointer-events: none;
   opacity: 1;
-  will-change: transform;
 }
 .blob--b     { border-radius: var(--radius-blob-b); }
 .blob--gold  { background: var(--gradient-blob-gold); }
 .blob--slate { background: var(--gradient-blob-slate); }
 .blob--rose  { background: var(--gradient-blob-rose); }
+/* Soft variant — caps gradient peak alpha at 0.20 (behind menus / glass panels) */
+.blob--soft.blob--gold { background: var(--gradient-blob-gold-soft); }
+
+/* Position anchors (single-blob mode uses tr by default; mr = right edge, ~40% height) */
 .blob--tl { inset-block-start: -12%; inset-inline-start: -10%; }
+.blob--tr { inset-block-start: -12%; inset-inline-end: -10%; }
+.blob--bl { inset-block-end: -14%; inset-inline-start: -8%; }
 .blob--br { inset-block-end: -14%; inset-inline-end: -8%; }
-.blob--corner { width: clamp(220px, 26vw, 380px); inset-block-start: -12%; inset-inline-end: -10%; }
+.blob--mr { inset-block-start: 40%; inset-inline-end: -12%; translate: 0 -50%; }
+
+/* Footprint sizes (single-blob mode) */
+.blob--sm { width: clamp(200px, 24vw, 300px); }
+.blob--md { width: clamp(300px, 36vw, 520px); }
+.blob--lg { width: clamp(440px, 52vw, 780px); }
+.blob--corner { width: clamp(220px, 26vw, 380px); inset-block-start: -12%; inset-inline-end: -10%; } /* legacy alias */
 
 @media (prefers-reduced-motion: no-preference) {
   .blob--drift-a { animation: blob-drift-a var(--dur-blob-drift) ease-in-out infinite alternate; }
@@ -261,6 +281,26 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   50%  { transform: translate(-30px,30px) scale(1.08) rotate(-5deg); border-radius: 58% 42% 45% 55% / 42% 58% 42% 58%; }
   100% { transform: translate(20px,-20px) scale(0.96) rotate(4deg); border-radius: 45% 55% 60% 40% / 60% 45% 55% 40%; }
 }
+/* Low-end / small-phone degradation: no ambient drift */
+@media (max-width: 419px) {
+  .blob { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Reveal-on-scroll — classes added ONLY by theme.js (no-JS renders visible).
+   Gated by reduced-motion so the pre-reveal state never hides content.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1000ms ease-out, transform 1000ms ease-out;
+  }
+  .reveal-pending.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* --------------------------------------------------------------------------
    Bento grid (§5) — curated surfaces only
@@ -268,7 +308,11 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .bento {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 300px;
   gap: var(--space-xl);
+}
+@media (min-width: 1024px) {
+  .bento { grid-auto-rows: 350px; }
 }
 .bento__cell { grid-column: span 3; }          /* 1×1 default (12/4 tiles) */
 .bento__cell--1x1 { grid-column: span 3; grid-row: span 1; }
@@ -325,6 +369,10 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 
 .btn--primary { background: var(--color-gold); color: var(--color-ink); }
 .btn--primary:hover { filter: brightness(1.06); box-shadow: var(--shadow-card-hover); }
+@media (prefers-reduced-motion: no-preference) {
+  .btn--primary:hover  { transform: scale(1.05); }
+  .btn--primary:active { transform: scale(0.95); }
+}
 
 .btn--ghost { background: transparent; color: currentColor; border: 1px solid var(--color-mist-25); }
 .btn--ghost:hover { background: var(--color-gold-15); border-color: var(--color-gold-40); }

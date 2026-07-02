@@ -10,9 +10,21 @@
         "show_blob": true,
         "blob_scheme": "gold",
         "text_align": "center",
-        "cta_label": "Shop best sellers"
+        "cta_label": "Shop best sellers",
+        "cta_link": "/collections/all"
+      }
+    },
+    "loved": {
+      "type": "sorella-product-carousel",
+      "settings": {
+        "eyebrow": "Essentials",
+        "heading": "The Most Loved",
+        "collection": "50ml-perfumes",
+        "product_count": 4,
+        "layout": "grid",
+        "show_view_all": true
       }
     }
   },
-  "order": ["header"]
+  "order": ["header", "loved"]
 }

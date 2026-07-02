@@ -1,23 +1,30 @@
 {%- comment -%}
   sorella-newsletter — Newsletter / Offer Card (Art Direction §10).
-  A centered glass card on a gradient surface, with ONE small corner-anchored
-  blob (never centered behind the form fields — §7.3). All content merchant-editable.
+  Horizontal split glass panel (StitchDesign reference): heading + body left,
+  inline pill form right; collapses to a centered stack under 768px. A `stacked`
+  layout keeps the legacy centered card. ONE small corner-anchored gold blob,
+  bottom-right (never centered behind the form fields — §7.3).
+  All content merchant-editable.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
+  assign nl_layout = s.layout | default: 'split'
 -%}
 <section class="sorella-newsletter blob-scene surface-gradient section-pad" data-section-id="{{ section.id }}">
   {%- if s.show_blob -%}
-    {% render 'sorella-blob', single: true, scheme: s.blob_scheme %}
+    {% render 'sorella-blob', single: true, scheme: s.blob_scheme, position: 'br', size: 'small' %}
   {%- endif -%}
 
   <div class="container container--bento sorella-newsletter__container">
-    <div class="sorella-newsletter__card glass-panel glass-panel--xl glass-panel--sheen">
-      {%- if s.eyebrow != blank -%}<span class="t-eyebrow text-gold">{{ s.eyebrow }}</span>{%- endif -%}
-      {%- if s.heading != blank -%}<h2 class="t-display-lg">{{ s.heading }}</h2>{%- endif -%}
-      {%- if s.text != blank -%}<p class="t-body">{{ s.text }}</p>{%- endif -%}
+    <div class="sorella-newsletter__card sorella-newsletter__card--{{ nl_layout }} glass-panel glass-panel--xl glass-panel--sheen">
+      <div class="sorella-newsletter__copy">
+        {%- if s.eyebrow != blank -%}<span class="t-eyebrow t-eyebrow--wide text-gold">{{ s.eyebrow }}</span>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="t-display-lg">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.text != blank -%}<p class="t-body sorella-newsletter__text">{{ s.text }}</p>{%- endif -%}
+      </div>
       <div class="sorella-newsletter__form">
-        {% render 'sorella-newsletter-form', layout: s.form_layout, button_label: s.button_label %}
+        {%- assign nl_field_id = section.id | prepend: 'newsletter-email-' -%}
+        {% render 'sorella-newsletter-form', layout: s.form_layout, button_label: s.button_label, field_id: nl_field_id %}
       </div>
     </div>
   </div>
@@ -29,14 +36,53 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-lg);
     max-width: 640px;
     margin-inline: auto;
     padding: var(--space-xxl);
     text-align: center;
     color: var(--color-parchment);
   }
-  .sorella-newsletter__form { margin-block-start: var(--space-sm); inline-size: 100%; }
+  .sorella-newsletter__copy { display: flex; flex-direction: column; align-items: center; gap: var(--space-md); }
+  .sorella-newsletter__text { color: var(--color-parchment-65); }
+  .sorella-newsletter__form { inline-size: 100%; }
+
+  /* Split layout — heading + body left, pill form right */
+  .sorella-newsletter__card--split {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xxl);
+    max-width: none;
+    text-align: start;
+  }
+  .sorella-newsletter__card--split .sorella-newsletter__copy { align-items: flex-start; max-width: 500px; }
+  .sorella-newsletter__card--split .sorella-newsletter__form { inline-size: auto; flex: 0 1 360px; min-inline-size: 320px; }
+
+  /* Pill email input — ink well, hairline parchment border, gold focus */
+  .sorella-newsletter .sorella-field input {
+    background: var(--color-ink-60);
+    border: 1px solid var(--color-parchment-12);
+    border-radius: var(--radius-pill);
+    padding: var(--space-md) var(--space-xl);
+    color: var(--color-parchment);
+  }
+  .sorella-newsletter .sorella-field input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+  }
+  .sorella-newsletter .sorella-newsletter-form .btn {
+    transition: transform var(--dur-hover) var(--ease-out), background-color var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sorella-newsletter .sorella-newsletter-form .btn:hover { transform: scale(1.05); }
+  }
+
+  @media (max-width: 767px) {
+    .sorella-newsletter__card--split { flex-direction: column; text-align: center; }
+    .sorella-newsletter__card--split .sorella-newsletter__copy { align-items: center; }
+    .sorella-newsletter__card--split .sorella-newsletter__form { inline-size: 100%; flex: 1 1 auto; min-inline-size: 0; }
+  }
   @media (max-width: 640px) {
     .sorella-newsletter__card { padding: var(--space-xl) var(--space-lg); }
   }
@@ -51,6 +97,13 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Subscribe to our emails" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Join our list for exclusive offers, new drops, and a little sisterly warmth in your inbox." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Sign up" },
+    {
+      "type": "select", "id": "layout", "label": "Layout", "default": "split",
+      "options": [
+        { "value": "split", "label": "Split (copy left, form right)" },
+        { "value": "stacked", "label": "Stacked (centered)" }
+      ]
+    },
     { "type": "header", "content": "Atmosphere" },
     { "type": "checkbox", "id": "show_blob", "label": "Show blob", "default": true },
     {

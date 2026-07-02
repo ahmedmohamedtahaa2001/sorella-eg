@@ -6,9 +6,6 @@
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  if s.enabled == false
-    break
-  endif
 -%}
 {%- if s.enabled -%}
   <section class="sorella-seasonal blob-scene surface-gradient section-pad" data-section-id="{{ section.id }}">

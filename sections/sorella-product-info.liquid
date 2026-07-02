@@ -32,6 +32,19 @@
       <div class="sorella-pdp__price" data-variant-price>
         {% render 'sorella-price', variant: current_variant, product: product, context: 'pdp', on_dark: true %}
       </div>
+      {%- comment -%}
+        Variant-id → fully-rendered price HTML map, consumed by theme.js on variant
+        change so .t-price styling and compare-at strikethrough survive swaps.
+      {%- endcomment -%}
+      <script type="application/json" data-variant-price-map>
+        {
+          {%- for v in product.variants -%}
+            {%- capture variant_price_html -%}{% render 'sorella-price', variant: v, product: product, context: 'pdp', on_dark: true %}{%- endcapture -%}
+            {%- assign variant_id_key = v.id | append: '' -%}
+            {{ variant_id_key | json }}: {{ variant_price_html | strip | json }}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        }
+      </script>
 
       {%- if product.metafields.sorella.rating -%}
         {% render 'sorella-star-rating', value: product.metafields.sorella.rating, count: product.metafields.sorella.rating_count %}
