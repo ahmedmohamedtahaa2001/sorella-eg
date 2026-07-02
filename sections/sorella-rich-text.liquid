@@ -7,7 +7,7 @@
   assign s = section.settings
   assign align = s.align | default: 'start'
   assign width = s.width | default: 'read'
-  assign surface = s.surface | default: 'surface-parchment'
+  assign surface = s.surface | default: 'surface-ink'
   if width == 'lock'
     assign container_class = 'container--lock'
   else
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "type": "select", "id": "surface", "label": "Surface", "default": "surface-parchment",
+      "type": "select", "id": "surface", "label": "Surface", "default": "surface-ink",
       "options": [
         { "value": "surface-parchment", "label": "Parchment" },
         { "value": "surface-ink", "label": "Ink" }

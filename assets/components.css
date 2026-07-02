@@ -53,9 +53,9 @@
    -------------------------------------------------------------------------- */
 .sorella-card {
   display: flex; flex-direction: column;
-  background: var(--color-parchment); color: var(--color-ink);
+  background: var(--color-navy-container); color: var(--color-parchment);
   border-radius: var(--radius-lg);
-  border: 1px solid transparent;
+  border: 1px solid var(--color-parchment-08);
   overflow: hidden;
   transition: border-color var(--dur-hover) var(--ease-out),
               box-shadow var(--dur-hover) var(--ease-out),
@@ -64,6 +64,7 @@
 .sorella-card:hover {
   border-color: var(--color-gold-40);
   box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
 }
 .sorella-card__media { border-radius: 0; }
 .sorella-card__media img { transition: transform 400ms var(--ease-out); }

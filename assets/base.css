@@ -6,11 +6,20 @@
 
 :root {
   /* Color — core */
-  --color-ink:        #1C1F24;
+  --color-ink:        #1C1F24;   /* reserved: footer, text-on-gold, photo overlays */
   --color-slate:      #3A4452;
   --color-mist:       #9AA3AD;
   --color-parchment:  #F2EEE7;
   --color-gold:       #C79C5A;
+
+  /* Color — navy canvas system (StitchDesign §2) — the dark surface of the site */
+  --color-navy:         #0a1420;  /* primary background / canvas          */
+  --color-navy-lowest:  #050f1b;  /* deepest section wells                */
+  --color-navy-low:     #121c29;  /* low containers                       */
+  --color-navy-container: #16202d;/* product cards, solid panels          */
+  --color-navy-high:    #212b38;  /* raised containers                    */
+  --color-navy-bright:  #2b3543;  /* media placeholder / brightest        */
+  --color-ink-60:       rgba(28,31,36,0.60);  /* photo overlay on bento tiles */
 
   /* Color — derived */
   --color-ink-90:        rgba(28,31,36,0.90);
@@ -25,12 +34,12 @@
   --color-gold-40:       rgba(199,156,90,0.40);
 
   /* Gradients & blob fills */
-  --gradient-surface:    linear-gradient(160deg, var(--color-ink) 0%, var(--color-slate) 100%);
+  --gradient-surface:    linear-gradient(165deg, var(--color-navy) 0%, var(--color-navy-lowest) 100%);
   --gradient-hero-scrim: linear-gradient(180deg, var(--color-ink-70) 0%, transparent 40%, var(--color-ink-70) 100%);
   --gradient-card-sheen: linear-gradient(135deg, var(--color-parchment-08) 0%, transparent 60%);
-  --gradient-blob-gold:  radial-gradient(circle at 30% 30%, rgba(199,156,90,0.55) 0%, rgba(199,156,90,0.05) 70%);
-  --gradient-blob-slate: radial-gradient(circle at 65% 40%, rgba(58,68,82,0.65) 0%, rgba(58,68,82,0.05) 70%);
-  --gradient-blob-rose:  radial-gradient(circle at 40% 60%, rgba(199,140,120,0.35) 0%, rgba(199,140,120,0.04) 70%);
+  --gradient-blob-gold:  radial-gradient(circle, rgba(199,156,90,0.28) 0%, transparent 70%);
+  --gradient-blob-slate: radial-gradient(circle, rgba(154,163,173,0.16) 0%, transparent 70%);
+  --gradient-blob-rose:  radial-gradient(circle, rgba(199,140,120,0.20) 0%, transparent 70%);
 
   /* Typography — families (see also font_face in css-variables snippet) */
   --font-display: "Fraunces", "Canela", Georgia, "Times New Roman", serif;
@@ -93,7 +102,7 @@ body {
   line-height: 1.47;
   letter-spacing: -0.2px;
   color: var(--color-parchment);
-  background-color: var(--color-ink);
+  background-color: var(--color-navy);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -131,9 +140,11 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 /* --------------------------------------------------------------------------
    Surfaces — alternating Ink / Parchment full-bleed is the divider (§8.1)
    -------------------------------------------------------------------------- */
-.surface-ink       { background: var(--color-ink);      color: var(--color-parchment); }
+.surface-ink       { background: var(--color-navy);      color: var(--color-parchment); }
+.surface-ink--well { background: var(--color-navy-lowest); color: var(--color-parchment); }
 .surface-parchment { background: var(--color-parchment); color: var(--color-ink); }
 .surface-gradient  { background: var(--gradient-surface); color: var(--color-parchment); }
+.surface-footer    { background: var(--color-ink);       color: var(--color-parchment); }
 
 /* --------------------------------------------------------------------------
    Containers & section rhythm
@@ -206,11 +217,11 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 
 /* Progressive-enhancement fallback: no blur support → solid Ink, no fog */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass-panel { background: var(--color-ink-90); }
+  .glass-panel { background: var(--color-navy-high); }
 }
 /* Utility to force-test the fallback in QA */
 .force-no-blur .glass-panel,
-.force-no-blur .nav-dock { background: var(--color-ink-90) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.force-no-blur .nav-dock { background: var(--color-navy-high) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 
 /* --------------------------------------------------------------------------
    Blob system (§7) — environment, never content. aria-hidden + no pointer events.
@@ -220,32 +231,35 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 
 .blob {
   position: absolute;
-  width: clamp(320px, 40vw, 640px);
+  width: clamp(380px, 46vw, 720px);
   aspect-ratio: 1 / 1;
   border-radius: var(--radius-blob-a);
-  filter: blur(var(--blur-blob-edge));
+  filter: blur(70px);            /* soft atmospheric glow (StitchDesign §7) */
   pointer-events: none;
-  opacity: 0.9;
+  opacity: 1;
+  will-change: transform;
 }
 .blob--b     { border-radius: var(--radius-blob-b); }
 .blob--gold  { background: var(--gradient-blob-gold); }
 .blob--slate { background: var(--gradient-blob-slate); }
 .blob--rose  { background: var(--gradient-blob-rose); }
-.blob--tl { inset-block-start: -10%; inset-inline-start: -8%; }
-.blob--br { inset-block-end: -12%; inset-inline-end: -6%; }
-.blob--corner { width: clamp(180px, 22vw, 320px); inset-block-start: -12%; inset-inline-end: -10%; }
+.blob--tl { inset-block-start: -12%; inset-inline-start: -10%; }
+.blob--br { inset-block-end: -14%; inset-inline-end: -8%; }
+.blob--corner { width: clamp(220px, 26vw, 380px); inset-block-start: -12%; inset-inline-end: -10%; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .blob--drift-a { animation: blob-drift-a var(--dur-blob-drift) ease-in-out infinite; }
-  .blob--drift-b { animation: blob-drift-b calc(var(--dur-blob-drift) + 2500ms) ease-in-out infinite; }
+  .blob--drift-a { animation: blob-drift-a var(--dur-blob-drift) ease-in-out infinite alternate; }
+  .blob--drift-b { animation: blob-drift-b calc(var(--dur-blob-drift) + 2500ms) ease-in-out infinite alternate; }
 }
 @keyframes blob-drift-a {
-  0%, 100% { border-radius: 62% 38% 55% 45% / 45% 55% 45% 55%; }
-  50%      { border-radius: 48% 52% 40% 60% / 55% 45% 60% 40%; }
+  0%   { transform: translate(0,0) scale(1) rotate(0deg); border-radius: 62% 38% 55% 45% / 45% 55% 45% 55%; }
+  50%  { transform: translate(30px,-40px) scale(1.1) rotate(5deg); border-radius: 48% 52% 40% 60% / 55% 45% 60% 40%; }
+  100% { transform: translate(-20px,20px) scale(0.95) rotate(-4deg); border-radius: 30% 70% 45% 55% / 40% 55% 45% 60%; }
 }
 @keyframes blob-drift-b {
-  0%, 100% { border-radius: 40% 60% 65% 35% / 55% 40% 60% 45%; }
-  50%      { border-radius: 58% 42% 45% 55% / 42% 58% 42% 58%; }
+  0%   { transform: translate(0,0) scale(1) rotate(0deg); border-radius: 40% 60% 65% 35% / 55% 40% 60% 45%; }
+  50%  { transform: translate(-30px,30px) scale(1.08) rotate(-5deg); border-radius: 58% 42% 45% 55% / 42% 58% 42% 58%; }
+  100% { transform: translate(20px,-20px) scale(0.96) rotate(4deg); border-radius: 45% 55% 60% 40% / 60% 45% 55% 40%; }
 }
 
 /* --------------------------------------------------------------------------

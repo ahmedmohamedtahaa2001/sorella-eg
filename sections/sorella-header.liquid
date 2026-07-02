@@ -131,7 +131,8 @@
       <input type="hidden" name="type" value="product">
       <label class="visually-hidden" for="header-search">{{ 'general.search.title' | t }}</label>
       <input type="search" id="header-search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" autocomplete="off">
-      {% render 'sorella-button', label: 'general.search.submit' | t, style: 'primary', type: 'submit' %}
+      {%- assign search_submit_label = 'general.search.submit' | t -%}
+      {% render 'sorella-button', label: search_submit_label, style: 'primary', type: 'submit' %}
       <button class="nav-dock__icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'sorella-icon', name: 'close', size: 22 %}</button>
     </form>
   </div>

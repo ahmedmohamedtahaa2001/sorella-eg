@@ -6,7 +6,7 @@
 {%- liquid
   assign s = section.settings
 -%}
-<section class="sorella-contact surface-parchment section-pad" data-section-id="{{ section.id }}">
+<section class="sorella-contact surface-ink section-pad" data-section-id="{{ section.id }}">
   <div class="container container--read">
     {%- if s.heading != blank -%}
       <h2 class="sorella-contact__heading t-display-md">{{ s.heading }}</h2>
@@ -19,18 +19,22 @@
             {{ 'sections.contact.success' | t }}
           </p>
         {%- else -%}
+          {%- assign contact_name_label = 'sections.contact.name' | t -%}
+          {%- assign contact_email_label = 'sections.contact.email' | t -%}
+          {%- assign contact_phone_label = 'sections.contact.phone' | t -%}
+          {%- assign contact_message_label = 'sections.contact.message' | t -%}
           {% render 'sorella-form-field',
             type: 'text',
             id: 'contact-name',
             name: 'contact[Name]',
-            label: 'sections.contact.name' | t,
+            label: contact_name_label,
             autocomplete: 'name' %}
 
           {% render 'sorella-form-field',
             type: 'email',
             id: 'contact-email',
             name: 'contact[email]',
-            label: 'sections.contact.email' | t,
+            label: contact_email_label,
             required: true,
             autocomplete: 'email' %}
 
@@ -39,7 +43,7 @@
               type: 'tel',
               id: 'contact-phone',
               name: 'contact[Phone]',
-              label: 'sections.contact.phone' | t,
+              label: contact_phone_label,
               autocomplete: 'tel' %}
           {%- endif -%}
 
@@ -47,10 +51,11 @@
             type: 'textarea',
             id: 'contact-body',
             name: 'contact[body]',
-            label: 'sections.contact.message' | t %}
+            label: contact_message_label %}
 
           <div class="sorella-contact__actions">
-            {% render 'sorella-button', label: 'sections.contact.submit' | t, style: 'primary', type: 'submit' %}
+            {%- assign contact_submit_label = 'sections.contact.submit' | t -%}
+            {% render 'sorella-button', label: contact_submit_label, style: 'primary', type: 'submit' %}
           </div>
         {%- endif -%}
       {%- endform -%}

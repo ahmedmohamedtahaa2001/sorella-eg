@@ -31,7 +31,8 @@
 -%}
 <span class="sorella-price sorella-price--{{ context | default: 'card' }}{% if compare and compare > current %} sorella-price--on-sale{% endif %}">
   {%- if show_from -%}
-    <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: current | money }}</span>
+    {%- assign from_money = current | money -%}
+    <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: from_money }}</span>
   {%- else -%}
     <span class="t-price {{ price_color_class }} sorella-price__current">{{ current | money }}</span>
     {%- if compare and compare > current -%}

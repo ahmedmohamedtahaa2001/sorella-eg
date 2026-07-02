@@ -15,7 +15,12 @@
         <input type="email" id="newsletter-email" name="contact[email]" required
           placeholder="{{ 'general.newsletter.placeholder' | t }}" autocomplete="email">
       </div>
-      {% render 'sorella-button', label: button_label | default: 'general.newsletter.submit' | t, style: 'primary', type: 'submit' %}
+      {%- if button_label != blank -%}
+        {%- assign newsletter_submit_label = button_label -%}
+      {%- else -%}
+        {%- assign newsletter_submit_label = 'general.newsletter.submit' | t -%}
+      {%- endif -%}
+      {% render 'sorella-button', label: newsletter_submit_label, style: 'primary', type: 'submit' %}
     {%- endif -%}
   {%- endform -%}
 </div>

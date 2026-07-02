@@ -12,9 +12,11 @@
     <h1 class="t-display-lg sorella-main-cart__title">{{ 'cart.general.title' | t }} ({{ cart.item_count }})</h1>
 
     {%- if cart.item_count == 0 -%}
+      {%- assign cart_empty_heading = 'cart.general.empty' | t -%}
+      {%- assign cart_empty_cta = 'cart.general.empty_cta' | t -%}
       {% render 'sorella-empty-state',
-        heading: 'cart.general.empty' | t,
-        cta_label: 'cart.general.empty_cta' | t,
+        heading: cart_empty_heading,
+        cta_label: cart_empty_cta,
         cta_url: routes.all_products_collection_url,
         icon: 'bag' %}
     {%- else -%}

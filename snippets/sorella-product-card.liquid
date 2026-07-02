@@ -57,17 +57,20 @@
   {%- if is_available and show_quick_add -%}
     <div class="sorella-card__actions">
       {%- if product.variants.size > 1 -%}
-        {% render 'sorella-button', label: 'products.product.choose_options' | t, href: product.url, style: 'ghost', size: 'sm', full: true %}
+        {%- assign choose_label = 'products.product.choose_options' | t -%}
+        {% render 'sorella-button', label: choose_label, href: product.url, style: 'ghost', size: 'sm', full: true %}
       {%- else -%}
+        {%- assign quick_label = 'products.product.quick_add' | t -%}
         {%- form 'product', product, class: 'sorella-card__form' -%}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          {% render 'sorella-button', label: 'products.product.quick_add' | t, style: 'primary', size: 'sm', full: true, type: 'submit' %}
+          {% render 'sorella-button', label: quick_label, style: 'primary', size: 'sm', full: true, type: 'submit' %}
         {%- endform -%}
       {%- endif -%}
     </div>
   {%- elsif is_available == false -%}
+    {%- assign notify_label = 'products.product.notify_me' | t -%}
     <div class="sorella-card__actions">
-      {% render 'sorella-button', label: 'products.product.notify_me' | t, href: product.url, style: 'ghost', size: 'sm', full: true %}
+      {% render 'sorella-button', label: notify_label, href: product.url, style: 'ghost', size: 'sm', full: true %}
     </div>
   {%- endif -%}
 </article>
