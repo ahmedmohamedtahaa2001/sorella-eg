@@ -15,3 +15,11 @@ scrim-check.jpeg
 
 # Separate app repo (has its own .git)
 sorella-eg-integration/
+
+# Project material lives on the project-materials branch, not on main
+# (Shopify GitHub sync imports the whole branch and chokes on non-theme bulk)
+current website/
+Refrences/
+Project Planning/
+Skills/
+docs/
