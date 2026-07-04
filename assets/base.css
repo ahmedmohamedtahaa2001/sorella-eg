@@ -319,11 +319,11 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .bento {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: 300px;
-  gap: var(--space-xl);
+  grid-auto-rows: var(--bento-row-height-sm, 300px);
+  gap: var(--bento-gap, var(--space-xl));
 }
 @media (min-width: 1024px) {
-  .bento { grid-auto-rows: 350px; }
+  .bento { grid-auto-rows: var(--bento-row-height, 350px); }
 }
 .bento__cell { grid-column: span 3; }          /* 1×1 default (12/4 tiles) */
 .bento__cell--1x1 { grid-column: span 3; grid-row: span 1; }
@@ -339,7 +339,10 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   .bento__cell--1x2 { grid-column: span 4; }
 }
 @media (max-width: 735px) {               /* phone — stacked, feature cells drop first */
-  .bento { grid-template-columns: 1fr; gap: var(--space-lg); }
+  .bento {
+    grid-template-columns: repeat(var(--bento-cols-mobile, 1), 1fr);
+    gap: var(--bento-gap-mobile, var(--space-lg));
+  }
   .bento__cell, .bento__cell--1x1, .bento__cell--2x1,
   .bento__cell--1x2, .bento__cell--2x2, .bento__cell--wide {
     grid-column: span 1; grid-row: auto;

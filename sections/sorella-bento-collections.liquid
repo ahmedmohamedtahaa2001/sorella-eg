@@ -4,6 +4,9 @@
   are photographic tiles only — NO blob field here.
   Reuses the sorella-bento-cell snippet; each cell falls back to its linked collection.
   Homepage guardrail: max 9 cells (≤9) — enforced via schema max_blocks.
+  Fully schema-driven: layout, spacing, colors, typography, borders, and icons are
+  wired to the shared .bento / .sorella-bento-cell CSS through scoped custom
+  properties, so other surfaces using those classes keep their token defaults.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
@@ -22,19 +25,29 @@
         {%- liquid
           assign b = block.settings
           assign coll = collections[b.collection]
-          assign link = coll.url
+          assign link = b.link | default: coll.url
           assign heading = b.heading | default: coll.title
           assign image = b.image | default: coll.featured_image
+          assign cell_video = nil
+          if b.media_type == 'video'
+            assign cell_video = b.video
+          endif
         -%}
         <div class="bento__cell--{{ b.span }}" {{ block.shopify_attributes }}>
           {% render 'sorella-bento-cell',
             image: image,
+            image_tablet: b.image_tablet,
+            image_mobile: b.image_mobile,
+            image_alt: b.image_alt,
+            video: cell_video,
             heading: heading,
             subheading: b.subheading,
             link: link,
             cta: b.cta,
             eyebrow: b.eyebrow,
-            variant: b.variant %}
+            variant: b.variant,
+            show_icon: s.show_cta_icon,
+            icon_size: s.cta_icon_size %}
         </div>
       {%- endfor -%}
     </div>
@@ -45,14 +58,139 @@
   .sorella-bento-collections .bento { align-items: stretch; }
 {% endstylesheet %}
 
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --bento-gap: {{ s.item_gap }}px;
+    --bento-gap-mobile: {{ s.mobile_item_gap }}px;
+    --bento-cols-mobile: {{ s.mobile_columns }};
+    --bento-row-height: {{ s.row_height }}px;
+    --bento-row-height-sm: {{ s.row_height_mobile }}px;
+    --bento-cell-radius: {{ s.cell_radius }}px;
+    --bento-cell-border: {{ s.cell_border_width }}px solid {% if s.cell_border_color != blank %}{{ s.cell_border_color }}{% else %}var(--color-mist-25){% endif %};
+    --bento-wash-opacity: {{ s.wash_opacity | divided_by: 100.0 }};
+    --bento-scrim-opacity: {{ s.scrim_opacity | divided_by: 100.0 }};
+    --bento-heading-feature: {{ s.cell_heading_size_feature }}px;
+    --bento-heading-tile: {{ s.cell_heading_size_tile }}px;
+    --bento-heading-mobile: {{ s.cell_heading_size_mobile }}px;
+    --bento-lh-feature: {{ s.cell_heading_lh_feature | divided_by: 100.0 }};
+    --bento-lh-tile: {{ s.cell_heading_lh_tile | divided_by: 100.0 }};
+    --bento-lh-mobile: {{ s.cell_heading_lh_mobile | divided_by: 100.0 }};
+    --bento-cell-pad: {{ s.cell_padding }}px;
+    --bento-cell-pad-lg: {{ s.cell_padding_feature }}px;
+    {%- if s.cell_border_hover_color != blank %} --bento-cell-border-hover: {{ s.cell_border_hover_color }};{% endif %}
+    {%- if s.cell_bg_color != blank %} --bento-cell-bg: {{ s.cell_bg_color }}; --bento-panel-bg: {{ s.cell_bg_color | color_modify: 'alpha', 0.4 }}; --bento-chip-bg: {{ s.cell_bg_color | color_modify: 'alpha', 0.55 }};{% endif %}
+    {%- if s.cell_text_color != blank %} --bento-cell-text: {{ s.cell_text_color }}; --bento-cell-body-color: {{ s.cell_text_color | color_modify: 'alpha', 0.86 }};{% endif %}
+    {%- if s.accent_color != blank %} --bento-accent: {{ s.accent_color }}; --bento-accent-40: {{ s.accent_color | color_modify: 'alpha', 0.4 }};{% endif %}
+    {%- if s.scrim_color != blank %} --bento-scrim-color: {{ s.scrim_color }}; --bento-scrim-veil: {{ s.scrim_color | color_modify: 'alpha', 0.16 }};{% endif %}
+    {%- if s.wash_color != blank %} --bento-wash-color: {{ s.wash_color }};{% endif %}
+    {%- if s.frame_color != blank %} --bento-frame-color: {{ s.frame_color }}; --bento-frame-color-hover: {{ s.frame_color }};{% endif %}
+    {%- unless s.show_frame %} --bento-frame-display: none;{% endunless %}
+    {%- unless s.mute_photos %} --bento-img-filter: none; --bento-img-filter-hover: none;{% endunless %}
+    {%- if s.cell_body_size > 0 %} --bento-btn-size: {{ s.cell_body_size }}px;{% endif %}
+  }
+  #shopify-section-{{ section.id }} .sorella-bento-collections {
+    margin-block-start: {{ s.margin_top }}px;
+    margin-block-end: {{ s.margin_bottom }}px;
+    {%- if s.section_bg_color != blank %} background: {{ s.section_bg_color }};{% endif %}
+  }
+  #shopify-section-{{ section.id }} .container--bento {
+    max-width: {{ s.section_max_width }}px;
+    padding-block-start: {{ s.padding_top }}px;
+    padding-block-end: {{ s.padding_bottom }}px;
+    padding-inline-start: {{ s.padding_left }}px;
+    padding-inline-end: {{ s.padding_right }}px;
+  }
+  {%- if s.heading_color != blank %}
+  #shopify-section-{{ section.id }} .section-head h2 { color: {{ s.heading_color }}; }
+  {%- endif %}
+  {%- if s.eyebrow_color != blank %}
+  #shopify-section-{{ section.id }} .section-head__eyebrow { color: {{ s.eyebrow_color }}; }
+  {%- endif %}
+  {%- if s.heading_size > 0 %}
+  #shopify-section-{{ section.id }} .section-head h2 { font-size: {{ s.heading_size }}px; }
+  {%- endif %}
+  {%- if s.cell_body_size > 0 %}
+  #shopify-section-{{ section.id }} .sorella-bento-cell .t-body-sm { font-size: {{ s.cell_body_size }}px; }
+  {%- endif %}
+  {%- if s.accent_color != blank %}
+  #shopify-section-{{ section.id }} .sorella-bento-cell .text-gold { color: {{ s.accent_color }}; }
+  {%- endif %}
+  @media (max-width: 735px) {
+    #shopify-section-{{ section.id }} .container--bento {
+      padding-block-start: {{ s.mobile_padding_top }}px;
+      padding-block-end: {{ s.mobile_padding_bottom }}px;
+      padding-inline-start: {{ s.mobile_padding_horizontal }}px;
+      padding-inline-end: {{ s.mobile_padding_horizontal }}px;
+    }
+  }
+{% endstyle %}
+
 {% schema %}
 {
   "name": "Bento Collections",
   "tag": "section",
   "max_blocks": 9,
   "settings": [
+    { "type": "header", "content": "Content" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Collections" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by mood" }
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by mood" },
+    { "type": "header", "content": "Typography" },
+    { "type": "range", "id": "heading_size", "label": "Section heading size", "min": 0, "max": 72, "step": 2, "unit": "px", "default": 0, "info": "0 uses the theme default." },
+    { "type": "range", "id": "cell_heading_size_feature", "label": "Feature cell heading size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 40 },
+    { "type": "range", "id": "cell_heading_size_tile", "label": "Small cell heading size", "min": 14, "max": 40, "step": 1, "unit": "px", "default": 24 },
+    { "type": "range", "id": "cell_heading_size_mobile", "label": "Cell heading size (mobile)", "min": 16, "max": 40, "step": 1, "unit": "px", "default": 28 },
+    { "type": "range", "id": "cell_body_size", "label": "Cell body text size", "min": 0, "max": 24, "step": 1, "unit": "px", "default": 0, "info": "0 uses the theme default." },
+    { "type": "range", "id": "cell_heading_lh_feature", "label": "Feature cell heading line height", "min": 90, "max": 160, "step": 5, "unit": "%", "default": 110 },
+    { "type": "range", "id": "cell_heading_lh_tile", "label": "Small cell heading line height", "min": 90, "max": 160, "step": 5, "unit": "%", "default": 120 },
+    { "type": "range", "id": "cell_heading_lh_mobile", "label": "Cell heading line height (mobile)", "min": 90, "max": 160, "step": 5, "unit": "%", "default": 115 },
+    { "type": "header", "content": "Colors", "info": "Leave a color empty to keep the theme palette." },
+    { "type": "color", "id": "section_bg_color", "label": "Section background" },
+    { "type": "color", "id": "heading_color", "label": "Section heading" },
+    { "type": "color", "id": "eyebrow_color", "label": "Section eyebrow" },
+    { "type": "color", "id": "cell_bg_color", "label": "Cell background" },
+    { "type": "color", "id": "cell_text_color", "label": "Cell text" },
+    { "type": "color", "id": "accent_color", "label": "Accent (eyebrows and CTAs)" },
+    { "type": "color", "id": "scrim_color", "label": "Photo scrim" },
+    { "type": "range", "id": "scrim_opacity", "label": "Photo scrim opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "color", "id": "wash_color", "label": "Photo color wash" },
+    { "type": "range", "id": "wash_opacity", "label": "Photo color wash opacity", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 30 },
+    { "type": "checkbox", "id": "mute_photos", "label": "Mute photo colors", "default": true, "info": "Softens saturation so mixed photography reads as one family." },
+    { "type": "header", "content": "Borders & Frame" },
+    { "type": "range", "id": "cell_radius", "label": "Cell corner radius", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 20 },
+    { "type": "range", "id": "cell_border_width", "label": "Cell border width", "min": 0, "max": 4, "step": 1, "unit": "px", "default": 1 },
+    { "type": "color", "id": "cell_border_color", "label": "Cell border" },
+    { "type": "color", "id": "cell_border_hover_color", "label": "Cell border (hover)" },
+    { "type": "checkbox", "id": "show_frame", "label": "Show inset frame on photo tiles", "default": true },
+    { "type": "color", "id": "frame_color", "label": "Inset frame" },
+    { "type": "header", "content": "Icons" },
+    { "type": "checkbox", "id": "show_cta_icon", "label": "Show CTA arrow icon", "default": true },
+    { "type": "range", "id": "cta_icon_size", "label": "CTA icon size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 15 },
+    { "type": "header", "content": "Grid" },
+    { "type": "range", "id": "row_height", "label": "Row height", "min": 200, "max": 500, "step": 10, "unit": "px", "default": 350 },
+    { "type": "range", "id": "row_height_mobile", "label": "Row height (mobile and tablet)", "min": 160, "max": 400, "step": 10, "unit": "px", "default": 300 },
+    {
+      "type": "select", "id": "mobile_columns", "label": "Columns (mobile)", "default": "1",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ]
+    },
+    { "type": "range", "id": "cell_padding", "label": "Cell inner padding", "min": 8, "max": 48, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "cell_padding_feature", "label": "Cell inner padding (large cells)", "min": 8, "max": 64, "step": 2, "unit": "px", "default": 32 },
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_left", "label": "Padding left", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_right", "label": "Padding right", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "margin_top", "label": "Margin top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "section_max_width", "label": "Section max width", "min": 800, "max": 1600, "step": 20, "unit": "px", "default": 1280 },
+    { "type": "range", "id": "item_gap", "label": "Item gap", "min": 0, "max": 64, "step": 2, "unit": "px", "default": 32 },
+    { "type": "header", "content": "Layout & Spacing (mobile)" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Padding top (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Padding bottom (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "mobile_padding_horizontal", "label": "Padding sides (mobile)", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_item_gap", "label": "Item gap (mobile)", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 24 }
   ],
   "blocks": [
     {
@@ -60,7 +198,19 @@
       "name": "Cell",
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Overrides the collection URL." },
+        {
+          "type": "select", "id": "media_type", "label": "Media type", "default": "image",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ]
+        },
         { "type": "image_picker", "id": "image", "label": "Image", "info": "Overrides the collection featured image." },
+        { "type": "image_picker", "id": "image_tablet", "label": "Image (tablet)", "info": "Optional. Shown below 1024px." },
+        { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional. Shown below 736px." },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Overrides the derived alt text." },
+        { "type": "video", "id": "video", "label": "Video", "info": "Plays muted on a loop when media type is Video." },
         { "type": "text", "id": "heading", "label": "Heading", "info": "Overrides the collection title." },
         { "type": "text", "id": "subheading", "label": "Subheading" },
         { "type": "text", "id": "cta", "label": "CTA label", "default": "Shop" },
