@@ -48,7 +48,7 @@
 
   /* Spacing (8px base) */
   --space-xxs: 4px;  --space-xs: 8px;  --space-sm: 12px; --space-md: 16px;
-  --space-lg: 24px;  --space-xl: 32px; --space-xxl: 48px; --space-section: 80px;
+  --space-lg: 24px;  --space-xl: 32px; --space-xxl: 48px; --space-section: 20px;
 
   /* Radius */
   --radius-none: 0;    --radius-xs: 6px;  --radius-sm: 10px; --radius-md: 14px;
