@@ -74,6 +74,23 @@
   .sorella-card__media img { transition: transform var(--dur-spatial) var(--ease-swift); }
   .sorella-card:hover .sorella-card__media img { transform: scale(1.05); }
 }
+
+/* Second-image crossfade — hover-capable pointers only (settings.card_hover_image) */
+.sorella-card__media-hover {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-spatial) var(--ease-swift);
+}
+@media (hover: hover) {
+  .sorella-card:hover .sorella-card__media-hover,
+  .sorella-card:focus-within .sorella-card__media-hover { opacity: 1; }
+}
+
+/* Star rating under the title (settings.card_show_rating) */
+.sorella-card__rating {
+  display: flex; align-items: center;
+  margin-block-start: var(--space-xxs);
+}
 .sorella-card__badges {
   position: absolute; inset-block-start: var(--space-sm); inset-inline-start: var(--space-sm);
   display: flex; gap: var(--space-xs); flex-wrap: wrap; z-index: 1;

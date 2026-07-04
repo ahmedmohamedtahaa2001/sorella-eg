@@ -14,5 +14,5 @@
 <span class="sorella-stars text-gold" role="img" aria-label="{{ value | default: 5 }} out of 5 stars">
   {%- for i in (1..rating) -%}{% render 'sorella-icon', name: 'star', size: 15 %}{%- endfor -%}
   {%- if empties > 0 -%}{%- for i in (1..empties) -%}{% render 'sorella-icon', name: 'star-outline', size: 15 %}{%- endfor -%}{%- endif -%}
-  {%- if count -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+  {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
 </span>

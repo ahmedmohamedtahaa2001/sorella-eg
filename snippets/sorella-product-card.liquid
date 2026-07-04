@@ -27,6 +27,20 @@
   endif
   assign inspired = product.metafields.sorella.inspired_by
   assign notes_summary = product.metafields.sorella.notes_summary
+
+  assign hover_media = blank
+  if settings.card_hover_image and product.media.size > 1
+    assign hover_media = product.media[1]
+    if hover_media.media_type != 'image' or hover_media.id == product.featured_media.id
+      assign hover_media = blank
+    endif
+  endif
+
+  assign rating_data = blank
+  if settings.card_show_rating
+    assign rating_data = product.metafields.reviews.rating.value
+    assign rating_count = product.metafields.reviews.rating_count.value
+  endif
   assign on_sale = false
   if product.compare_at_price > product.price
     assign on_sale = true
@@ -44,6 +58,14 @@
             alt: product.featured_media.alt | default: product.title | escape }}
         {%- else -%}
           {{ 'product-1' | placeholder_svg_tag: 'media__placeholder' }}
+        {%- endif -%}
+        {%- if hover_media != blank -%}
+          {{ hover_media.preview_image | image_url: width: 600 | image_tag:
+            loading: 'lazy',
+            class: 'sorella-card__media-hover',
+            sizes: '(max-width: 640px) 45vw, 280px',
+            widths: '240, 320, 400, 600',
+            alt: hover_media.alt | default: product.title | escape }}
         {%- endif -%}
       </div>
     </a>
@@ -81,6 +103,11 @@
         <h3 class="sorella-card__title t-headline">
           <a href="{{ product.url }}" dir="auto">{{ product.title }}</a>
         </h3>
+        {%- if rating_data != blank -%}
+          <div class="sorella-card__rating">
+            {% render 'sorella-star-rating', value: rating_data.rating, count: rating_count %}
+          </div>
+        {%- endif -%}
         {%- if notes_summary != blank -%}
           <p class="sorella-card__notes" dir="auto">{{ notes_summary }}</p>
         {%- endif -%}

@@ -206,6 +206,20 @@
         "id": "card_quick_add",
         "label": "Show quick-add on hover",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_hover_image",
+        "label": "Show second image on hover",
+        "info": "Crossfades to the product's second image when hovering the card.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_rating",
+        "label": "Show star rating",
+        "info": "Reads the reviews.rating metafield set by review apps.",
+        "default": true
       }
     ]
   },

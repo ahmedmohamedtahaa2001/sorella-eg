@@ -1,21 +1,35 @@
 {%- comment -%}
   sorella-feature-trio — generic educational / value trio (StitchDesign "Olfactory
   Architecture" & "Art of Inspiration" value cards). Numbered or icon glass cards in a
-  row with an optional connector line. Zero hardcoded content — all from block settings.
+  row with an optional connector line, note chips per card, and a closing CTA that
+  turns education into browsing. Zero hardcoded content — all from settings/blocks.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
 -%}
-<section class="sorella-feature-trio blob-scene {{ s.surface | default: 'surface-ink--well' }} section-pad" data-section-id="{{ section.id }}">
+{% style %}
+  #shopify-section-{{ section.id }} .sorella-feature-trio {
+    padding-block-start: {{ s.padding_top }}px;
+    padding-block-end: {{ s.padding_bottom }}px;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .sorella-feature-trio {
+      padding-block-start: {{ s.mobile_padding_top }}px;
+      padding-block-end: {{ s.mobile_padding_bottom }}px;
+    }
+  }
+{% endstyle %}
+<section class="sorella-feature-trio blob-scene {{ s.surface | default: 'surface-ink--well' }}" data-section-id="{{ section.id }}">
   {%- if s.show_blob -%}
     {% render 'sorella-blob', scheme: s.blob_scheme, single: true, position: s.blob_position, size: s.blob_size %}
   {%- endif -%}
 
   <div class="container container--bento sorella-feature-trio__inner">
-    {%- if s.eyebrow != blank or s.heading != blank -%}
+    {%- if s.eyebrow != blank or s.heading != blank or s.support_text != blank -%}
       <div class="section-head section-head--center">
         {%- if s.eyebrow != blank -%}<span class="section-head__eyebrow t-eyebrow t-eyebrow--wide text-gold">{{ s.eyebrow }}</span>{%- endif -%}
         {%- if s.heading != blank -%}<h2 class="t-display-lg">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.support_text != blank -%}<p class="t-body-lg sorella-feature-trio__support">{{ s.support_text }}</p>{%- endif -%}
       </div>
     {%- endif -%}
 
@@ -23,6 +37,9 @@
       {%- for block in section.blocks -%}
         {%- assign b = block.settings -%}
         <article class="sorella-feature-trio__card glass-panel glass-panel--md glass-panel--sheen{% if b.emphasis %} is-emphasis{% endif %}" {{ block.shopify_attributes }}>
+          {%- if b.emphasis and s.emphasis_tag != blank -%}
+            <span class="sorella-feature-trio__flag t-eyebrow t-eyebrow--micro">{{ s.emphasis_tag }}</span>
+          {%- endif -%}
           {%- if b.badge != blank or b.icon != blank -%}
             <span class="sorella-feature-trio__badge t-headline">
               {%- if b.icon != blank -%}{% render 'sorella-icon', name: b.icon, size: 22 %}{%- else -%}{{ b.badge }}{%- endif -%}
@@ -31,15 +48,37 @@
           {%- if b.heading != blank -%}<h3 class="t-headline">{{ b.heading }}</h3>{%- endif -%}
           {%- if b.label != blank -%}<span class="t-eyebrow text-gold sorella-feature-trio__label">{{ b.label }}</span>{%- endif -%}
           {%- if b.text != blank -%}<p class="t-body-sm sorella-feature-trio__text">{{ b.text }}</p>{%- endif -%}
+          {%- if b.notes != blank -%}
+            {%- assign note_list = b.notes | split: ',' -%}
+            <ul class="sorella-feature-trio__notes" role="list">
+              {%- for note in note_list -%}
+                {%- assign note_clean = note | strip -%}
+                {%- if note_clean != blank -%}<li class="sorella-feature-trio__note t-caption">{{ note_clean }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
         </article>
       {%- endfor -%}
     </div>
+
+    {%- if s.cta_label != blank and s.cta_link != blank -%}
+      <div class="sorella-feature-trio__cta">
+        {% render 'sorella-button', label: s.cta_label, href: s.cta_link, style: s.cta_style %}
+        {%- if s.cta_note != blank -%}<p class="t-caption text-mist sorella-feature-trio__cta-note">{{ s.cta_note }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
 {% stylesheet %}
   .sorella-feature-trio__inner { position: relative; z-index: 1; }
   .section-head--center { text-align: center; align-items: center; display: flex; flex-direction: column; gap: var(--space-sm); margin-block-end: var(--space-xxl); }
+  .sorella-feature-trio__support {
+    color: var(--color-parchment-65);
+    color: color-mix(in srgb, var(--color-parchment) 72%, transparent);
+    max-width: 52ch;
+    margin-block-start: var(--space-xxs);
+  }
   .sorella-feature-trio__grid {
     position: relative;
     display: grid; gap: var(--space-lg);
@@ -49,27 +88,79 @@
     content: ""; position: absolute; inset-inline: 6%; inset-block-start: 50%;
     height: 1px; z-index: 0;
     background: var(--color-gold-15);
-    background: color-mix(in srgb, var(--color-gold) 20%, transparent);
+    background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--color-gold) 35%, transparent) 18%,
+      color-mix(in srgb, var(--color-gold) 35%, transparent) 82%,
+      transparent 100%);
   }
   @media (max-width: 767px) { .sorella-feature-trio__grid--connected::before { display: none; } }
   .sorella-feature-trio__card {
     position: relative; z-index: 1;
     display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-sm);
     padding: var(--space-xl);
-    transition: transform var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
+    transition: transform var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out);
   }
-  .sorella-feature-trio__card:hover { transform: translateY(-6px); }
+  .sorella-feature-trio__card:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-gold-40);
+  }
   .sorella-feature-trio__card.is-emphasis { border-color: var(--color-gold-40); }
+  .sorella-feature-trio__card.is-emphasis::after {
+    content: ""; position: absolute; inset-block-start: -1px; inset-inline: 18%;
+    height: 2px; border-radius: var(--radius-pill);
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  }
+  /* Physical left pairs with the physical translate — centered in LTR and RTL alike */
+  .sorella-feature-trio__flag {
+    position: absolute; inset-block-start: 0; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    padding: 6px 14px; border-radius: var(--radius-pill);
+    background: var(--color-ink);
+    border: 1px solid var(--color-gold-40);
+    color: var(--color-gold);
+  }
   .sorella-feature-trio__badge {
     display: inline-flex; align-items: center; justify-content: center;
     width: 64px; height: 64px; border-radius: var(--radius-full);
     background: var(--color-gold-15); border: 1px solid var(--color-gold-40);
     color: var(--color-gold);
     margin-block-end: var(--space-xs);
+    transition: box-shadow var(--dur-hover) var(--ease-out), background var(--dur-hover) var(--ease-out);
   }
-  .sorella-feature-trio__card.is-emphasis .sorella-feature-trio__badge { background: rgba(199,156,90,0.22); border-color: var(--color-gold); }
+  .sorella-feature-trio__card:hover .sorella-feature-trio__badge {
+    background: var(--color-gold-15);
+    background: color-mix(in srgb, var(--color-gold) 22%, transparent);
+    box-shadow: 0 0 0 6px var(--color-gold-15);
+  }
+  .sorella-feature-trio__card.is-emphasis .sorella-feature-trio__badge {
+    background: var(--color-gold-15);
+    background: color-mix(in srgb, var(--color-gold) 22%, transparent);
+    border-color: var(--color-gold);
+  }
   .sorella-feature-trio__label { display: block; }
   .sorella-feature-trio__text { color: var(--color-parchment-65); max-width: 34ch; }
+  .sorella-feature-trio__notes {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-xxs);
+    padding: 0; list-style: none;
+  }
+  .sorella-feature-trio__note {
+    padding: 4px 12px; border-radius: var(--radius-pill);
+    border: 1px solid var(--color-mist-25);
+    background: var(--color-parchment-08);
+    color: var(--color-parchment-65);
+    color: color-mix(in srgb, var(--color-parchment) 72%, transparent);
+  }
+  .sorella-feature-trio__cta {
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-xxl);
+    text-align: center;
+  }
+  .sorella-feature-trio__cta-note { margin: 0; }
 {% endstylesheet %}
 
 {% schema %}
@@ -80,7 +171,21 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complexity" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Olfactory Architecture" },
+    { "type": "textarea", "id": "support_text", "label": "Support text", "default": "Every fragrance is composed in three acts. Knowing them is how you choose a scent that lasts — and one you'll be asked about." },
     { "type": "checkbox", "id": "show_connector", "label": "Show connector line", "default": true },
+    { "type": "text", "id": "emphasis_tag", "label": "Emphasised card flag", "info": "Small pill shown on cards marked \"Emphasise\".", "default": "The Defining Hours" },
+    { "type": "header", "content": "Call to action" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Find Your Signature" },
+    { "type": "url", "id": "cta_link", "label": "CTA link" },
+    {
+      "type": "select", "id": "cta_style", "label": "CTA style", "default": "primary",
+      "options": [
+        { "value": "primary", "label": "Gold (solid)" },
+        { "value": "ghost", "label": "Ghost (outline)" },
+        { "value": "text", "label": "Text link" }
+      ]
+    },
+    { "type": "text", "id": "cta_note", "label": "CTA support note", "info": "Trust microcopy under the button, e.g. a sample or delivery offer.", "default": "Discover which notes speak to you" },
     { "type": "header", "content": "Surface & atmosphere" },
     {
       "type": "select", "id": "surface", "label": "Surface", "default": "surface-ink--well",
@@ -115,7 +220,12 @@
         { "value": "medium", "label": "Medium" },
         { "value": "large", "label": "Large" }
       ]
-    }
+    },
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top (desktop)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (desktop)", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Padding top (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Padding bottom (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 }
   ],
   "blocks": [
     {
@@ -127,6 +237,7 @@
         { "type": "text", "id": "heading", "label": "Heading", "default": "The Opening" },
         { "type": "text", "id": "label", "label": "Label", "default": "Top Notes" },
         { "type": "textarea", "id": "text", "label": "Text", "default": "The immediate impression — volatile citrus and light herbals that awaken the senses." },
+        { "type": "text", "id": "notes", "label": "Note chips", "info": "Comma-separated, e.g. Bergamot, Neroli, Wild Herbs.", "default": "Bergamot, Neroli, Wild Herbs" },
         { "type": "checkbox", "id": "emphasis", "label": "Emphasise (gold border)", "default": false }
       ]
     }
@@ -135,9 +246,9 @@
     {
       "name": "Feature trio",
       "blocks": [
-        { "type": "step", "settings": { "badge": "01", "heading": "The Opening", "label": "Top Notes", "text": "The immediate impression — volatile citrus and light herbals that awaken the senses for the first 15 minutes." } },
-        { "type": "step", "settings": { "badge": "02", "heading": "The Soul", "label": "Heart Notes", "text": "The true character of the fragrance. Rich florals and spices that emerge as the top notes fade, lasting for hours.", "emphasis": true } },
-        { "type": "step", "settings": { "badge": "03", "heading": "The Anchor", "label": "Base Notes", "text": "The final depth. Heavy resins, musks, and woods that bind to the skin, creating a lingering trail of memory." } }
+        { "type": "step", "settings": { "badge": "01", "heading": "The Opening", "label": "Top Notes", "text": "The immediate impression — volatile citrus and light herbals that awaken the senses for the first 15 minutes.", "notes": "Bergamot, Neroli, Wild Herbs" } },
+        { "type": "step", "settings": { "badge": "02", "heading": "The Soul", "label": "Heart Notes", "text": "The true character of the fragrance. Rich florals and spices that emerge as the top notes fade, lasting for hours.", "notes": "Jasmine, Saffron, Warm Spice", "emphasis": true } },
+        { "type": "step", "settings": { "badge": "03", "heading": "The Anchor", "label": "Base Notes", "text": "The final depth. Heavy resins, musks, and woods that bind to the skin, creating a lingering trail of memory.", "notes": "Amber, Oud, White Musk" } }
       ]
     }
   ]

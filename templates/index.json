@@ -185,7 +185,8 @@
             "badge": "01",
             "heading": "The Opening",
             "label": "Top Notes",
-            "text": "The immediate impression — volatile citrus and light herbals that awaken the senses for the first 15 minutes."
+            "text": "The immediate impression — volatile citrus and light herbals that awaken the senses for the first 15 minutes.",
+            "notes": "Bergamot, Neroli, Wild Herbs"
           }
         },
         "s2": {
@@ -195,6 +196,7 @@
             "heading": "The Soul",
             "label": "Heart Notes",
             "text": "The true character of the fragrance. Rich florals and spices that emerge as the top notes fade, lasting for hours.",
+            "notes": "Jasmine, Saffron, Warm Spice",
             "emphasis": true
           }
         },
@@ -204,7 +206,8 @@
             "badge": "03",
             "heading": "The Anchor",
             "label": "Base Notes",
-            "text": "The final depth. Heavy resins, musks, and woods that bind to the skin, creating a lingering trail of memory."
+            "text": "The final depth. Heavy resins, musks, and woods that bind to the skin, creating a lingering trail of memory.",
+            "notes": "Amber, Oud, White Musk"
           }
         }
       },
@@ -216,7 +219,13 @@
       "settings": {
         "eyebrow": "Complexity",
         "heading": "Olfactory Architecture",
+        "support_text": "Every Sorella fragrance is composed in three acts. Knowing them is how you choose a scent that lasts — and one you'll be asked about.",
         "show_connector": true,
+        "emphasis_tag": "The Defining Hours",
+        "cta_label": "Find Your Signature",
+        "cta_link": "/collections/50ml-perfumes",
+        "cta_style": "primary",
+        "cta_note": "Free 5ml sample on orders over LE 1,100",
         "surface": "surface-ink",
         "show_blob": true,
         "blob_scheme": "slate",
@@ -229,11 +238,16 @@
       "settings": {
         "eyebrow": "Essentials",
         "heading": "The Most Loved",
+        "support_text": "Worn, reordered, and gifted — the scents our customers can't put down.",
         "collection": "50ml-perfumes",
         "product_count": 4,
         "card_variant": "default",
+        "show_rank": true,
+        "rank_prefix": "Nº",
+        "footnote": "Made fresh in Egypt · Free 5ml sample on orders over LE 1,100",
         "show_view_all": true,
         "view_all_label": "View All Scents",
+        "view_all_style": "ghost",
         "layout": "grid"
       }
     },
