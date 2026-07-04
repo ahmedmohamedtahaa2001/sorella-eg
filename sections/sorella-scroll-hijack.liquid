@@ -1,0 +1,176 @@
+{%- comment -%}
+  sorella-scroll-hijack — Full-page section-snap ("scroll hijack") panels.
+  The wrapper owns its own 100svh viewport: one wheel tick / swipe / arrow
+  key slides the inner track exactly one panel (GPU transform). At the first
+  and last panel the gesture is released back to the page, so the section
+  composes with the hero, footer, and any neighbors without locking <body>.
+  Panels are merchant blocks — background image/color, eyebrow, heading,
+  text, button — never a hardcoded count. Behavior (durations, mobile
+  fallback, swipe threshold) is all schema-driven.
+{%- endcomment -%}
+{{ 'sorella-scroll-hijack.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sorella-scroll-hijack.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+-%}
+{% style %}
+  #shopify-section-{{ section.id }} .sorella-hijack {
+    --hijack-duration: {{ s.transition_duration | default: 600 }}ms;
+    margin-block-start: {{ s.margin_top | default: 0 }}px;
+    margin-block-end: {{ s.margin_bottom | default: 0 }}px;
+  }
+  #shopify-section-{{ section.id }} .sorella-hijack__content {
+    max-width: {{ s.section_max_width | default: 1280 }}px;
+    gap: {{ s.item_gap | default: 16 }}px;
+    padding: {{ s.padding_top | default: 48 }}px {{ s.padding_right | default: 32 }}px
+             {{ s.padding_bottom | default: 48 }}px {{ s.padding_left | default: 32 }}px;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .sorella-hijack__content {
+      padding-top: {{ s.mobile_padding_top | default: 32 }}px;
+      padding-bottom: {{ s.mobile_padding_bottom | default: 32 }}px;
+      padding-left: {{ s.mobile_padding_horizontal | default: 16 }}px;
+      padding-right: {{ s.mobile_padding_horizontal | default: 16 }}px;
+    }
+  }
+{% endstyle %}
+
+<div
+  class="sorella-hijack"
+  data-scroll-hijack
+  data-section-id="{{ section.id }}"
+  data-throttle="{{ s.throttle_duration | default: 1000 }}"
+  data-touch-threshold="{{ s.touch_threshold | default: 60 }}"
+  data-mobile-breakpoint="{{ s.mobile_breakpoint | default: 749 }}"
+  {% if s.disable_on_mobile %}data-disable-mobile{% endif %}
+  role="region"
+  aria-label="{{ s.region_label | escape }}"
+  tabindex="0"
+>
+  <div class="sorella-hijack__track" data-hijack-track>
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign bs = block.settings
+        assign panel_alt = bs.heading | strip_html | escape
+        assign panel_overlay = bs.overlay_opacity | default: 30 | divided_by: 100.0
+      -%}
+      <section
+        id="panel-{{ block.id }}"
+        class="sorella-hijack__panel"
+        data-hijack-panel
+        data-index="{{ forloop.index0 }}"
+        role="group"
+        aria-label="{{ forloop.index }}. {{ panel_alt }}"
+        style="--panel-bg: {{ bs.background_color }}; --panel-overlay: {{ panel_overlay }};"
+        {{ block.shopify_attributes }}
+      >
+        {%- if bs.image != blank -%}
+          {%- if forloop.first -%}
+            {{ bs.image | image_url: width: 2400 | image_tag:
+              loading: 'eager', fetchpriority: 'high',
+              sizes: '100vw', widths: '800, 1200, 1600, 2400',
+              class: 'sorella-hijack__bg', alt: panel_alt }}
+          {%- else -%}
+            {{ bs.image | image_url: width: 2400 | image_tag:
+              loading: 'lazy',
+              sizes: '100vw', widths: '800, 1200, 1600, 2400',
+              class: 'sorella-hijack__bg', alt: panel_alt }}
+          {%- endif -%}
+        {%- endif -%}
+        <span class="sorella-hijack__overlay" aria-hidden="true"></span>
+        <div class="sorella-hijack__content sorella-hijack__content--{{ bs.content_align | default: 'center' }}">
+          {%- if bs.eyebrow != blank -%}
+            <span class="t-eyebrow t-eyebrow--wide text-gold">{{ bs.eyebrow }}</span>
+          {%- endif -%}
+          {%- if bs.heading != blank -%}
+            <h2 class="t-display-lg sorella-hijack__heading">{{ bs.heading }}</h2>
+          {%- endif -%}
+          {%- if bs.text != blank -%}
+            <div class="sorella-hijack__text t-body-lg">{{ bs.text }}</div>
+          {%- endif -%}
+          {%- if bs.button_label != blank -%}
+            <div class="sorella-hijack__actions">
+              {% render 'sorella-button', label: bs.button_label, href: bs.button_link, style: 'primary' %}
+            </div>
+          {%- endif -%}
+        </div>
+      </section>
+    {%- endfor -%}
+  </div>
+
+  {%- if s.show_dots and section.blocks.size > 1 -%}
+    <div class="sorella-hijack__dots" role="group" aria-label="{{ s.dots_aria_label | escape }}">
+      {%- for block in section.blocks -%}
+        {%- assign dot_label = block.settings.heading | strip_html | escape -%}
+        <button type="button" class="sorella-hijack__dot{% if forloop.first %} is-active{% endif %}" data-hijack-dot aria-label="{{ forloop.index }}. {{ dot_label }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Scroll story panels",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "region_label", "label": "Section accessibility label", "default": "Story panels", "info": "Announced to screen readers; also the label keyboard users land on before arrow-key navigation." },
+    { "type": "header", "content": "Behavior" },
+    { "type": "range", "id": "transition_duration", "label": "Panel transition speed", "min": 200, "max": 1200, "step": 50, "unit": "ms", "default": 600 },
+    { "type": "range", "id": "throttle_duration", "label": "Gesture cooldown", "min": 400, "max": 2000, "step": 100, "unit": "ms", "default": 1000, "info": "One gesture moves one panel; further input is ignored for this long so fast scrolling can't skip panels." },
+    { "type": "range", "id": "touch_threshold", "label": "Swipe distance to change panel", "min": 20, "max": 150, "step": 5, "unit": "px", "default": 60 },
+    { "type": "checkbox", "id": "disable_on_mobile", "label": "Disable scroll-snap on mobile", "default": true, "info": "Below the breakpoint, panels render as normal stacked full-height sections with native scrolling (recommended for accessibility)." },
+    { "type": "range", "id": "mobile_breakpoint", "label": "Mobile breakpoint", "min": 420, "max": 1020, "step": 10, "unit": "px", "default": 750 },
+    { "type": "header", "content": "Progress dots" },
+    { "type": "checkbox", "id": "show_dots", "label": "Show progress dots", "default": true },
+    { "type": "text", "id": "dots_aria_label", "label": "Dots accessibility label", "default": "Panels" },
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "section_max_width", "label": "Content max width", "min": 600, "max": 1440, "step": 20, "unit": "px", "default": 1280 },
+    { "type": "range", "id": "item_gap", "label": "Gap between content elements", "min": 0, "max": 64, "step": 4, "unit": "px", "default": 16 },
+    { "type": "range", "id": "padding_top", "label": "Content padding top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Content padding bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_left", "label": "Content padding left", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "padding_right", "label": "Content padding right", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "margin_top", "label": "Section margin top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Section margin bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "header", "content": "Layout & Spacing — mobile" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Content padding top", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Content padding bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "mobile_padding_horizontal", "label": "Content padding horizontal", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 16 }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background image" },
+        { "type": "color", "id": "background_color", "label": "Background color", "default": "#0a1420", "info": "Shown behind (or instead of) the image." },
+        { "type": "range", "id": "overlay_opacity", "label": "Overlay darkness", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 30, "info": "Dark veil over the background for text legibility." },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Panel heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "select", "id": "content_align", "label": "Content alignment", "default": "center",
+          "options": [
+            { "value": "start", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "end", "label": "Right" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll story panels",
+      "blocks": [
+        { "type": "panel", "settings": { "eyebrow": "Chapter one", "heading": "Our story", "text": "<p>Two sisters, one atelier — every scent a story of connection.</p>", "content_align": "center" } },
+        { "type": "panel", "settings": { "eyebrow": "Chapter two", "heading": "Our ingredients", "text": "<p>Amber, oud, and warm spice — slow-blended in small batches.</p>", "button_label": "Discover the notes", "button_link": "/collections/all", "content_align": "start", "background_color": "#121c29" } },
+        { "type": "panel", "settings": { "eyebrow": "Chapter three", "heading": "Shop the collection", "button_label": "Shop now", "button_link": "/collections/all", "content_align": "center", "background_color": "#16202d" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

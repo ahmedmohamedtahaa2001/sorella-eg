@@ -1,6 +1,6 @@
 /* ==========================================================================
    Sorella — theme JS
-   Adaptive nav dock, drawers (cart / mobile nav / mega-menu), accordions,
+   Scroll-adaptive navbar, drawers (cart / mobile nav / mega-menu), accordions,
    quantity selectors, reveal-on-scroll, cart AJAX, variant price updates.
    Vanilla JS, no dependencies. Respects prefers-reduced-motion (live).
    ========================================================================== */
@@ -97,72 +97,79 @@
   }
 
   /* ----------------------------------------------------------------------
-     Adaptive Nav Dock (Art Direction §9)
-     Transparent at top -> glass dock on scroll; hide on scroll-down,
-     reveal on scroll-up once docked.
+     Sorella Nav — fixed full-width bar with two scroll states.
+     Transparent over the hero; gains the merchant-set solid background once
+     the page scrolls past the trigger (a percentage of the viewport height,
+     data-scroll-trigger). Templates without a hero render solid from load.
+     Single rAF-throttled handler: scroll/resize events only schedule a
+     frame; class toggling runs at most once per frame, right before paint.
      ---------------------------------------------------------------------- */
-  function initNavDock() {
-    var dock = document.querySelector('[data-nav-dock]');
-    if (!dock || dock.dataset.initialized === 'true') return;
-    dock.dataset.initialized = 'true';
+  function initNavBar() {
+    var nav = document.querySelector('[data-sorella-nav]');
+    if (!nav || nav.dataset.initialized === 'true') return;
+    nav.dataset.initialized = 'true';
 
-    var hideOnScroll = dock.getAttribute('data-scroll-hide') === 'true';
-    // Trigger tied to hero bottom edge when available, else a sensible fallback.
-    var heroSentinel = document.querySelector('[data-hero-sentinel]');
+    var hideOnScroll = nav.getAttribute('data-scroll-hide') === 'true';
+    var triggerPct = parseFloat(nav.getAttribute('data-scroll-trigger'));
+    if (isNaN(triggerPct)) triggerPct = 100;
+    var announcementH = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--announcement-height')
+    ) || 0;
+
+    // The transparent state only makes sense over a hero — if the section
+    // rendered transparent on a template without one, force solid.
+    var hasHero = !!document.querySelector('[data-hero-sentinel]');
+    var adaptive = nav.classList.contains('sorella-nav--transparent') && hasHero;
+    if (!adaptive) {
+      nav.classList.remove('sorella-nav--transparent');
+      nav.classList.add('sorella-nav--solid');
+    }
+
     var lastY = window.scrollY;
-    var docked = false;
+    var ticking = false;
 
-    function setDocked(state) {
-      if (state === docked) return;
-      docked = state;
-      dock.classList.toggle('nav-dock--top', !state);
-      dock.classList.toggle('nav-dock--docked', state);
-    }
+    function update() {
+      ticking = false;
+      if (!nav.isConnected) return;
+      var y = window.scrollY;
+      var solid = true;
 
-    // No hero on this template → the dock is always in its solid docked state,
-    // but while the in-flow announcement bar is still visible at the top of the
-    // page the dock shifts below it (.nav-dock--offset) instead of covering it.
-    if (!heroSentinel) {
-      setDocked(true);
-      var announcementH = parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue('--announcement-height')
-      ) || 0;
-      if (announcementH > 0) {
-        var syncOffset = function () {
-          dock.classList.toggle('nav-dock--offset', window.scrollY < announcementH);
-        };
-        syncOffset();
-        window.addEventListener('scroll', syncOffset, { passive: true });
+      if (adaptive) {
+        solid = y > window.innerHeight * (triggerPct / 100);
+        nav.classList.toggle('sorella-nav--solid', solid);
+        nav.classList.toggle('sorella-nav--transparent', !solid);
+      } else if (announcementH > 0) {
+        // Solid-from-load pages: sit below the in-flow announcement bar
+        // while it is still visible at the very top.
+        nav.classList.toggle('sorella-nav--offset', y < announcementH);
       }
-      return;
+
+      if (hideOnScroll && solid && y > lastY && y > 200) {
+        nav.classList.add('sorella-nav--hidden');    // scrolling down
+      } else {
+        nav.classList.remove('sorella-nav--hidden'); // scrolling up / transparent
+      }
+      lastY = y;
     }
 
-    // Use IntersectionObserver on the hero sentinel for a height-independent trigger.
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        setDocked(!entries[0].isIntersecting);
-      }, { rootMargin: '-80px 0px 0px 0px', threshold: 0 });
-      io.observe(heroSentinel);
-    } else {
-      // Fallback: fixed-ish threshold.
-      window.addEventListener('scroll', function () {
-        setDocked(window.scrollY > 120);
-      }, { passive: true });
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
     }
 
-    if (hideOnScroll) {
-      window.addEventListener('scroll', function () {
-        if (!dock.isConnected) return;
-        var y = window.scrollY;
-        if (!docked) { lastY = y; return; }
-        if (y > lastY && y > 200) {
-          dock.classList.add('nav-dock--hidden');   // scrolling down
-        } else {
-          dock.classList.remove('nav-dock--hidden'); // scrolling up
-        }
-        lastY = y;
-      }, { passive: true });
-    }
+    update(); // paint the correct state on mount (handles mid-page loads)
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+
+    // Cleanup — the theme editor tears the section down and re-renders it;
+    // without this each reload would leak another pair of window listeners.
+    document.addEventListener('shopify:section:unload', function onUnload(event) {
+      if (!event.target || !event.target.contains(nav)) return;
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      document.removeEventListener('shopify:section:unload', onUnload);
+    });
   }
 
   /* ----------------------------------------------------------------------
@@ -632,7 +639,7 @@
      Boot
      ---------------------------------------------------------------------- */
   function boot() {
-    initNavDock();
+    initNavBar();
     initPanels();
     initMegaMenu();
     initAccordions();
@@ -658,7 +665,7 @@
   // document-level delegation prevent duplicate listeners/observers.
   document.addEventListener('shopify:section:load', function (event) {
     var root = event.target || document;
-    initNavDock();
+    initNavBar();
     initPanels(root);
     initMegaMenu(root);
     initVariantSelectors(root);

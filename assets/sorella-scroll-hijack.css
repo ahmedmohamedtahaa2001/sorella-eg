@@ -1,0 +1,124 @@
+/* ==========================================================================
+   sorella-scroll-hijack — full-page section-snap ("scroll hijack") panels.
+   Every rule is scoped under .sorella-hijack: the wrapper is its own
+   fixed-height viewport that owns the hijacked "scroll" internally, so
+   nothing here (overflow, transforms) ever leaks onto <body> or affects
+   the header, footer, drawers, or neighboring sections.
+   Tokens from base.css. Merchant-set values arrive as CSS vars inlined
+   by the section's {% style %} block.
+   ========================================================================== */
+
+.sorella-hijack {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-navy);
+  color: var(--color-parchment);
+}
+.sorella-hijack:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -2px;
+}
+
+/* The track stacks panels in normal flow and slides in whole-viewport
+   steps. translateY is in percentages of the track's own height, so it
+   is resize-proof by construction — no per-panel `top` math to redo. */
+.sorella-hijack__track {
+  height: 100%;
+  will-change: transform;
+  transition: transform var(--hijack-duration, 600ms) var(--ease-out);
+}
+
+.sorella-hijack__panel {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  background: var(--panel-bg, var(--color-navy));
+}
+
+.sorella-hijack__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Merchant-set dark veil over photography for text legibility */
+.sorella-hijack__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: var(--panel-overlay, 0.3);
+  pointer-events: none;
+}
+
+.sorella-hijack__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: start;
+  width: 100%;
+  margin-inline: auto;
+}
+.sorella-hijack__content--center { align-items: center; text-align: center; }
+.sorella-hijack__content--end { align-items: flex-end; text-align: end; }
+
+.sorella-hijack__heading { margin: 0; text-wrap: balance; text-shadow: 0 2px 16px var(--color-ink-70); }
+.sorella-hijack__text { max-width: 560px; text-shadow: 0 1px 8px var(--color-ink-70); }
+.sorella-hijack__text > p { margin: 0; }
+.sorella-hijack__text > p + p { margin-block-start: var(--space-sm); }
+
+/* Progress dots — driven by the JS state machine, not scroll detection */
+.sorella-hijack__dots {
+  position: absolute;
+  inset-inline-end: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  z-index: 2;
+}
+.sorella-hijack__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  background: var(--color-parchment-12);
+  transition: background var(--dur-hover) var(--ease-out), height var(--dur-hover) var(--ease-out);
+}
+.sorella-hijack__dot:hover { background: var(--color-parchment-65); }
+.sorella-hijack__dot.is-active { height: 26px; background: var(--color-gold); }
+.sorella-hijack__dot:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+
+/* Reduced motion: no animated glide — the JS also skips the transition,
+   this is the belt-and-braces CSS layer. */
+@media (prefers-reduced-motion: reduce) {
+  .sorella-hijack__track { transition: none; }
+}
+
+/* Native mode — hijack disabled (merchant's mobile toggle): panels become
+   ordinary stacked full-height blocks with normal document scroll. */
+.sorella-hijack.is-native {
+  height: auto;
+  overflow: visible;
+}
+.sorella-hijack.is-native .sorella-hijack__track {
+  height: auto;
+  transform: none !important;
+  transition: none;
+}
+.sorella-hijack.is-native .sorella-hijack__panel {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.sorella-hijack.is-native .sorella-hijack__dots { display: none; }

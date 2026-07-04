@@ -4,48 +4,96 @@
       "type": "sorella-hero",
       "settings": {
         "eyebrow": "Egyptian fragrance house",
-        "heading": "Sorella — From our",
-        "heading_accent": "bond",
-        "heading_suffix": "to your senses.",
-        "subheading": "Perfume sprays, oils, and musks crafted by two sisters — every scent a story of connection.",
-        "cta_label": "Shop the Collection",
-        "cta_link": "/collections/all",
-        "cta2_label": "Explore Rituals",
-        "cta2_link": "/collections/for-her",
-        "show_blobs": true,
-        "blob_scheme": "gold-slate",
-        "content_align": "start"
+        "autoplay": true,
+        "slide_duration": 6,
+        "dots_aria_label": "Hero slides",
+        "show_texture": true,
+        "bar_aria_label": "Discover fragrances",
+        "scrim_opacity": 40,
+        "overlay_opacity": 9,
+        "bar_cta_label": "Explore the collections",
+        "bar_cta_anchor": "collections"
       },
       "blocks": {
-        "t1": {
-          "type": "trust",
+        "s1": {
+          "type": "slide",
           "settings": {
-            "icon": "sparkle",
-            "heading": "Free 5ml offer",
-            "text": "Discovery included with every full bottle."
+            "heading": "Sorella — From our",
+            "heading_accent": "bond",
+            "heading_suffix": "to your senses.",
+            "break_before_accent": true,
+            "subheading": "Perfume sprays, oils, and musks crafted by two sisters — every scent a story of connection."
           }
         },
-        "t2": {
-          "type": "trust",
+        "s2": {
+          "type": "slide",
           "settings": {
-            "icon": "leaf",
-            "heading": "Made in Egypt",
-            "text": "Blended and bottled by two sisters in Egypt."
+            "heading": "Oils & musks — with",
+            "heading_accent": "soul",
+            "heading_suffix": "close to the skin.",
+            "break_before_accent": true,
+            "subheading": "Slow-blended perfume oils and musks — intimate scents that stay close to the skin."
           }
         },
-        "t3": {
-          "type": "trust",
+        "s3": {
+          "type": "slide",
           "settings": {
-            "icon": "truck",
-            "heading": "Express Delivery",
-            "text": "Fragile-grade shipping nationwide."
+            "heading": "Amber & oud — the",
+            "heading_accent": "oriental",
+            "heading_suffix": "evening edit.",
+            "break_before_accent": true,
+            "subheading": "Amber, oud, and warm spice — our richest compositions for evenings that linger."
+          }
+        },
+        "s4": {
+          "type": "slide",
+          "settings": {
+            "heading": "A gift of scent — from",
+            "heading_accent": "sisters",
+            "heading_suffix": "to your story.",
+            "break_before_accent": true,
+            "subheading": "Discovery sets and 5ml minis — the easiest way to share a story of connection."
+          }
+        },
+        "f1": {
+          "type": "filter",
+          "settings": {
+            "label": "Bestsellers",
+            "value": "Shop the icons",
+            "anchor": "bestsellers",
+            "link": "/collections/all",
+            "show_chevron": true
+          }
+        },
+        "f2": {
+          "type": "filter",
+          "settings": {
+            "label": "Our essences",
+            "value": "Find your scent family",
+            "anchor": "essences",
+            "link": "/collections/all",
+            "show_chevron": true
+          }
+        },
+        "f3": {
+          "type": "filter",
+          "settings": {
+            "label": "The sisters",
+            "value": "Read our story",
+            "anchor": "story",
+            "link": "/pages/about",
+            "show_chevron": true
           }
         }
       },
       "block_order": [
-        "t1",
-        "t2",
-        "t3"
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "f1",
+        "f2",
+        "f3"
       ]
     },
     "collections": {
@@ -58,8 +106,8 @@
             "eyebrow": "Concentrated Rituals",
             "heading": "Perfume Oils",
             "subheading": "Rich roll-on oils that sit closer to the skin and last for days.",
-            "cta": "Explore",
-            "span": "2x1"
+            "cta": "Shop Perfume Oils",
+            "span": "1x1"
           }
         },
         "c_her": {
@@ -69,9 +117,9 @@
             "eyebrow": "Her Signatures",
             "heading": "For Her",
             "subheading": "Delicate florals and warm gourmands for the feminine spirit.",
-            "cta": "View All",
+            "cta": "Shop For Her",
             "span": "1x2",
-            "variant": "panel"
+            "variant": "default"
           }
         },
         "c_him": {
@@ -79,7 +127,7 @@
           "settings": {
             "collection": "for-him",
             "heading": "For Him",
-            "cta": "Explore",
+            "cta": "Shop For Him",
             "span": "1x1"
           }
         },
@@ -100,7 +148,7 @@
           "settings": {
             "collection": "unisex",
             "heading": "Unisex Scents",
-            "cta": "Explore",
+            "cta": "Shop Unisex",
             "span": "1x1"
           }
         },
@@ -110,17 +158,17 @@
             "collection": "musks",
             "heading": "Musks",
             "subheading": "Everyday body musks from 300 LE.",
-            "cta": "Explore",
+            "cta": "Shop Musks",
             "span": "1x1"
           }
         }
       },
       "block_order": [
         "c_oil",
+        "c_uni",
         "c_her",
         "c_him",
         "c_summer",
-        "c_uni",
         "c_musk"
       ],
       "settings": {
@@ -169,7 +217,7 @@
         "eyebrow": "Complexity",
         "heading": "Olfactory Architecture",
         "show_connector": true,
-        "surface": "surface-ink--well",
+        "surface": "surface-ink",
         "show_blob": true,
         "blob_scheme": "slate",
         "blob_position": "bl",

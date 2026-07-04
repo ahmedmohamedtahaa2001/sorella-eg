@@ -71,10 +71,19 @@
 
   /* Motion */
   --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-swift:    cubic-bezier(0.23, 1, 0.32, 1);  /* snappy-yet-smooth hover response */
+  --dur-structural: 300ms; /* color / opacity / border feedback */
+  --dur-spatial:    700ms; /* transforms — weight, drift, premium settle */
   --dur-dock:      300ms;
   --dur-hover:     180ms;
   --dur-press:     120ms;
   --dur-drawer:    300ms;
+  --ease-feedback: cubic-bezier(0.2, 0, 0, 1);   /* quick-confirm borders/text */
+  --ease-content:  cubic-bezier(0.19, 1, 0.22, 1); /* content glide */
+  --dur-zoom:      800ms;   /* structural transform/scale on hover */
+  --dur-feedback:  300ms;   /* border / underline / scrim response */
+  --dur-content:   600ms;   /* content-level motion (arrow, icon) */
+  --delay-stagger: 100ms;   /* feedback answers just after the zoom starts */
   --dur-blob-drift: 18000ms;
 
   /* Layout */
@@ -84,8 +93,8 @@
   --container-lock: 1440px;
 
   /* Chrome heights (set by header section, referenced by scroll offsets) */
-  --nav-top-height: 88px;
-  --nav-dock-height: 60px;
+  --nav-height-top: 88px;      /* transparent state, over the hero */
+  --nav-height-scrolled: 60px; /* solid state, once scrolled */
   --announcement-height: 0px;
 }
 
@@ -95,6 +104,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+/* Anchored scrolls (hero discovery bar, #links) land below the fixed navbar */
+.shopify-section { scroll-margin-block-start: calc(var(--nav-height-scrolled) + var(--space-sm)); }
 
 body {
   margin: 0;
@@ -150,7 +162,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
 .surface-ink       { background: var(--color-navy);      color: var(--color-parchment); }
 .surface-ink--well { background: var(--color-navy-lowest); color: var(--color-parchment); }
 .surface-parchment { background: var(--color-parchment); color: var(--color-ink); }
-.surface-gradient  { background: var(--gradient-surface); color: var(--color-parchment); }
+.surface-gradient  { background: var(--color-navy); color: var(--color-parchment); }
 .surface-footer    { background: var(--color-ink);       color: var(--color-parchment); }
 
 /* --------------------------------------------------------------------------
@@ -229,8 +241,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   .glass-panel { background: var(--color-navy-high); }
 }
 /* Utility to force-test the fallback in QA */
-.force-no-blur .glass-panel,
-.force-no-blur .nav-dock { background: var(--color-navy-high) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.force-no-blur .glass-panel { background: var(--color-navy-high) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 
 /* --------------------------------------------------------------------------
    Blob system (§7) — environment, never content. aria-hidden + no pointer events.
@@ -294,7 +305,7 @@ h1, h2, h3, h4, h5, h6, p { margin: 0; }
   .reveal-pending {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 1000ms ease-out, transform 1000ms ease-out;
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
   }
   .reveal-pending.is-revealed {
     opacity: 1;

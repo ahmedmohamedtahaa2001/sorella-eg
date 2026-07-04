@@ -27,6 +27,22 @@ any Shopify theme task — from a single section to a full theme build.
 
 ---
 
+## 🎯 Strict Development Rules (apply to EVERY agent, EVERY subtask)
+
+1. **NO HARDCODED CONTENT** — Every heading, paragraph, image, video, and CTA button must be
+   mapped directly to a robust, fully editable `{% schema %}` block so it is 100% manageable
+   via the Shopify Theme Customizer.
+2. **NATIVE LIQUID & FUNCTIONALITY** — Write clean Liquid files (`.liquid`), synced with
+   responsive CSS/JS. Never output static HTML/CSS mockups pretending to be sections.
+3. **REAL DYNAMICS** — All product grids, collections, cart drawers, and toggles must be
+   genuinely dynamic using Shopify loops (e.g., `{% for product in collection.products %}`)
+   and the Shopify AJAX API where needed for functions like Add to Cart. No fake/static
+   product cards.
+4. **SCAFFOLD INTEGRATION** — Work directly on top of the existing downloaded repository
+   scaffold. Maintain Shopify Theme Check linting compliance (**0 offenses**) at all times.
+
+---
+
 ## How to Use This Skill
 
 1. **Read the task** the user provided
@@ -189,6 +205,79 @@ Every agent must know and enforce these rules:
 - CSS class names that map to the theme's design system
 - Liquid logic operators and control flow
 - Asset references for JS/CSS files that are not merchant-editable
+
+### 📐 Mandatory "Layout & Spacing" Schema Group (EVERY section)
+
+Every section schema MUST include a **"Layout & Spacing"** settings group with these IDs
+(all `range` inputs; defaults taken from the Playwright audit of the reference site):
+
+```
+Desktop:  padding_top, padding_bottom, padding_left, padding_right,
+          margin_top, margin_bottom, section_max_width, item_gap
+Mobile:   mobile_padding_top, mobile_padding_bottom, mobile_padding_horizontal
+```
+
+Wire them into the section's scoped CSS via `{{ section.id }}` so each instance is
+independently tunable:
+
+```liquid
+{% style %}
+  #shopify-section-{{ section.id }} .section-inner {
+    padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px
+             {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+    max-width: {{ section.settings.section_max_width }}px;
+    gap: {{ section.settings.item_gap }}px;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .section-inner {
+      padding-top: {{ section.settings.mobile_padding_top }}px;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+      padding-left: {{ section.settings.mobile_padding_horizontal }}px;
+      padding-right: {{ section.settings.mobile_padding_horizontal }}px;
+    }
+  }
+{% endstyle %}
+```
+
+### 🎛️ Full Customizer Control Matrix
+
+EVERYTHING visual must be admin-controllable from the Theme Customizer. Per section
+(and per block where it applies), expose settings for ALL of the following:
+
+| Category | What must be controllable | Setting types |
+|---|---|---|
+| **Typography** | Font family, font weight, font size, line height, letter spacing — per text element (heading, subheading, body, button) | `font_picker`, `range` (size/weight/line-height), `select` |
+| **Text color** | Every text element's color (+ hover state for links/buttons) | `color` |
+| **Media** | Image OR video choice per slot; separate media per breakpoint: large / medium / small screens (`image_desktop`, `image_tablet`, `image_mobile`); alt text; focal point; aspect ratio; object-fit | `image_picker`, `video`, `video_url`, `select`, `text` |
+| **Spacing** | Padding, margins, gaps, inner spacing — desktop AND mobile (see Layout & Spacing group above) | `range` |
+| **Borders** | Border width, border color, border radius (per card/button/image/container) | `range`, `color` |
+| **Layout** | Grid vs flexbox choice and its properties: columns per breakpoint (desktop/tablet/mobile), direction, alignment, justification, wrap, order/reverse | `select`, `range`, `checkbox` |
+| **Icons** | Icon choice (select from library or custom image upload), icon size, icon color, icon stroke width, icon position, show/hide | `select`, `image_picker`, `range`, `color`, `checkbox` |
+| **Content** | Every heading, paragraph, label, badge, CTA text + CTA link | `text`, `inline_richtext`, `richtext`, `url` |
+| **Backgrounds** | Background color/gradient, background image/video, overlay color + opacity | `color`, `color_background`, `image_picker`, `range` |
+
+Responsive media pattern (large / medium / small screens):
+
+```liquid
+{% if section.settings.media_type == 'video' and section.settings.video != blank %}
+  {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false }}
+{% else %}
+  <picture>
+    {% if section.settings.image_mobile != blank %}
+      <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 750 }}">
+    {% endif %}
+    {% if section.settings.image_tablet != blank %}
+      <source media="(max-width: 989px)" srcset="{{ section.settings.image_tablet | image_url: width: 1100 }}">
+    {% endif %}
+    {{ section.settings.image_desktop | image_url: width: 2000 | image_tag: loading: 'lazy', alt: section.settings.image_alt }}
+  </picture>
+{% endif %}
+```
+
+QA agents MUST fail any section where a visual property from this matrix is fixed in CSS
+with no corresponding schema setting.
 
 ---
 

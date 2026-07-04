@@ -7,3 +7,11 @@ node_modules/
 # Secrets — never commit
 .env
 .env.*
+
+# QA / tooling artifacts
+.playwright-mcp/
+__pycache__/
+scrim-check.jpeg
+
+# Separate app repo (has its own .git)
+sorella-eg-integration/

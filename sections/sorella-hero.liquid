@@ -1,90 +1,223 @@
 {%- comment -%}
-  sorella-hero — Glass Hero Card over media + blob field (Art Direction §9, §7.3).
-  Signature moment: accent headline (italic gold word), 2 blobs (gold tl + slate mr),
-  hero-scrim, optional grain texture, display-hero headline + Gold CTA.
-  Renders [data-hero-sentinel] so the nav dock trigger is height-independent.
+  sorella-hero — Framed hero card with slide carousel + floating discovery bar (Art Direction §9, §7.3).
+  Layout: page-canvas frame gutter → rounded full-bleed media card → bottom-anchored
+  headline + lede row → dark discovery bar cut into the bottom-right corner.
+  Slides (blocks) crossfade with a glass blur-dissolve; heading + lede swap in sync.
+  Discovery fields can smooth-scroll to other homepage sections via their anchor key.
+  The transparent top-state navbar overlays the card, reading as "nav inside the frame".
+  Renders [data-hero-sentinel]; its presence tells the navbar this template
+  has a hero, enabling the transparent ↔ solid scroll behavior.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  assign align = s.content_align | default: 'start'
+  assign slides = section.blocks | where: 'type', 'slide'
+  assign fields = section.blocks | where: 'type', 'filter'
   assign hero_alt = s.heading | strip_html | escape
 -%}
-<section class="sorella-hero blob-scene surface-gradient" data-section-id="{{ section.id }}">
-  {%- if s.show_blobs -%}
-    {%- case s.blob_scheme -%}
-      {%- when 'gold' -%}
-        {% render 'sorella-blob', single: true, scheme: 'gold', position: 'tl', size: 'large' %}
-      {%- when 'slate' -%}
-        {% render 'sorella-blob', single: true, scheme: 'slate', position: 'mr', size: 'large' %}
-      {%- when 'gold-rose' -%}
-        {% render 'sorella-blob', single: true, scheme: 'gold', position: 'tl', size: 'large' %}
-        {% render 'sorella-blob', single: true, scheme: 'rose', position: 'mr', size: 'large' %}
-      {%- else -%}
-        {% render 'sorella-blob', single: true, scheme: 'gold', position: 'tl', size: 'large' %}
-        {% render 'sorella-blob', single: true, scheme: 'slate', position: 'mr', size: 'large' %}
-    {%- endcase -%}
-  {%- endif -%}
-
-  {%- if s.image != blank or s.video_url != blank -%}
+{% style %}
+  #shopify-section-{{ section.id }} .sorella-hero__card {
+    margin-block-start: {{ s.margin_top | default: 0 }}px;
+    margin-block-end: {{ s.margin_bottom | default: 0 }}px;
+    max-width: {{ s.section_max_width | default: 3000 }}px;
+    margin-inline: auto;
+    min-height: clamp(560px, {{ s.min_height | default: 88 }}svh, 900px);
+  }
+  #shopify-section-{{ section.id }} .sorella-hero__content {
+    gap: {{ s.item_gap | default: 24 }}px;
+    padding-block-start: {{ s.padding_top | default: 0 }}px;
+    padding-block-end: {{ s.padding_bottom | default: 0 }}px;
+  }
+  #shopify-section-{{ section.id }} .sorella-hero__row {
+    padding-inline-start: {{ s.padding_left | default: 32 }}px;
+    padding-inline-end: {{ s.padding_right | default: 32 }}px;
+  }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .sorella-hero__card {
+      min-height: clamp(520px, {{ s.mobile_min_height | default: 92 }}svh, 760px);
+    }
+    #shopify-section-{{ section.id }} .sorella-hero__content {
+      padding-block-start: {{ s.mobile_padding_top | default: 0 }}px;
+      padding-block-end: {{ s.mobile_padding_bottom | default: 0 }}px;
+    }
+    #shopify-section-{{ section.id }} .sorella-hero__row {
+      padding-inline: {{ s.mobile_padding_horizontal | default: 16 }}px;
+    }
+  }
+{% endstyle %}
+<section
+  class="sorella-hero surface-gradient"
+  data-section-id="{{ section.id }}"
+  data-hero-root
+  {% if s.autoplay %}data-autoplay{% endif %}
+  data-slide-duration="{{ s.slide_duration | default: 6 }}"
+  style="--hero-dim: {{ s.overlay_opacity | default: 9 | divided_by: 100.0 }}; --hero-scrim: {{ s.scrim_opacity | default: 40 | divided_by: 100.0 }};"
+>
+  <div class="sorella-hero__card">
     <div class="sorella-hero__media">
-      {%- if s.video_url != blank -%}
-        {%- if s.image != blank -%}
+      {%- if slides.size > 0 -%}
+        {%- for slide in slides -%}
+          <div class="sorella-hero__slide{% if forloop.first %} is-active{% endif %}" data-hero-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+            {%- assign slide_alt = slide.settings.heading | strip_html | escape -%}
+            {%- if slide.settings.image != blank -%}
+              {%- if forloop.first -%}
+                {{ slide.settings.image | image_url: width: 2000 | image_tag:
+                  loading: 'eager', fetchpriority: 'high',
+                  sizes: '100vw', widths: '800, 1200, 1600, 2000',
+                  alt: slide_alt }}
+              {%- else -%}
+                {{ slide.settings.image | image_url: width: 2000 | image_tag:
+                  loading: 'lazy',
+                  sizes: '100vw', widths: '800, 1200, 1600, 2000',
+                  alt: slide_alt }}
+              {%- endif -%}
+            {%- else -%}
+              {%- comment -%} Placeholder: bundled theme asset, cycled by slide position; any merchant-picked image above replaces it. {%- endcomment -%}
+              {%- assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+              {%- assign placeholder_asset = 'sorella-hero-slide-' | append: placeholder_index | append: '.jpg' -%}
+              <img
+                src="{{ placeholder_asset | asset_img_url: '2000x' }}"
+                alt="{{ slide_alt }}"
+                {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                width="2000" height="1500"
+              >
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- elsif s.image != blank or s.video_url != blank -%}
+        {%- if s.video_url != blank -%}
+          {%- if s.image != blank -%}
+            {{ s.image | image_url: width: 2000 | image_tag:
+              loading: 'eager',
+              sizes: '100vw', widths: '800, 1200, 1600, 2000',
+              alt: hero_alt,
+              class: 'sorella-hero__media-static' }}
+          {%- endif -%}
+          <video class="sorella-hero__video" autoplay muted loop playsinline poster="{{ s.image | image_url: width: 1600 }}">
+            <source src="{{ s.video_url }}" type="video/mp4">
+          </video>
+        {%- else -%}
           {{ s.image | image_url: width: 2000 | image_tag:
-            loading: 'eager',
+            loading: 'eager', fetchpriority: 'high',
             sizes: '100vw', widths: '800, 1200, 1600, 2000',
-            alt: hero_alt,
-            class: 'sorella-hero__media-static' }}
+            alt: hero_alt }}
         {%- endif -%}
-        <video class="sorella-hero__video" autoplay muted loop playsinline poster="{{ s.image | image_url: width: 1600 }}">
-          <source src="{{ s.video_url }}" type="video/mp4">
-        </video>
-      {%- else -%}
-        {{ s.image | image_url: width: 2000 | image_tag:
-          loading: 'eager', fetchpriority: 'high',
-          sizes: '100vw', widths: '800, 1200, 1600, 2000',
-          alt: hero_alt }}
       {%- endif -%}
     </div>
+    <span class="sorella-hero__dim" aria-hidden="true"></span>
     <span class="sorella-hero__scrim" aria-hidden="true"></span>
     {%- if s.show_texture -%}<span class="sorella-hero__grain" aria-hidden="true"></span>{%- endif -%}
-  {%- endif -%}
 
-  <div class="container container--bento sorella-hero__container">
-    <div class="sorella-hero__grid{% if section.blocks.size > 0 %} sorella-hero__grid--split{% endif %}">
-      <div class="sorella-hero__card glass-panel glass-panel--xl glass-panel--sheen sorella-hero__card--{{ align }}">
-        {%- if s.eyebrow != blank -%}<span class="t-eyebrow t-eyebrow--wide text-gold">{{ s.eyebrow }}</span>{%- endif -%}
-        {%- if s.heading != blank or s.heading_accent != blank or s.heading_suffix != blank -%}
-          <h1 class="t-display-hero sorella-hero__heading">
-            {{- s.heading -}}
-            {%- if s.heading_accent != blank -%}
-              {%- if s.break_before_accent -%}<br>{%- else %} {% endif -%}
-              <em class="text-gold sorella-hero__heading-accent">{{ s.heading_accent }}</em>
-            {%- endif -%}
-            {%- if s.heading_suffix != blank %} {{ s.heading_suffix }}{% endif -%}
-          </h1>
-        {%- endif -%}
-        {%- if s.subheading != blank -%}<p class="t-lead">{{ s.subheading }}</p>{%- endif -%}
-        {%- if s.cta_label != blank -%}
-          <div class="sorella-hero__actions">
-            {% render 'sorella-button', label: s.cta_label, href: s.cta_link, style: 'primary' %}
-            {%- if s.cta2_label != blank -%}{% render 'sorella-button', label: s.cta2_label, href: s.cta2_link, style: 'ghost' %}{%- endif -%}
+    <div class="sorella-hero__content">
+      <div class="sorella-hero__row">
+        <div class="sorella-hero__intro">
+          {%- if s.eyebrow != blank -%}<span class="t-eyebrow t-eyebrow--wide text-gold">{{ s.eyebrow }}</span>{%- endif -%}
+
+          {%- if slides.size > 0 -%}
+            <div class="sorella-hero__intro-stack">
+              {%- for slide in slides -%}
+                {%- capture heading_inner -%}
+                  {{- slide.settings.heading -}}
+                  {%- if slide.settings.heading_accent != blank -%}
+                    {%- if slide.settings.break_before_accent -%}<br>{%- else %} {% endif -%}
+                    <em class="text-gold sorella-hero__heading-accent">{{ slide.settings.heading_accent }}</em>
+                  {%- endif -%}
+                  {%- if slide.settings.heading_suffix != blank %} {{ slide.settings.heading_suffix }}{% endif -%}
+                {%- endcapture -%}
+                <div class="sorella-hero__intro-slide{% if forloop.first %} is-active{% endif %}" data-hero-text aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" {{ slide.shopify_attributes }}>
+                  {%- if forloop.first -%}
+                    <h1 class="t-display-hero sorella-hero__heading">{{ heading_inner }}</h1>
+                  {%- else -%}
+                    <h2 class="t-display-hero sorella-hero__heading">{{ heading_inner }}</h2>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- elsif s.heading != blank or s.heading_accent != blank or s.heading_suffix != blank -%}
+            <h1 class="t-display-hero sorella-hero__heading">
+              {{- s.heading -}}
+              {%- if s.heading_accent != blank -%}
+                {%- if s.break_before_accent -%}<br>{%- else %} {% endif -%}
+                <em class="text-gold sorella-hero__heading-accent">{{ s.heading_accent }}</em>
+              {%- endif -%}
+              {%- if s.heading_suffix != blank %} {{ s.heading_suffix }}{% endif -%}
+            </h1>
+          {%- endif -%}
+
+          {%- if s.cta_label != blank or s.cta2_label != blank -%}
+            <div class="sorella-hero__actions">
+              {%- if s.cta_label != blank -%}{% render 'sorella-button', label: s.cta_label, href: s.cta_link, style: 'primary' %}{%- endif -%}
+              {%- if s.cta2_label != blank -%}{% render 'sorella-button', label: s.cta2_label, href: s.cta2_link, style: 'ghost' %}{%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if slides.size > 1 -%}
+            <div class="sorella-hero__dots" role="group" aria-label="{{ s.dots_aria_label | escape }}">
+              {%- for slide in slides -%}
+                {%- capture dot_label -%}
+                  {{- slide.settings.heading }} {{ slide.settings.heading_accent }} {{ slide.settings.heading_suffix -}}
+                {%- endcapture -%}
+                <button type="button" class="sorella-hero__dot{% if forloop.first %} is-active{% endif %}" data-hero-dot aria-label="{{ forloop.index }}. {{ dot_label | strip_html | strip | escape }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if slides.size > 0 -%}
+          <div class="sorella-hero__lede-stack">
+            {%- for slide in slides -%}
+              <p class="sorella-hero__lede t-body sorella-hero__lede--slide{% if forloop.first %} is-active{% endif %}" data-hero-text aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">{{ slide.settings.subheading }}</p>
+            {%- endfor -%}
           </div>
+        {%- elsif s.subheading != blank -%}
+          <p class="sorella-hero__lede t-body">{{ s.subheading }}</p>
         {%- endif -%}
       </div>
 
-      {%- if section.blocks.size > 0 -%}
-        <div class="sorella-hero__trust">
-          {%- for block in section.blocks -%}
-            <div class="sorella-hero__trust-card glass-panel glass-panel--md glass-panel--sheen" {{ block.shopify_attributes }}>
-              {%- if block.settings.icon != blank -%}
-                <span class="sorella-hero__trust-icon">{% render 'sorella-icon', name: block.settings.icon, size: 30 %}</span>
+      {%- if fields.size > 0 or s.bar_cta_label != blank -%}
+        <div class="sorella-hero__bar" role="navigation"{% if s.bar_aria_label != blank %} aria-label="{{ s.bar_aria_label | escape }}"{% endif %}>
+          <div class="sorella-hero__bar-fields">
+            {%- for block in fields -%}
+              {%- liquid
+                assign field_href = block.settings.link
+                if field_href == blank and block.settings.anchor != blank
+                  assign field_href = '#'
+                endif
+              -%}
+              {%- if field_href != blank -%}
+                <a href="{{ field_href }}" class="sorella-hero__field"{% if block.settings.anchor != blank %} data-scroll-target="{{ block.settings.anchor | escape }}"{% endif %} {{ block.shopify_attributes }}>
+              {%- else -%}
+                <div class="sorella-hero__field" {{ block.shopify_attributes }}>
               {%- endif -%}
-              <div class="sorella-hero__trust-body">
-                {%- if block.settings.heading != blank -%}<h3 class="t-title">{{ block.settings.heading }}</h3>{%- endif -%}
-                {%- if block.settings.text != blank -%}<p class="t-body-sm">{{ block.settings.text }}</p>{%- endif -%}
-              </div>
-            </div>
-          {%- endfor -%}
+                {%- if block.settings.label != blank -%}
+                  <span class="sorella-hero__field-label t-eyebrow t-eyebrow--micro">{{ block.settings.label }}</span>
+                {%- endif -%}
+                {%- if block.settings.value != blank -%}
+                  <span class="sorella-hero__field-value">
+                    <span class="sorella-hero__field-text">{{ block.settings.value }}</span>
+                    {%- if block.settings.show_chevron -%}
+                      <span class="sorella-hero__field-chevron">{% render 'sorella-icon', name: 'chevron-down', size: 14 %}</span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              {%- if field_href != blank -%}</a>{%- else -%}</div>{%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if s.bar_cta_label != blank -%}
+            {%- liquid
+              assign bar_cta_href = s.bar_cta_link
+              if bar_cta_href == blank
+                if s.bar_cta_anchor != blank
+                  assign bar_cta_href = '#'
+                else
+                  assign bar_cta_href = routes.all_products_collection_url
+                endif
+              endif
+            -%}
+            <a href="{{ bar_cta_href }}" class="sorella-hero__bar-cta"{% if s.bar_cta_anchor != blank %} data-scroll-target="{{ s.bar_cta_anchor | escape }}"{% endif %}>
+              <span class="sorella-hero__bar-cta-text">{{ s.bar_cta_label }}</span>
+              {% render 'sorella-icon', name: 'arrow-right', size: 16 %}
+            </a>
+          {%- endif -%}
         </div>
       {%- endif -%}
     </div>
@@ -94,13 +227,20 @@
 </section>
 
 {% stylesheet %}
-  .sorella-hero {
-    position: relative; display: flex; align-items: center;
-    min-height: clamp(550px, 92vh, 900px);
-    min-height: clamp(550px, 92svh, 900px);
-    padding-block: calc(var(--nav-top-height) + var(--space-xxl)) var(--space-xxl);
+  /* Full-bleed card — no frame gutter; only the bottom-right corner is rounded */
+  .sorella-hero { position: relative; }
+
+  .sorella-hero__card {
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: clamp(560px, 88vh, 900px);
+    min-height: clamp(560px, 88svh, 900px);
+    border-radius: 0 0 var(--radius-xl) 0;
+    background: var(--color-navy-low);
+    color: var(--color-parchment);
   }
-  .sorella-hero__media { position: absolute; inset: 0; z-index: 0; }
+
+  .sorella-hero__media { position: absolute; z-index: 0; inset: 0; }
   .sorella-hero__media img, .sorella-hero__media video { width: 100%; height: 100%; object-fit: cover; }
   .sorella-hero__media img { position: absolute; inset: 0; }
   /* Reduced motion: show the still poster image instead of the autoplaying video */
@@ -109,7 +249,40 @@
     .sorella-hero__media-static { display: block; }
     .sorella-hero__media-static ~ .sorella-hero__video { display: none; }
   }
-  .sorella-hero__scrim { position: absolute; inset: 0; z-index: 0; background: var(--gradient-hero-scrim); }
+
+  /* Carousel slides — glass blur-dissolve between images. Slides overshoot the
+     card by 24px so the blurred fringe is clipped by overflow:hidden instead of
+     showing the card background as an edge vignette during crossfades. */
+  .sorella-hero__slide {
+    position: absolute; inset: -24px;
+    opacity: 0; filter: blur(18px); transform: scale(1.04);
+    pointer-events: none;
+    transition: opacity 900ms var(--ease-out), filter 900ms var(--ease-out), transform 1400ms var(--ease-out);
+  }
+  .sorella-hero__slide.is-active { opacity: 1; filter: blur(0); transform: scale(1); }
+  @media (prefers-reduced-motion: reduce) {
+    .sorella-hero__slide { transition: opacity 300ms linear; filter: none; transform: none; }
+  }
+
+  /* Uniform dim veil over the imagery (merchant-set) — lifts text contrast everywhere */
+  .sorella-hero__dim {
+    position: absolute; inset: 0; z-index: 0;
+    background: var(--color-ink);
+    opacity: var(--hero-dim, 0.09);
+  }
+  /* Black scrim spanning the full media height: flat merchant-set darkness over
+     the nav zone (top) and the headline/lede row zone (bottom), easing smoothly
+     to fully clear at the vertical center. */
+  .sorella-hero__scrim {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(180deg,
+      rgb(0 0 0 / var(--hero-scrim, 0.4)) 0%,
+      rgb(0 0 0 / var(--hero-scrim, 0.4)) 12%,
+      rgb(0 0 0 / 0) 48%,
+      rgb(0 0 0 / 0) 52%,
+      rgb(0 0 0 / var(--hero-scrim, 0.4)) 64%,
+      rgb(0 0 0 / var(--hero-scrim, 0.4)) 100%);
+  }
   /* Paper/grain texture — inline SVG noise (no external requests), ~20% opacity */
   .sorella-hero__grain {
     position: absolute; inset: 0; z-index: 0;
@@ -117,46 +290,217 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23grain)'/%3E%3C/svg%3E");
     background-size: 160px 160px;
   }
-  .sorella-hero__container { position: relative; z-index: 1; width: 100%; }
-  .sorella-hero__card {
-    display: flex; flex-direction: column; justify-content: center; gap: var(--space-md);
-    max-width: 620px; min-height: 550px; padding: var(--space-xxl);
-    color: var(--color-parchment);
+
+  .sorella-hero__content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--space-lg); }
+
+  /* Headline left, lede bottom-aligned right */
+  .sorella-hero__row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: var(--space-xl); padding-inline: var(--space-xl);
   }
-  .sorella-hero__heading { line-height: 0.95; letter-spacing: -0.02em; }
+  .sorella-hero__intro { display: flex; flex-direction: column; gap: var(--space-md); max-width: 640px; }
+  .sorella-hero__heading { line-height: 0.95; letter-spacing: -0.02em; text-wrap: balance; margin: 0; text-shadow: 0 2px 16px var(--color-ink-70); }
   .sorella-hero__heading-accent { font-style: italic; }
-  .sorella-hero__card--center { margin-inline: auto; text-align: center; align-items: center; }
-  .sorella-hero__card--end { margin-inline-start: auto; }
-  .sorella-hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-block-start: var(--space-sm); }
-  .sorella-hero__sentinel { position: absolute; inset-block-end: 0; height: 1px; width: 1px; }
-  .sorella-hero__grid { width: 100%; }
-  .sorella-hero__grid--split { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); align-items: stretch; }
-  .sorella-hero__grid--split .sorella-hero__card { max-width: none; }
-  .sorella-hero__trust { display: flex; flex-direction: column; gap: var(--space-lg); }
-  .sorella-hero__trust-card {
-    display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-lg);
-    padding: var(--space-lg); flex: 1; color: var(--color-parchment);
-    transition: transform var(--dur-hover) var(--ease-out);
+  .sorella-hero__lede { max-width: 340px; color: var(--color-parchment); align-self: flex-end; text-shadow: 0 1px 8px var(--color-ink-70); }
+  .sorella-hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-block-start: var(--space-xs); }
+
+  /* Per-slide text: stacked in one grid cell, crossfading with the media.
+     Headings anchor to the cell bottom so the baseline doesn't jump when
+     slides have different line counts. */
+  .sorella-hero__intro-stack, .sorella-hero__lede-stack { display: grid; }
+  .sorella-hero__intro-stack > *, .sorella-hero__lede-stack > * { grid-area: 1 / 1; align-self: end; }
+  .sorella-hero__intro-slide, .sorella-hero__lede--slide {
+    opacity: 0; transform: translateY(8px); pointer-events: none; visibility: hidden;
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out), visibility 0s 600ms;
   }
-  .sorella-hero__trust-icon { color: var(--color-gold); display: inline-flex; transition: transform var(--dur-hover) var(--ease-out); }
+  .sorella-hero__intro-slide.is-active, .sorella-hero__lede--slide.is-active {
+    opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 150ms, 150ms, 0s;
+  }
+  .sorella-hero__lede-stack { align-self: flex-end; }
+  @media (prefers-reduced-motion: reduce) {
+    .sorella-hero__intro-slide, .sorella-hero__lede--slide { transition: opacity 300ms linear; transform: none; }
+  }
+
+  /* Slide dots */
+  .sorella-hero__dots { display: flex; gap: var(--space-xs); margin-block-start: var(--space-xs); }
+  .sorella-hero__dot {
+    width: 8px; height: 8px; padding: 0; border: 0; cursor: pointer;
+    border-radius: var(--radius-pill);
+    background: var(--color-parchment-12);
+    transition: background var(--dur-hover) var(--ease-out), width var(--dur-hover) var(--ease-out);
+  }
+  .sorella-hero__dot:hover { background: var(--color-parchment-65); }
+  .sorella-hero__dot.is-active { width: 24px; background: var(--color-gold); }
+
+  /* Floating discovery bar — cut into the bottom-right corner */
+  .sorella-hero__bar {
+    align-self: flex-end;
+    display: flex; align-items: center; gap: var(--space-md);
+    width: 75%;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-navy-low);
+    /* Flush against the card's bottom-right corner: a thick canvas-coloured border
+       on the exposed edges makes the bar read as cut out of the card, and only the
+       top-left corner is rounded; the card's overflow-hidden radius clips the outer corner. */
+    border: 8px solid var(--color-navy);
+    border-inline-end: 0; border-block-end: 0;
+    border-radius: var(--radius-xl) 0 0 0;
+    box-shadow: var(--shadow-blob-card);
+  }
+
+  .sorella-hero__bar-fields { display: flex; flex: 1; min-width: 0; }
+  .sorella-hero__field {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: var(--space-xxs);
+    padding-inline: var(--space-lg);
+    color: var(--color-parchment); text-decoration: none;
+  }
+  .sorella-hero__field:first-child { padding-inline-start: var(--space-xs); }
+  .sorella-hero__field + .sorella-hero__field { border-inline-start: 1px solid var(--color-parchment-12); }
+  .sorella-hero__field-label { color: var(--color-parchment-65); }
+  .sorella-hero__field-value {
+    display: inline-flex; align-items: center; gap: var(--space-xxs);
+    font-size: 15px; line-height: 1.3; min-width: 0;
+  }
+  .sorella-hero__field-text {
+    display: block; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sorella-hero__field-chevron { display: inline-flex; color: var(--color-parchment-65); flex-shrink: 0; }
   @media (prefers-reduced-motion: no-preference) {
-    .sorella-hero__trust-card:hover { transform: translateY(-3px); }
-    .sorella-hero__trust-card:hover .sorella-hero__trust-icon { transform: scale(1.1); }
+    a.sorella-hero__field .sorella-hero__field-value { transition: color var(--dur-hover) var(--ease-out); }
+    a.sorella-hero__field:hover .sorella-hero__field-value { color: var(--color-gold); }
   }
-  .sorella-hero__trust-body h3 { margin: 0; }
-  .sorella-hero__trust-body p { color: var(--color-parchment-65); margin-block-start: var(--space-xxs); }
-  @media (max-width: 1023px) {
-    .sorella-hero__grid--split { grid-template-columns: 1fr; }
-    .sorella-hero__trust { flex-direction: row; flex-wrap: wrap; }
-    .sorella-hero__trust-card { flex: 1 1 220px; }
+
+  /* Bar CTA — gold pill that smooth-scrolls to (or links out to) another section */
+  .sorella-hero__bar-cta {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+    min-height: 48px; padding: 12px var(--space-lg);
+    border-radius: var(--radius-pill);
+    background: var(--color-gold); color: var(--color-ink);
+    font-size: 14px; font-weight: 600; line-height: 1; white-space: nowrap;
+    transition: transform var(--dur-hover) var(--ease-out), background var(--dur-hover) var(--ease-out);
+  }
+  .sorella-hero__bar-cta:hover { transform: scale(1.04); }
+  .sorella-hero__bar-cta:active { transform: scale(0.97); }
+
+  .sorella-hero__sentinel { position: absolute; inset-block-end: 0; height: 1px; width: 1px; }
+
+  @media (max-width: 900px) {
+    .sorella-hero__bar { width: 100%; border-inline-start: 0; border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
+    .sorella-hero__field { padding-inline: var(--space-md); }
+    .sorella-hero__field:first-child { padding-inline-start: 0; }
+    /* Stack the headline row before the H1 column gets too narrow for a 2-line display */
+    .sorella-hero__row { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+    .sorella-hero__lede { align-self: flex-start; }
+    .sorella-hero__lede-stack { align-self: flex-start; }
   }
   @media (max-width: 640px) {
-    .sorella-hero__card { padding: var(--space-xl) var(--space-lg); min-height: 0; }
-  }
-  @media (max-width: 640px) {
-    .sorella-hero__trust { flex-direction: column; }
+    .sorella-hero__card { min-height: clamp(520px, 92svh, 760px); }
+    .sorella-hero__row { padding-inline: var(--space-md); }
+    /* Stack the discovery bar: fields become rows, search becomes a full-width pill */
+    .sorella-hero__bar { flex-direction: column; align-items: stretch; gap: var(--space-sm); padding: var(--space-md); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .sorella-hero__bar-fields { flex-direction: column; }
+    .sorella-hero__field { padding: var(--space-sm) 0; }
+    .sorella-hero__field + .sorella-hero__field { border-inline-start: 0; border-block-start: 1px solid var(--color-parchment-12); }
+    .sorella-hero__field-text { white-space: normal; }
+    .sorella-hero__bar-cta { width: 100%; }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    function initHero(root) {
+      if (root.dataset.heroInit) return;
+      root.dataset.heroInit = 'true';
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* Smooth-scroll discovery fields to their target homepage section.
+         The anchor key is the section's ID suffix in the template JSON
+         (e.g. "bestsellers" → <div id="shopify-section-…__bestsellers">). */
+      root.querySelectorAll('[data-scroll-target]').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          var key = link.getAttribute('data-scroll-target');
+          var target = document.getElementById(key) ||
+            document.querySelector('[id$="__' + key + '"]');
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      /* Slide carousel: crossfade media + swap heading/lede in sync */
+      var slides = root.querySelectorAll('[data-hero-slide]');
+      var texts = root.querySelectorAll('[data-hero-text]');
+      var dots = root.querySelectorAll('[data-hero-dot]');
+      if (slides.length < 2) return;
+
+      var index = 0;
+      var timer = null;
+      var hovered = false;
+      var focused = false;
+      var duration = (parseInt(root.getAttribute('data-slide-duration'), 10) || 6) * 1000;
+      var autoplay = root.hasAttribute('data-autoplay') && !reduced;
+
+      function setActive(list, activeIndex, perSlide) {
+        list.forEach(function (el, i) {
+          var active = perSlide ? i === activeIndex : i % slides.length === activeIndex;
+          el.classList.toggle('is-active', active);
+          if (el.hasAttribute('aria-hidden') || el.hasAttribute('data-hero-slide') || el.hasAttribute('data-hero-text')) {
+            el.setAttribute('aria-hidden', active ? 'false' : 'true');
+          }
+          if (el.hasAttribute('data-hero-dot')) {
+            if (active) { el.setAttribute('aria-current', 'true'); } else { el.removeAttribute('aria-current'); }
+          }
+        });
+      }
+
+      function goTo(i) {
+        index = (i + slides.length) % slides.length;
+        setActive(slides, index, true);
+        setActive(texts, index, false);
+        setActive(dots, index, true);
+      }
+
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      function start() {
+        if (!autoplay || timer || document.hidden || hovered || focused || !root.isConnected) return;
+        timer = setInterval(function () { goTo(index + 1); }, duration);
+      }
+
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { goTo(i); stop(); start(); });
+      });
+
+      root.addEventListener('pointerenter', function () { hovered = true; stop(); });
+      root.addEventListener('pointerleave', function () { hovered = false; start(); });
+      root.addEventListener('focusin', function () { focused = true; stop(); });
+      root.addEventListener('focusout', function (event) {
+        if (!root.contains(event.relatedTarget)) { focused = false; start(); }
+      });
+
+      function onVisibility() { if (document.hidden) { stop(); } else { start(); } }
+      document.addEventListener('visibilitychange', onVisibility);
+      document.addEventListener('shopify:section:unload', function onUnload(event) {
+        if (event.target.contains(root)) {
+          stop();
+          document.removeEventListener('visibilitychange', onVisibility);
+          document.removeEventListener('shopify:section:unload', onUnload);
+        }
+      });
+
+      start();
+    }
+
+    document.querySelectorAll('[data-hero-root]').forEach(initHero);
+    document.addEventListener('shopify:section:load', function (event) {
+      event.target.querySelectorAll('[data-hero-root]').forEach(initHero);
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
@@ -164,61 +508,74 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Egyptian fragrance house" },
+    { "type": "header", "content": "Carousel" },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-rotate slides", "default": true },
+    { "type": "range", "id": "slide_duration", "label": "Seconds per slide", "min": 3, "max": 12, "step": 1, "default": 6 },
+    { "type": "text", "id": "dots_aria_label", "label": "Slide dots accessibility label", "default": "Hero slides" },
+    { "type": "header", "content": "Fallback content (used when there are no slides)" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Sorella — From our" },
     { "type": "text", "id": "heading_accent", "label": "Heading accent (italic gold)", "default": "bond" },
     { "type": "text", "id": "heading_suffix", "label": "Heading suffix", "default": "to your senses." },
     { "type": "checkbox", "id": "break_before_accent", "label": "Line break before accent", "default": true },
-    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Fragrances crafted by two sisters — made fresh in Egypt." },
-    { "type": "text", "id": "cta_label", "label": "Primary button label", "default": "Shop best sellers" },
+    { "type": "textarea", "id": "subheading", "label": "Supporting paragraph (right side)", "default": "Fragrances crafted by two sisters — made fresh in Egypt." },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "url", "id": "video_url", "label": "Background video URL (mp4)" },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "cta_label", "label": "Primary button label" },
     { "type": "url", "id": "cta_link", "label": "Primary button link" },
     { "type": "text", "id": "cta2_label", "label": "Secondary button label" },
     { "type": "url", "id": "cta2_link", "label": "Secondary button link" },
-    { "type": "header", "content": "Media" },
-    { "type": "image_picker", "id": "image", "label": "Background image" },
-    { "type": "url", "id": "video_url", "label": "Background video URL (mp4)" },
-    { "type": "checkbox", "id": "show_texture", "label": "Show grain texture over media", "default": true },
     { "type": "header", "content": "Atmosphere" },
-    { "type": "checkbox", "id": "show_blobs", "label": "Show blob field", "default": true },
+    { "type": "range", "id": "scrim_opacity", "label": "Edge scrim darkness", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 40, "info": "Black overlay over the top (nav) and bottom (headline row) zones, fading to clear at the center." },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay darkness", "min": 0, "max": 80, "step": 1, "unit": "%", "default": 9, "info": "Extra uniform dark veil on top of the gradient scrim — raise it if text needs more contrast." },
+    { "type": "checkbox", "id": "show_texture", "label": "Show grain texture over media", "default": true },
+    { "type": "header", "content": "Discovery bar" },
+    { "type": "text", "id": "bar_aria_label", "label": "Bar accessibility label", "default": "Discover fragrances" },
+    { "type": "text", "id": "bar_cta_label", "label": "Bar button label", "default": "Explore the collections", "info": "Gold pill button at the end of the bar. Leave empty to hide it." },
+    { "type": "text", "id": "bar_cta_anchor", "label": "Bar button scroll target (homepage section key)", "default": "collections", "info": "The section's key in the homepage template, e.g. \"collections\", \"bestsellers\", \"story\". Clicking scrolls smoothly to that section." },
+    { "type": "url", "id": "bar_cta_link", "label": "Bar button link (fallback when no scroll target)", "info": "Defaults to the all-products collection." },
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "min_height", "label": "Hero height (desktop)", "min": 50, "max": 100, "step": 1, "unit": "vh", "default": 88 },
+    { "type": "range", "id": "section_max_width", "label": "Section max width", "min": 800, "max": 3000, "step": 50, "unit": "px", "default": 3000, "info": "3000 renders full-bleed." },
+    { "type": "range", "id": "item_gap", "label": "Gap between headline row and bar", "min": 0, "max": 64, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_top", "label": "Content padding top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Content padding bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0, "info": "Keep at 0 for the bar to stay flush with the card's corner." },
+    { "type": "range", "id": "padding_left", "label": "Content padding left", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "padding_right", "label": "Content padding right", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "margin_top", "label": "Section margin top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Section margin bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "header", "content": "Layout & Spacing — mobile" },
+    { "type": "range", "id": "mobile_min_height", "label": "Hero height (mobile)", "min": 50, "max": 100, "step": 1, "unit": "vh", "default": 92 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Content padding top", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Content padding bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "mobile_padding_horizontal", "label": "Content padding horizontal", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 16 }
+  ],
+  "max_blocks": 10,
+  "blocks": [
     {
-      "type": "select", "id": "blob_scheme", "label": "Blob colours", "default": "gold-slate",
-      "options": [
-        { "value": "gold-slate", "label": "Gold + Slate" },
-        { "value": "gold", "label": "Gold" },
-        { "value": "slate", "label": "Slate" },
-        { "value": "gold-rose", "label": "Gold + Rose" }
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Sorella — From our" },
+        { "type": "text", "id": "heading_accent", "label": "Heading accent (italic gold)", "default": "bond" },
+        { "type": "text", "id": "heading_suffix", "label": "Heading suffix", "default": "to your senses." },
+        { "type": "checkbox", "id": "break_before_accent", "label": "Line break before accent", "default": true },
+        { "type": "textarea", "id": "subheading", "label": "Supporting paragraph (right side)", "default": "Fragrances crafted by two sisters — made fresh in Egypt." }
       ]
     },
     {
-      "type": "select", "id": "content_align", "label": "Card alignment", "default": "start",
-      "options": [
-        { "value": "start", "label": "Start" },
-        { "value": "center", "label": "Center" },
-        { "value": "end", "label": "End" }
-      ]
-    }
-  ],
-  "max_blocks": 3,
-  "blocks": [
-    {
-      "type": "trust",
-      "name": "Trust card",
+      "type": "filter",
+      "name": "Discovery field",
       "settings": [
+        { "type": "text", "id": "label", "label": "Label (small, uppercase)", "default": "Discover" },
+        { "type": "text", "id": "value", "label": "Value (catchy line)", "default": "Shop the icons" },
         {
-          "type": "select", "id": "icon", "label": "Icon", "default": "sparkle",
-          "options": [
-            { "value": "sparkle", "label": "Sparkle" },
-            { "value": "leaf", "label": "Leaf" },
-            { "value": "truck", "label": "Delivery" },
-            { "value": "gift", "label": "Gift" },
-            { "value": "shield", "label": "Shield" },
-            { "value": "heart", "label": "Heart" },
-            { "value": "droplet", "label": "Droplet" },
-            { "value": "diamond", "label": "Diamond" },
-            { "value": "verified", "label": "Verified badge" }
-          ]
+          "type": "text", "id": "anchor", "label": "Scroll target (homepage section key)",
+          "info": "The section's key in the homepage template, e.g. \"bestsellers\", \"essences\", \"story\". Clicking scrolls smoothly to that section."
         },
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Free 5ml offer" },
-        { "type": "text", "id": "text", "label": "Text", "default": "Discovery included with every full bottle." }
+        { "type": "url", "id": "link", "label": "Link (fallback when no scroll target)" },
+        { "type": "checkbox", "id": "show_chevron", "label": "Show chevron", "default": true }
       ]
     }
   ],
@@ -226,9 +583,11 @@
     {
       "name": "Hero",
       "blocks": [
-        { "type": "trust", "settings": { "icon": "sparkle", "heading": "Free 5ml offer", "text": "Discovery included with every full bottle." } },
-        { "type": "trust", "settings": { "icon": "leaf", "heading": "Made in Egypt", "text": "Sourced from the banks of the Nile." } },
-        { "type": "trust", "settings": { "icon": "truck", "heading": "Express Delivery", "text": "Fragile-grade shipping nationwide." } }
+        { "type": "slide", "settings": { "heading": "Sorella — From our", "heading_accent": "bond", "heading_suffix": "to your senses.", "subheading": "Perfume sprays, oils, and musks crafted by two sisters — every scent a story of connection." } },
+        { "type": "slide", "settings": { "heading": "Oils & musks with", "heading_accent": "soul", "heading_suffix": "", "subheading": "Slow-blended perfume oils and musks — intimate scents that stay close to the skin." } },
+        { "type": "filter", "settings": { "label": "Bestsellers", "value": "Shop the icons", "anchor": "bestsellers" } },
+        { "type": "filter", "settings": { "label": "Our essences", "value": "Find your scent family", "anchor": "essences" } },
+        { "type": "filter", "settings": { "label": "The sisters", "value": "Read our story", "anchor": "story" } }
       ]
     }
   ]

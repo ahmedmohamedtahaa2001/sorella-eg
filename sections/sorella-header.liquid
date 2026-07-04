@@ -1,69 +1,72 @@
 {%- comment -%}
-  sorella-header — Adaptive Nav Dock (Art Direction §9).
-  Two scroll states: transparent-top (over hero) → glass dock (scrolled).
+  sorella-header — Sorella Nav (fixed full-width bar, two scroll states).
+  Transparent over the homepage hero → merchant-set solid background once the
+  page scrolls past the trigger (a percentage of the viewport height).
   Center links from a linklist; top-level items with children become mega-menus.
   When no menu is assigned, a designed collection-link fallback renders instead.
 {%- endcomment -%}
 {{ 'chrome.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign start_top = false
-  if template.name == 'index' and section.settings.transparent_top
-    assign start_top = true
+  assign s = section.settings
+  assign start_transparent = false
+  if template.name == 'index' and s.transparent_top
+    assign start_transparent = true
   endif
-  assign dock_class = 'nav-dock--docked'
-  if start_top
-    assign dock_class = 'nav-dock--top'
+  assign nav_state_class = 'sorella-nav--solid'
+  if start_transparent
+    assign nav_state_class = 'sorella-nav--transparent'
   endif
+
+  assign nav_bg_alpha = s.scrolled_opacity | default: 100 | divided_by: 100.0
 
   comment
     Designed fallback nav — shown only until the merchant assigns a menu.
   endcomment
   assign fallback_titles = 'For Her,For Him,Unisex,Perfume Oil,Bundles' | split: ','
   assign fallback_handles = 'for-her,for-him,unisex,perfume-oil,bundles' | split: ','
-  assign menu_links = section.settings.menu.links
+  assign menu_links = s.menu.links
 -%}
 
-<header class="nav-dock {{ dock_class }}"
-  data-nav-dock
-  data-scroll-hide="{{ section.settings.scroll_hide }}"
+<header class="sorella-nav {{ nav_state_class }}"
+  data-sorella-nav
+  data-scroll-hide="{{ s.scroll_hide }}"
+  data-scroll-trigger="{{ s.scroll_trigger | default: 100 }}"
+  style="--nav-top-offset: {{ s.top_offset }}px; --nav-scrolled-bg: {{ s.scrolled_bg | color_modify: 'alpha', nav_bg_alpha }}; --nav-scrolled-text: {{ s.scrolled_text }};"
   role="banner">
-  <div class="nav-dock__inner">
+  <div class="sorella-nav__inner">
     {%- comment -%} Left — logo {%- endcomment -%}
-    <a class="nav-dock__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+    <a class="sorella-nav__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
       {%- if settings.logo != blank -%}
         {%- assign logo_alt = settings.logo.alt | default: shop.name -%}
-        <img class="nav-dock__logo-full" src="{{ settings.logo | image_url: width: 400 }}"
+        <img class="sorella-nav__logo-img" src="{{ settings.logo | image_url: width: 400 }}"
           width="{{ settings.logo_width }}" height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio | round }}" alt="{{ logo_alt | escape }}"
           style="width: {{ settings.logo_width }}px; height: auto;">
-        {%- if settings.logo_mark != blank -%}
-          <img class="nav-dock__logo-mark" src="{{ settings.logo_mark | image_url: width: 120 }}" width="120" height="{{ 120 | divided_by: settings.logo_mark.aspect_ratio | round }}" alt="{{ logo_alt | escape }}">
-        {%- endif -%}
       {%- else -%}
-        <span class="nav-dock__wordmark">{{ settings.brand_name | default: shop.name }}</span>
+        <span class="sorella-nav__wordmark">{{ settings.brand_name | default: shop.name }}</span>
       {%- endif -%}
     </a>
 
     {%- comment -%} Center — primary links {%- endcomment -%}
-    <nav class="nav-dock__nav" aria-label="{{ 'general.accessibility.primary_nav' | t }}">
-      <ul class="nav-dock__links">
+    <nav class="sorella-nav__nav" aria-label="{{ 'general.accessibility.primary_nav' | t }}">
+      <ul class="sorella-nav__links">
         {%- if menu_links.size > 0 -%}
           {%- for link in menu_links -%}
             {%- if link.links != blank -%}
-              <li class="nav-dock__item" data-megamenu>
-                <a class="nav-dock__link t-nav-link" href="{{ link.url }}"
+              <li class="sorella-nav__item" data-megamenu>
+                <a class="sorella-nav__link t-nav-link" href="{{ link.url }}"
                   data-megamenu-trigger aria-expanded="false" aria-haspopup="true">
                   {{ link.title }} {% render 'sorella-icon', name: 'chevron-down', size: 14 %}
                 </a>
-                <div class="nav-dock__mega" data-megamenu-panel>
+                <div class="sorella-nav__mega" data-megamenu-panel>
                   {% render 'sorella-blob', single: true, scheme: 'gold', drift: false, soft: true %}
-                  <div class="nav-dock__mega-inner glass-panel">
-                    <ul class="nav-dock__mega-grid">
+                  <div class="sorella-nav__mega-inner glass-panel">
+                    <ul class="sorella-nav__mega-grid">
                       {%- for child in link.links -%}
                         <li>
-                          <a class="nav-dock__mega-link t-body-strong" href="{{ child.url }}">{{ child.title }}</a>
+                          <a class="sorella-nav__mega-link t-body-strong" href="{{ child.url }}">{{ child.title }}</a>
                           {%- if child.links != blank -%}
-                            <ul class="nav-dock__mega-sub">
+                            <ul class="sorella-nav__mega-sub">
                               {%- for grandchild in child.links -%}
                                 <li><a class="t-body-sm text-mist" href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
                               {%- endfor -%}
@@ -76,15 +79,15 @@
                 </div>
               </li>
             {%- else -%}
-              <li class="nav-dock__item">
-                <a class="nav-dock__link t-nav-link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              <li class="sorella-nav__item">
+                <a class="sorella-nav__link t-nav-link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
               </li>
             {%- endif -%}
           {%- endfor -%}
         {%- else -%}
           {%- for title in fallback_titles -%}
-            <li class="nav-dock__item">
-              <a class="nav-dock__link t-nav-link" href="{{ routes.collections_url }}/{{ fallback_handles[forloop.index0] }}">{{ title }}</a>
+            <li class="sorella-nav__item">
+              <a class="sorella-nav__link t-nav-link" href="{{ routes.collections_url }}/{{ fallback_handles[forloop.index0] }}">{{ title }}</a>
             </li>
           {%- endfor -%}
         {%- endif -%}
@@ -92,19 +95,19 @@
     </nav>
 
     {%- comment -%} Right — utility icons {%- endcomment -%}
-    <div class="nav-dock__utils">
-      <button class="nav-dock__icon" type="button" data-open-target="search-drawer" aria-label="{{ 'general.search.title' | t }}">
+    <div class="sorella-nav__utils">
+      <button class="sorella-nav__icon" type="button" data-open-target="search-drawer" aria-label="{{ 'general.search.title' | t }}">
         {% render 'sorella-icon', name: 'search', size: 22 %}
       </button>
-      <a class="nav-dock__icon nav-dock__icon--account" href="{{ routes.account_url }}" aria-label="{{ 'customer.account.title' | t }}">
+      <a class="sorella-nav__icon sorella-nav__icon--account" href="{{ routes.account_url }}" aria-label="{{ 'customer.account.title' | t }}">
         {% render 'sorella-icon', name: 'user', size: 22 %}
       </a>
-      <a class="nav-dock__icon nav-dock__icon--cart" href="{{ routes.cart_url }}"
+      <a class="sorella-nav__icon sorella-nav__icon--cart" href="{{ routes.cart_url }}"
         {% if settings.cart_drawer_enabled %}data-open-target="cart-drawer"{% endif %} aria-label="{{ 'cart.general.title' | t }}">
         {% render 'sorella-icon', name: 'bag', size: 22 %}
         {% render 'sorella-badge', variant: 'cart', count: cart.item_count %}
       </a>
-      <button class="nav-dock__icon nav-dock__icon--menu" type="button" data-open-target="mobile-drawer" aria-label="{{ 'general.accessibility.open_menu' | t }}">
+      <button class="sorella-nav__icon sorella-nav__icon--menu" type="button" data-open-target="mobile-drawer" aria-label="{{ 'general.accessibility.open_menu' | t }}">
         {% render 'sorella-icon', name: 'menu', size: 24 %}
       </button>
     </div>
@@ -116,7 +119,7 @@
   <div class="sorella-drawer__panel glass-panel">
     <div class="sorella-drawer__head">
       <span class="t-title">{{ settings.brand_name | default: shop.name }}</span>
-      <button class="nav-dock__icon" type="button" data-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
+      <button class="sorella-nav__icon" type="button" data-close aria-label="{{ 'general.accessibility.close_menu' | t }}">
         {% render 'sorella-icon', name: 'close', size: 22 %}
       </button>
     </div>
@@ -159,7 +162,7 @@
       <input type="search" id="header-search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" autocomplete="off">
       {%- assign search_submit_label = 'general.search.submit' | t -%}
       {% render 'sorella-button', label: search_submit_label, style: 'primary', type: 'submit' %}
-      <button class="nav-dock__icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'sorella-icon', name: 'close', size: 22 %}</button>
+      <button class="sorella-nav__icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'sorella-icon', name: 'close', size: 22 %}</button>
     </form>
   </div>
 </aside>
@@ -169,8 +172,15 @@
   "name": "Header",
   "settings": [
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Intended main menu: For Her, For Him, Unisex, Perfume Oil, Bundles (each linking to its collection). Until a menu is assigned, the header shows these five collection links as a built-in fallback." },
+    { "type": "header", "content": "Scroll behavior" },
     { "type": "checkbox", "id": "transparent_top", "label": "Transparent over homepage hero", "default": true },
-    { "type": "checkbox", "id": "scroll_hide", "label": "Hide dock on scroll down, reveal on scroll up", "default": true }
+    { "type": "range", "id": "top_offset", "label": "Transparent-state offset from top of page", "min": 0, "max": 60, "step": 1, "unit": "px", "default": 25, "info": "Space above the navbar while it is still transparent at the top of the page." },
+    { "type": "range", "id": "scroll_trigger", "label": "Scroll distance before the background appears", "min": 10, "max": 200, "step": 5, "unit": "%", "default": 100, "info": "Percentage of the viewport height. At 100%, the navbar gains its background after scrolling one full screen; scrolling back up restores the transparent state." },
+    { "type": "checkbox", "id": "scroll_hide", "label": "Hide navbar on scroll down, reveal on scroll up", "default": false },
+    { "type": "header", "content": "Scrolled colors" },
+    { "type": "color", "id": "scrolled_bg", "label": "Scrolled background color", "default": "#0a1420", "info": "Design system navy canvas — the color the navbar fades to once scrolled." },
+    { "type": "range", "id": "scrolled_opacity", "label": "Scrolled background opacity", "min": 50, "max": 100, "step": 1, "unit": "%", "default": 100 },
+    { "type": "color", "id": "scrolled_text", "label": "Scrolled text & icon color", "default": "#F2EEE7" }
   ],
   "enabled_on": { "groups": ["header"] }
 }

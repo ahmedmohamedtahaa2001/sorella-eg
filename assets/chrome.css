@@ -1,86 +1,66 @@
 /* ==========================================================================
-   Sorella — global chrome (nav dock, drawers, mega-menu, footer, cart)
+   Sorella — global chrome (navbar, drawers, mega-menu, footer, cart)
    Loaded by the header section. Tokens from base.css.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Adaptive Nav Dock (Art Direction §9)
+   Sorella Nav — fixed full-width bar with two scroll states (§8, reworked):
+   transparent over the hero → merchant-set solid background once the page
+   scrolls past the trigger. Background/text colors and the trigger distance
+   are schema settings, inlined as CSS vars on the <header> element.
    -------------------------------------------------------------------------- */
-.nav-dock {
-  --dock-dur: 600ms; /* reference glide: slower than base --dur-dock */
+.sorella-nav {
   position: fixed;
-  top: 12px; left: 50%;
-  transform: translateX(-50%) translateZ(0);
-  max-width: 920px;
-  width: calc(100% - 32px);
-  height: var(--nav-dock-height);
-  z-index: 100;
-  border-radius: var(--radius-pill);
-  background: var(--color-parchment-65);
-  background: color-mix(in srgb, var(--color-parchment) 90%, transparent);
-  -webkit-backdrop-filter: blur(var(--blur-dock));
-  backdrop-filter: blur(var(--blur-dock));
-  border: var(--border-hairline);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  color: var(--color-ink);
-  transition:
-    background var(--dock-dur) var(--ease-out),
-    -webkit-backdrop-filter var(--dock-dur) var(--ease-out),
-    backdrop-filter var(--dock-dur) var(--ease-out),
-    max-width var(--dock-dur) var(--ease-out),
-    height var(--dock-dur) var(--ease-out),
-    top var(--dock-dur) var(--ease-out),
-    border-radius var(--dock-dur) var(--ease-out),
-    color var(--dock-dur) var(--ease-out),
-    box-shadow var(--dock-dur) var(--ease-out),
-    transform var(--dock-dur) var(--ease-out);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-dock { transition: none; }
-}
-
-.nav-dock--top {
-  /* Sit below the announcement bar while at the top of the page; the docked
-     state (top: 12px) naturally collapses the offset once scrolled. */
-  top: var(--announcement-height, 0px);
-  max-width: 100%;
+  top: 0; left: 0; right: 0;
   width: 100%;
-  height: var(--nav-top-height);
-  border-radius: 0;
+  height: var(--nav-height-scrolled);
+  z-index: 100;
+  background: var(--nav-scrolled-bg, var(--color-navy));
+  color: var(--nav-scrolled-text, var(--color-parchment));
+  border-block-end: var(--border-hairline);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition:
+    background-color var(--dur-structural) var(--ease-out),
+    border-color var(--dur-structural) var(--ease-out),
+    box-shadow var(--dur-structural) var(--ease-out),
+    color var(--dur-structural) var(--ease-out),
+    height var(--dur-structural) var(--ease-out),
+    top var(--dur-structural) var(--ease-out),
+    transform var(--dur-structural) var(--ease-out);
+}
+
+/* Transparent state — over the hero, before the scroll trigger */
+.sorella-nav--transparent {
+  top: calc(var(--announcement-height, 0px) + var(--nav-top-offset, 0px));
+  height: var(--nav-height-top);
   background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
   border-color: transparent;
   box-shadow: none;
   color: var(--color-parchment);
-  text-shadow: 0 1px 3px var(--color-ink-70);
+  text-shadow: 0 1px 3px var(--color-ink-70); /* legibility net over any hero frame (§8.1) */
 }
 
-.nav-dock--hidden { transform: translateX(-50%) translateY(-140%) translateZ(0); }
+@media (prefers-reduced-motion: reduce) {
+  .sorella-nav { transition: none; }
+}
+
+/* Optional hide-on-scroll-down (schema toggle) */
+.sorella-nav--hidden { transform: translateY(-110%); }
 
 /* No-hero templates: while the in-flow announcement bar is visible at the very
-   top of the page, the docked pill sits below it instead of covering it. */
-.nav-dock--docked.nav-dock--offset { top: calc(var(--announcement-height, 0px) + 12px); }
+   top of the page, the solid bar sits below it instead of covering it. */
+.sorella-nav--solid.sorella-nav--offset { top: var(--announcement-height, 0px); }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nav-dock--docked { background: var(--color-ink-90); color: var(--color-parchment); }
-}
-
-.nav-dock__inner {
+.sorella-nav__inner {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg);
   height: 100%; width: 100%; max-width: var(--container-lock); margin-inline: auto;
   padding-inline: var(--space-lg);
 }
-.nav-dock--top .nav-dock__inner { padding-inline: var(--space-xl); }
+.sorella-nav--transparent .sorella-nav__inner { padding-inline: var(--space-xl); }
 
-.nav-dock__logo { display: inline-flex; align-items: center; flex: none; }
-.nav-dock__logo-full { display: block; }
-.nav-dock__logo-mark { display: none; width: 36px; height: auto; }
-.nav-dock--docked .nav-dock__logo-full { display: none; }
-.nav-dock--docked .nav-dock__logo-mark { display: block; }
-/* If no mark uploaded, keep wordmark visible (fallback handled in markup) */
-.nav-dock__wordmark {
+.sorella-nav__logo { display: inline-flex; align-items: center; flex: none; }
+.sorella-nav__logo-img { display: block; }
+.sorella-nav__wordmark {
   color: inherit;
   font-family: var(--font-display);
   font-size: clamp(20px, 2.4vw, 26px);
@@ -90,47 +70,47 @@
   letter-spacing: 0.2em;
 }
 
-.nav-dock__nav { flex: 1; display: flex; justify-content: center; }
-.nav-dock__links { display: flex; align-items: center; gap: var(--space-lg); }
-.nav-dock__item { position: relative; }
-.nav-dock__link {
+.sorella-nav__nav { flex: 1; display: flex; justify-content: center; }
+.sorella-nav__links { display: flex; align-items: center; gap: var(--space-lg); }
+.sorella-nav__item { position: relative; }
+.sorella-nav__link {
   display: inline-flex; align-items: center; gap: 4px; color: inherit;
   font-family: var(--font-body); font-size: 12px; font-weight: 600; line-height: 1;
   letter-spacing: 1.8px; text-transform: uppercase;
-  opacity: 0.8; /* parchment @80% over hero; ink @80% when docked */
+  opacity: 0.8; /* parchment @80% in both states */
   padding: 8px 4px;
   transition: color var(--dur-hover) var(--ease-out), opacity var(--dur-hover) var(--ease-out);
 }
-.nav-dock__link:hover, .nav-dock__link[aria-current="page"] { color: var(--color-gold); opacity: 1; }
+.sorella-nav__link:hover, .sorella-nav__link[aria-current="page"] { color: var(--color-gold); opacity: 1; }
 
-.nav-dock__utils { display: flex; align-items: center; gap: var(--space-sm); flex: none; }
-.nav-dock__icon {
+.sorella-nav__utils { display: flex; align-items: center; gap: var(--space-sm); flex: none; }
+.sorella-nav__icon {
   position: relative; display: inline-flex; align-items: center; justify-content: center;
   width: 44px; height: 44px; color: inherit; border-radius: var(--radius-full);
   transition: color var(--dur-hover) var(--ease-out);
 }
-.nav-dock__icon:hover { color: var(--color-gold); }
-.nav-dock__icon--menu { display: none; }
+.sorella-nav__icon:hover { color: var(--color-gold); }
+.sorella-nav__icon--menu { display: none; }
 .sorella-badge--cart { position: absolute; top: 6px; inset-inline-end: 4px; }
 
-/* Mega-menu (drops as its own wide panel, independent of dock width) */
-.nav-dock__mega {
-  position: fixed; top: calc(var(--nav-dock-height) + 20px); left: 50%;
+/* Mega-menu (drops as its own wide panel, independent of the bar) */
+.sorella-nav__mega {
+  position: fixed; top: calc(var(--nav-height-scrolled) + 12px); left: 50%;
   transform: translateX(-50%) translateY(8px);
   width: min(920px, calc(100% - 32px));
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out), visibility var(--dur-hover);
   z-index: 99;
 }
-.nav-dock--top .nav-dock__mega { top: calc(var(--nav-top-height) + var(--announcement-height, 0px) + 4px); }
-.nav-dock__item.is-open .nav-dock__mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); }
-.nav-dock__mega .blob-field { border-radius: var(--radius-lg); }
-.nav-dock__mega-inner { position: relative; padding: var(--space-xl); color: var(--color-parchment); }
-.nav-dock__mega-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-lg); }
-.nav-dock__mega-link { display: block; color: var(--color-parchment); margin-block-end: var(--space-xs); }
-.nav-dock__mega-link:hover { color: var(--color-gold); }
-.nav-dock__mega-sub { display: flex; flex-direction: column; gap: 4px; }
-.nav-dock__mega-sub a:hover { color: var(--color-gold); }
+.sorella-nav--transparent .sorella-nav__mega { top: calc(var(--nav-height-top) + var(--announcement-height, 0px) + var(--nav-top-offset, 0px) + 4px); }
+.sorella-nav__item.is-open .sorella-nav__mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); }
+.sorella-nav__mega .blob-field { border-radius: var(--radius-lg); }
+.sorella-nav__mega-inner { position: relative; padding: var(--space-xl); color: var(--color-parchment); }
+.sorella-nav__mega-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-lg); }
+.sorella-nav__mega-link { display: block; color: var(--color-parchment); margin-block-end: var(--space-xs); }
+.sorella-nav__mega-link:hover { color: var(--color-gold); }
+.sorella-nav__mega-sub { display: flex; flex-direction: column; gap: 4px; }
+.sorella-nav__mega-sub a:hover { color: var(--color-gold); }
 
 /* --------------------------------------------------------------------------
    Drawers (mobile nav, search, cart) — glass slide-in panels
@@ -254,16 +234,9 @@
    Responsive — nav → hamburger ≤ 833px (§11)
    -------------------------------------------------------------------------- */
 @media (max-width: 833px) {
-  .nav-dock__nav { display: none; }
-  .nav-dock__icon--menu { display: inline-flex; }
-  .nav-dock__icon--account { display: none; }
-  .nav-dock {
-    max-width: 100%; width: 100%; top: 0; left: 0; transform: none; border-radius: 0;
-  }
-  .nav-dock--top { top: var(--announcement-height, 0px); }
-  .nav-dock--hidden { transform: translateY(-140%); }
-  .nav-dock--docked .nav-dock__logo-full { display: block; }
-  .nav-dock--docked .nav-dock__logo-mark { display: none; }
+  .sorella-nav__nav { display: none; }
+  .sorella-nav__icon--menu { display: inline-flex; }
+  .sorella-nav__icon--account { display: none; }
 }
 
 @media (max-width: 735px) {

@@ -16,11 +16,6 @@
         "label": "Logo (full wordmark)"
       },
       {
-        "type": "image_picker",
-        "id": "logo_mark",
-        "label": "Logo mark (compact icon)"
-      },
-      {
         "type": "range",
         "id": "logo_width",
         "min": 80,
