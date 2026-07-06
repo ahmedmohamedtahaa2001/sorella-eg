@@ -184,6 +184,18 @@
         "unit": "LE",
         "label": "Free 5ml gift threshold",
         "default": 1100
+      },
+      {
+        "type": "collection",
+        "id": "gift_collection",
+        "label": "Free 5ml reward collection",
+        "info": "Products offered in the cart drawer's free-gift picker (disabled until the threshold is reached)."
+      },
+      {
+        "type": "collection",
+        "id": "cross_sell_collection",
+        "label": "Cart cross-sell collection",
+        "info": "Shown as \"You might also like\" inside the cart drawer."
       }
     ]
   },

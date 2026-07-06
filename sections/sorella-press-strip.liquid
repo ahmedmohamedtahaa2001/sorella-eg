@@ -1,0 +1,71 @@
+{%- comment -%}
+  Sorella — Press / logo strip (audit §1) — quiet authority row.
+  Logo image blocks or text blocks ("As seen in…").
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="sec sec--tight"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
+  <div class="wrap">
+    <div class="press">
+      {%- if s.heading != blank -%}<span class="press__label eyebrow">{{ s.heading }}</span>{%- endif -%}
+      <div class="press__row">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'logo' -%}
+              {%- if block.settings.image != blank -%}
+                <span class="press__item" {{ block.shopify_attributes }}>
+                  {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+                  <img class="press__logo" src="{{ block.settings.image | image_url: width: 240 }}" alt="{{ block.settings.image.alt | default: 'Press logo' | escape }}" loading="lazy" width="120" height="40">
+                  {%- if block.settings.link != blank -%}</a>{%- endif -%}
+                </span>
+              {%- endif -%}
+            {%- when 'text' -%}
+              {%- if block.settings.text != blank -%}
+                <span class="press__item press__text serif" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Press strip",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Label", "default": "As seen in" },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "press" }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Logo image" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text name",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Publication name", "default": "Vogue Arabia" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press strip",
+      "blocks": [
+        { "type": "text", "settings": { "text": "Vogue Arabia" } },
+        { "type": "text", "settings": { "text": "Cairo Scene" } },
+        { "type": "text", "settings": { "text": "Elle" } },
+        { "type": "text", "settings": { "text": "What Women Want" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

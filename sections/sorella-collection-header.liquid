@@ -1,0 +1,76 @@
+{%- comment -%}
+  Sorella — collection header. Title, description (rte), product count,
+  optional banner image. Uses the real `collection` object.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+
+  assign banner = s.banner_image
+  if banner == blank and s.use_collection_image
+    assign banner = collection.image
+  endif
+
+  assign eyebrow = s.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'Collection'
+  endif
+
+  assign count_noun = 'fragrances'
+  if collection.all_products_count == 1
+    assign count_noun = 'fragrance'
+  endif
+-%}
+<section class="sec sec--tight colhead{% if banner != blank %} colhead--banner{% endif %}">
+  <div class="wrap">
+    {%- if banner != blank -%}
+      <div class="colhead__banner">
+        <img
+          src="{{ banner | image_url: width: 2000 }}"
+          srcset="{{ banner | image_url: width: 800 }} 800w, {{ banner | image_url: width: 1400 }} 1400w, {{ banner | image_url: width: 2000 }} 2000w"
+          sizes="(max-width:1240px) 100vw, 1240px"
+          alt="{{ banner.alt | default: collection.title | escape }}"
+          width="{{ banner.width | default: 2000 }}"
+          height="{{ banner.height | default: 900 }}"
+          loading="lazy">
+        <div class="colhead__over">
+          {%- if s.show_eyebrow -%}<span class="eyebrow colhead__eyebrow">{{ eyebrow }}</span>{%- endif -%}
+          <h1 class="serif colhead__title">{{ collection.title | default: 'All fragrances' }}</h1>
+          {%- if s.show_count -%}
+            <span class="colhead__count">{{ collection.all_products_count }} {{ count_noun }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if s.show_description and collection.description != blank -%}
+        <div class="rte colhead__desc colhead__desc--under">{{ collection.description }}</div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="colhead__plain">
+        {%- if s.show_eyebrow -%}<span class="eyebrow">{{ eyebrow }}</span>{%- endif -%}
+        <h1 class="serif colhead__title">{{ collection.title | default: 'All fragrances' }}</h1>
+        {%- if s.show_description and collection.description != blank -%}
+          <div class="rte colhead__desc">{{ collection.description }}</div>
+        {%- endif -%}
+        {%- if s.show_count -%}
+          <span class="colhead__count">{{ collection.all_products_count }} {{ count_noun }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection header",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The collection" },
+    { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
+    { "type": "header", "content": "Banner" },
+    { "type": "image_picker", "id": "banner_image", "label": "Banner image", "info": "Overrides the collection image." },
+    { "type": "checkbox", "id": "use_collection_image", "label": "Fall back to collection image", "default": true }
+  ],
+  "presets": [{ "name": "Collection header" }]
+}
+{% endschema %}

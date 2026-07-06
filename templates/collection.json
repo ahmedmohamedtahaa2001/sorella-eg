@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "collection-header": {
+      "type": "sorella-collection-header",
+      "settings": {
+        "eyebrow": "The collection",
+        "show_eyebrow": true,
+        "show_description": true,
+        "show_count": true,
+        "use_collection_image": true
+      }
+    },
+    "collection-toolbar": {
+      "type": "sorella-collection-toolbar",
+      "settings": {
+        "show_filters": true,
+        "show_subnav": true
+      }
+    },
+    "collection-grid": {
+      "type": "sorella-collection-grid",
+      "settings": {
+        "products_per_page": 16,
+        "card_variant": "add",
+        "show_interrupt": true,
+        "interrupt_after": 4
+      }
+    }
+  },
+  "order": ["collection-header", "collection-toolbar", "collection-grid"]
+}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  sorella-price-anchor — PDP price triple-stack (mega audit §3.1)
+  Brand-safe anchoring: an optional designer-retail reference
+  (product.metafields.sorella.retail_price, a number in major currency units)
+  is shown struck-through as the anchor, above the Sorella price, with a
+  compare-at "Save" badge when the selected variant is on sale.
+  NEVER outputs "dupe" — anchor vs. prestige only.
+  Params:
+    product (object, required)
+    variant (object, optional) — selected variant for live price / compare-at
+    id      (string, optional) — data-price-block id for sticky-bar sync
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: product.selected_or_first_available_variant
+  assign current = v.price
+  assign compare = v.compare_at_price
+  assign retail = product.metafields.sorella.retail_price.value
+
+  assign on_sale = false
+  if compare and compare > current
+    assign on_sale = true
+  endif
+-%}
+<div class="pdp-price" data-price-block{% if id != blank %} data-price-block-id="{{ id }}"{% endif %}>
+  {%- if retail != blank -%}
+    <span class="retail" title="Comparable designer retail">{{ retail | times: 100 | money }}</span>
+  {%- endif -%}
+  <span class="now" data-pdp-price>{{ current | money }}</span>
+  {%- if on_sale -%}
+    {%- assign saved = compare | minus: current -%}
+    <s class="was">{{ compare | money }}</s>
+    <span class="save">Save {{ saved | money }}</span>
+  {%- endif -%}
+  <span class="anchor">{% if retail != blank %}Prestige performance for a fraction of designer retail{% else %}Performs like designer bottles at four times the price{% endif %}</span>
+</div>

@@ -1,0 +1,83 @@
+{%- comment -%}
+  Sorella — collection product grid. Loops `collection.products` in a .pgrid,
+  paginated by `products_per_page`. Renders each via `sorella-product-card`.
+  Inserts an optional quiz/discovery interrupt card after N products.
+  Friendly empty state when the collection (or filter) returns nothing.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign per_page = s.products_per_page | default: 12
+  assign card_variant = s.card_variant | default: 'add'
+  assign interrupt_after = s.interrupt_after
+-%}
+<section class="sec sec--tight colgrid" id="{{ section.id }}">
+  <div class="wrap">
+    {%- paginate collection.products by per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="pgrid">
+          {%- for product in collection.products -%}
+            {% render 'sorella-product-card', product: product, variant: card_variant %}
+
+            {%- if s.show_interrupt and interrupt_after > 0 and forloop.index == interrupt_after and forloop.last == false -%}
+              <a class="pcard pcard--promo colpromo" href="{{ s.interrupt_url | default: '#' }}">
+                <span class="colpromo__eyebrow">{{ s.interrupt_eyebrow | default: 'Not sure yet?' }}</span>
+                <span class="serif colpromo__title">{{ s.interrupt_title | default: 'Find your scent in 5 taps' }}</span>
+                <span class="colpromo__body">{{ s.interrupt_body | default: 'Answer a few questions and we’ll match you to your fragrance.' }}</span>
+                <span class="colpromo__cta">
+                  {{ s.interrupt_cta | default: 'Take the quiz' }}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {% render 'sorella-pagination', paginate: paginate %}
+      {%- else -%}
+        <div class="colgrid__empty">
+          <span class="eyebrow">Nothing here yet</span>
+          <h2 class="serif colgrid__emptytitle">{{ s.empty_title | default: 'No fragrances match' }}</h2>
+          <p class="colgrid__emptybody">{{ s.empty_body | default: 'Try clearing your filters, or browse the full library — there’s a scent for every mood.' }}</p>
+          <a class="btn btn--primary" href="{{ s.empty_url | default: routes.all_products_collection_url }}">{{ s.empty_cta | default: 'Shop all fragrances' }}</a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 16 },
+    {
+      "type": "select",
+      "id": "card_variant",
+      "label": "Card style",
+      "default": "add",
+      "options": [
+        { "value": "add", "label": "Add to bag (always visible)" },
+        { "value": "cta", "label": "Add + Buy now" },
+        { "value": "plus", "label": "Quick + add" },
+        { "value": "wish", "label": "Wishlist heart" },
+        { "value": "default", "label": "Reveal on hover" }
+      ]
+    },
+    { "type": "header", "content": "Discovery interrupt card" },
+    { "type": "checkbox", "id": "show_interrupt", "label": "Show quiz / discovery card", "default": true },
+    { "type": "range", "id": "interrupt_after", "label": "Insert after N products", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "text", "id": "interrupt_eyebrow", "label": "Eyebrow", "default": "Not sure yet?" },
+    { "type": "text", "id": "interrupt_title", "label": "Title", "default": "Find your scent in 5 taps" },
+    { "type": "textarea", "id": "interrupt_body", "label": "Body", "default": "Answer a few questions and we’ll match you to your fragrance." },
+    { "type": "text", "id": "interrupt_cta", "label": "Button label", "default": "Take the quiz" },
+    { "type": "url", "id": "interrupt_url", "label": "Quiz / discovery URL" },
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_title", "label": "Empty title", "default": "No fragrances match" },
+    { "type": "textarea", "id": "empty_body", "label": "Empty message", "default": "Try clearing your filters, or browse the full library — there’s a scent for every mood." },
+    { "type": "text", "id": "empty_cta", "label": "Empty button label", "default": "Shop all fragrances" },
+    { "type": "url", "id": "empty_url", "label": "Empty button URL" }
+  ],
+  "presets": [{ "name": "Collection grid" }]
+}
+{% endschema %}

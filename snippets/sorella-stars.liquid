@@ -1,0 +1,16 @@
+{%- comment -%}
+  Sorella — star rating (.stars)
+  Params:
+    rating (number, default 5) — average rating, shown in the .n span
+    count  (number, optional)  — review count, appended as "· {count} reviews"
+    size   (string, optional)  — 'lg' | 'sm' → adds .stars--{size}
+  Renders 5 ★ glyphs + <span class="n"> with the rating (and count if given).
+{%- endcomment -%}
+{%- liquid
+  assign r = rating | default: 5
+  assign klass = 'stars'
+  if size != blank
+    assign klass = klass | append: ' stars--' | append: size
+  endif
+-%}
+<span class="{{ klass }}">★★★★★{%- if r != blank or count != blank %} <span class="n">{{ r }}{% if count != blank %} · {{ count }} reviews{% endif %}</span>{% endif -%}</span>

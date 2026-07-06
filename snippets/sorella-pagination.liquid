@@ -1,0 +1,30 @@
+{%- comment -%}
+  Sorella — light pagination (.pag). Numbered + prev/next.
+  Params:
+    paginate (object, required) — Shopify paginate object from {% paginate %}
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="pag" role="navigation" aria-label="Pagination">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="pag__nav" rel="prev" aria-label="Previous page">&larr;</a>
+    {%- else -%}
+      <span class="pag__nav pag__nav--off" aria-hidden="true">&larr;</span>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a href="{{ part.url }}" aria-label="Page {{ part.title }}">{{ part.title }}</a>
+      {%- elsif part.title == paginate.current_page -%}
+        <a class="on" aria-current="page">{{ part.title }}</a>
+      {%- else -%}
+        <span class="pag__gap">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="pag__nav" rel="next" aria-label="Next page">&rarr;</a>
+    {%- else -%}
+      <span class="pag__nav pag__nav--off" aria-hidden="true">&rarr;</span>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

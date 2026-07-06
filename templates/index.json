@@ -1,4 +1,90 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero": { "type": "sorella-hero", "settings": {} },
+    "marquee": {
+      "type": "sorella-trust-marquee",
+      "blocks": {
+        "p1": { "type": "phrase", "settings": { "text": "Made fresh in Egypt" } },
+        "p2": { "type": "phrase", "settings": { "text": "True to the original" } },
+        "p3": { "type": "phrase", "settings": { "text": "Free 5ml over LE 1,100" } },
+        "p4": { "type": "phrase", "settings": { "text": "Try it first — LE 85" } },
+        "p5": { "type": "phrase", "settings": { "text": "Stays on all evening" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4", "p5"]
+    },
+    "carousel": { "type": "sorella-bestseller-carousel", "settings": {} },
+    "brand_story": { "type": "sorella-brand-story", "settings": {} },
+    "worlds": {
+      "type": "sorella-scent-worlds",
+      "blocks": {
+        "w1": { "type": "world", "settings": { "kicker": "Gourmand", "title": "Dessert Table", "scheme": "1" } },
+        "w2": { "type": "world", "settings": { "kicker": "Solar · Beachy", "title": "Sahel Summer", "scheme": "2" } },
+        "w3": { "type": "world", "settings": { "kicker": "Oriental · Evening", "title": "Golden Hour", "scheme": "3" } },
+        "w4": { "type": "world", "settings": { "kicker": "Musks · Oils", "title": "Second Skin", "scheme": "4" } }
+      },
+      "block_order": ["w1", "w2", "w3", "w4"],
+      "settings": {}
+    },
+    "bundles": {
+      "type": "sorella-bundles",
+      "blocks": {
+        "b1": { "type": "bundle", "settings": {} },
+        "b2": { "type": "bundle", "settings": {} },
+        "b3": { "type": "bundle", "settings": {} }
+      },
+      "block_order": ["b1", "b2", "b3"],
+      "settings": {}
+    },
+    "spotlight": {
+      "type": "sorella-spotlight",
+      "blocks": {
+        "s1": { "type": "size", "settings": { "label": "5ml · LE 85", "selected": false } },
+        "s2": { "type": "size", "settings": { "label": "50ml · LE 850", "selected": true } },
+        "s3": { "type": "size", "settings": { "label": "Bundle · LE 2,200", "selected": false } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {}
+    },
+    "reviews": {
+      "type": "sorella-reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "quote": "Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.", "author": "Farida M.", "size": "50ml" } },
+        "r2": { "type": "review", "settings": { "quote": "El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.", "author": "Nour A.", "size": "Bundle" } },
+        "r3": { "type": "review", "settings": { "quote": "Ordered the 5ml tester first, fell in love, came back for the 50ml. Wsel fe 3 ayam.", "author": "Mariam S.", "size": "5ml → 50ml" } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "quiz": {
+      "type": "sorella-quiz-teaser",
+      "blocks": {
+        "c1": { "type": "chip", "settings": { "emoji": "🌊", "label": "Fresh & clean" } },
+        "c2": { "type": "chip", "settings": { "emoji": "🌸", "label": "Soft florals" } },
+        "c3": { "type": "chip", "settings": { "emoji": "🍯", "label": "Warm gourmand" } },
+        "c4": { "type": "chip", "settings": { "emoji": "🌲", "label": "Woody & deep" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"]
+    },
+    "trust": {
+      "type": "sorella-trust-bar",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "icon": "shipping", "label": "Fast shipping", "subtext": "Ships in 2–4 days" } },
+        "t2": { "type": "item", "settings": { "icon": "returns", "label": "Easy exchange", "subtext": "7-day unopened exchange" } },
+        "t3": { "type": "item", "settings": { "icon": "egypt", "label": "Made in Egypt", "subtext": "Blended fresh, poured to order" } },
+        "t4": { "type": "item", "settings": { "icon": "longevity", "label": "Lasts all day", "subtext": "Oil-rich, into the evening" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"]
+    },
+    "faq": {
+      "type": "sorella-faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How long does the scent last?", "answer": "<p>Our oil-rich blends are built to last — most customers report all-day wear on skin and days on clothing.</p>", "open": true } },
+        "q2": { "type": "qa", "settings": { "question": "Can I try a scent before buying the full size?", "answer": "<p>Yes — every full-size fragrance has a 5ml tester for LE 85. Try it first, commit only when you love it.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "How fast is shipping?", "answer": "<p>Orders ship from Egypt in 2–4 days, blended fresh and poured to order.</p>" } },
+        "q4": { "type": "qa", "settings": { "question": "What is your returns / exchange policy?", "answer": "<p>Because fragrance is personal, we can't accept opened returns — which is why we offer the 5ml tester first. Unopened items can be exchanged within 7 days.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    },
+    "newsletter": { "type": "sorella-newsletter", "settings": {} }
+  },
+  "order": ["hero", "marquee", "carousel", "brand_story", "worlds", "bundles", "spotlight", "reviews", "quiz", "trust", "faq", "newsletter"]
 }

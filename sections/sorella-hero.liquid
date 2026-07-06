@@ -1,0 +1,68 @@
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__copy">
+      {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
+      {%- if s.heading != blank -%}<h1>{{ s.heading }}</h1>{%- endif -%}
+      {%- if s.subtext != blank -%}<p class="hero__sub">{{ s.subtext }}</p>{%- endif -%}
+      {%- if s.primary_label != blank or s.secondary_label != blank -%}
+        <div class="hero__cta">
+          {%- if s.primary_label != blank -%}<a class="btn btn--primary" href="{{ s.primary_link | default: '#' }}">{{ s.primary_label }}</a>{%- endif -%}
+          {%- if s.secondary_label != blank -%}<a class="btn btn--ghost" href="{{ s.secondary_link | default: '#' }}">{{ s.secondary_label }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if s.meta_1 != blank or s.meta_2 != blank or s.meta_3 != blank -%}
+        <div class="hero__meta">
+          {%- if s.meta_1 != blank -%}<span>{{ s.meta_1 }}</span>{%- endif -%}
+          {%- if s.meta_2 != blank -%}<span>{{ s.meta_2 }}</span>{%- endif -%}
+          {%- if s.meta_3 != blank -%}<span>{{ s.meta_3 }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="hero__art">
+      {%- if s.image != blank -%}
+        {{ s.image | image_url: width: 1100 | image_tag: class: 'hero__img', loading: 'eager', sizes: '(max-width: 820px) 100vw, 48vw', widths: '480, 760, 1100, 1400' }}
+      {%- else -%}
+        <div class="hero__bottle"></div>
+      {%- endif -%}
+      {%- if s.rating != blank -%}
+        <div class="hero__price"><span class="stars">★★★★★ <span class="n">{{ s.rating }}</span></span>{% if s.reviews_text != blank %} · <b>{{ s.reviews_text }}</b>{% endif %}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if s.image != blank -%}
+<style>
+  #shopify-section-{{ section.id }} .hero__art{ overflow:hidden; }
+  #shopify-section-{{ section.id }} .hero__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made fresh in Egypt" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "The scent she<br>remembers you by." },
+    { "type": "textarea", "id": "subtext", "label": "Subtext", "default": "Oil-rich fragrance, blended in small batches and poured to order — true to the original, built to last into the evening." },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Shop bestsellers" },
+    { "type": "url", "id": "primary_link", "label": "Primary link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "Find your scent" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary link" },
+    { "type": "header", "content": "Value props" },
+    { "type": "text", "id": "meta_1", "label": "Prop 1", "default": "Try any scent for LE 85" },
+    { "type": "text", "id": "meta_2", "label": "Prop 2", "default": "Free 5ml over LE 1,100" },
+    { "type": "text", "id": "meta_3", "label": "Prop 3", "default": "Ships in 2–4 days" },
+    { "type": "header", "content": "Visual" },
+    { "type": "image_picker", "id": "image", "label": "Product image", "info": "Optional — falls back to the bottle placeholder." },
+    { "type": "text", "id": "rating", "label": "Rating", "default": "4.8" },
+    { "type": "text", "id": "reviews_text", "label": "Reviews label", "default": "1,288 reviews" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+{%- liquid
+  assign lead = section.settings.text_bold
+  assign body = section.settings.text
+  assign link = section.settings.link
+-%}
+{%- if lead != blank or body != blank -%}
+  {%- capture inner -%}{%- if lead != blank -%}<b>{{ lead }}</b> {% endif %}{{ body }}{%- endcapture -%}
+  {%- if link != blank -%}
+    <a class="announce" href="{{ link }}">{{ inner }}</a>
+  {%- else -%}
+    <div class="announce">{{ inner }}</div>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "tag": "aside",
+  "class": "announce-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "text_bold",
+      "label": "Bold lead",
+      "default": "Free 5ml perfume"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Message",
+      "default": "on orders over LE 1,100 — pick it in your cart"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (optional)"
+    }
+  ]
+}
+{% endschema %}

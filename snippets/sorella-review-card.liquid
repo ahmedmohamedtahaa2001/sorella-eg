@@ -1,0 +1,86 @@
+{%- comment -%}
+  Sorella — review card (.review)
+  Params:
+    quote    (string, required) — the review body; rendered dir="auto" (raw
+             Franco-Arabic kept verbatim, never transliterated)
+    author   (string, required) — reviewer name
+    verified (bool, optional)   — shows "✓ Verified buyer" in the byline
+    rating   (number, default 5)
+    date     (string, optional) — e.g. "Mar 2026"
+    size     (string, optional) — e.g. "50ml", "Bundle", "5ml → 50ml"
+    variant  ('default' | 'product', default 'default')
+    product  (object) — required for 'product'; renders the shoppable
+             .review__shopcard strip (thumb · name · 50ml · {price} · ★{rating} · Shop)
+    longevity  (number 1-5, optional) — renders a .meterk bar
+    projection (number 1-5, optional) — renders a .meterk bar
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: 'default'
+  assign r = rating | default: 5
+  assign initial = author | strip | slice: 0 | upcase
+
+  assign vb = ''
+  if verified
+    assign vb = '✓ Verified buyer'
+  endif
+  if size != blank
+    if vb != blank
+      assign vb = vb | append: ' · ' | append: size
+    else
+      assign vb = size
+    endif
+  endif
+  if date != blank
+    if vb != blank
+      assign vb = vb | append: ' · ' | append: date
+    else
+      assign vb = date
+    endif
+  endif
+
+  assign rclass = 'review'
+  if v == 'product'
+    assign rclass = 'review review--product'
+  endif
+-%}
+<div class="{{ rclass }}">
+  {% render 'sorella-stars', rating: r %}
+  <p class="review__q" dir="auto">{{ quote }}</p>
+  {%- if longevity != blank or projection != blank -%}
+    <div class="meters">
+      {%- if longevity != blank -%}
+        <div class="meterk"><span>Longevity</span><span class="mtrack"><span class="mfill" style="width:{{ longevity | times: 20 }}%"></span></span></div>
+      {%- endif -%}
+      {%- if projection != blank -%}
+        <div class="meterk"><span>Projection</span><span class="mtrack"><span class="mfill" style="width:{{ projection | times: 20 }}%"></span></span></div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="review__by">
+    <span class="review__av">{{ initial }}</span>
+    <div>
+      <div class="review__n">{{ author }}</div>
+      {%- if vb != blank -%}<span class="review__vb">{{ vb }}</span>{%- endif -%}
+    </div>
+  </div>
+  {%- if v == 'product' and product != blank -%}
+    {%- liquid
+      assign prating = product.metafields.sorella.rating.value | default: r
+    -%}
+    <a class="review__shopcard" href="{{ product.url }}">
+      <span class="review__shopcard-thumb">
+        {%- if product.featured_image -%}
+          <img src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.title | escape }}" width="48" height="58" loading="lazy">
+        {%- else -%}
+          <span class="b"></span>
+        {%- endif -%}
+      </span>
+      <span class="review__shopcard-info">
+        <span class="review__shopcard-k">Reviewed</span>
+        <span class="review__shopcard-name">{{ product.title }}</span>
+        <span class="review__shopcard-meta">{% if size != blank %}{{ size }}{% else %}50ml{% endif %} · {{ product.price | money }} · ★ {{ prating }}</span>
+      </span>
+      <span class="review__shopcard-btn">Shop</span>
+    </a>
+  {%- endif -%}
+</div>

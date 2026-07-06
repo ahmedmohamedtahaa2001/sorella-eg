@@ -1,0 +1,11 @@
+{%- comment -%}
+  Sorella — badge / tag (.tag)
+  Params:
+    label (string, required) — the badge text
+    style (string, default 'out') — 'solid' | 'out' | 'muted'
+  Emits: <span class="tag tag--{style}">{label}</span>
+{%- endcomment -%}
+{%- liquid
+  assign s = style | default: 'out'
+-%}
+{%- if label != blank -%}<span class="tag tag--{{ s }}">{{ label }}</span>{%- endif -%}

@@ -1,0 +1,79 @@
+{%- comment -%}
+  Sorella — sticky add-to-bag bar (.pdp-stickybar). Size pills mirror the main
+  ladder; price + hidden variant id stay in sync with the selected variant
+  (audit §3.7). Progressive: the form submits the selected variant without JS.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign cv = p.selected_or_first_available_variant
+  assign rating = p.metafields.sorella.rating
+-%}
+<div class="pdp-stickybar">
+  <div class="pdp-stickybar__in">
+    <div class="pdp-stickybar__id">
+      <span class="pdp-stickybar__thumb"{% if p.featured_image %} style="background-image:url({{ p.featured_image | image_url: width: 120 }});background-size:cover;background-position:center"{% endif %}></span>
+      <div>
+        <div class="pdp-stickybar__name">{{ p.title }}</div>
+        <div class="pdp-stickybar__meta">{% if rating != blank %}★ {{ rating }} · {% endif %}{{ p.metafields.sorella.character.value | default: p.type }}</div>
+      </div>
+    </div>
+
+    {%- if p.variants.size > 1 -%}
+      <div class="pdp-stickybar__sizes" data-sticky-sizes>
+        {%- for variant in p.variants -%}
+          <button type="button" class="size{% if variant.id == cv.id %} on{% endif %}" data-sticky-size data-vid="{{ variant.id }}" data-price="{{ variant.price | money }}"{% unless variant.available %} disabled{% endunless %}>{{ variant.title }}</button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <span class="pdp-stickybar__price" data-sticky-price>{{ cv.price | money }}</span>
+
+    <form action="{{ routes.cart_add_url }}" method="post" class="pdp-stickybar__form">
+      <input type="hidden" name="id" value="{{ cv.id }}" data-sticky-id>
+      {%- if p.available -%}
+        <button type="submit" name="add" class="btn btn--primary">Add to bag</button>
+      {%- else -%}
+        <button type="button" class="btn btn--ghost" disabled>Sold out</button>
+      {%- endif -%}
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  var bar = document.querySelector('[data-sticky-sizes]');
+  var stickyPrice = document.querySelector('[data-sticky-price]');
+  var stickyId = document.querySelector('[data-sticky-id]');
+  var mainForm = document.querySelector('[data-pdp-form]');
+  function sync(vid, price){
+    if(stickyId) stickyId.value = vid;
+    if(price && stickyPrice) stickyPrice.textContent = price;
+    if(bar){ bar.querySelectorAll('[data-sticky-size]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-vid') === String(vid)); }); }
+    var addBtn = mainForm && mainForm.querySelector('button[name="add"]');
+    if(addBtn && price){ addBtn.textContent = 'Add to bag — ' + price; }
+  }
+  if(bar){
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('[data-sticky-size]'); if(!b) return;
+      sync(b.getAttribute('data-vid'), b.getAttribute('data-price'));
+      var radio = mainForm && mainForm.querySelector('input[name="id"][value="' + b.getAttribute('data-vid') + '"]');
+      if(radio){ radio.checked = true; }
+    });
+  }
+  if(mainForm){
+    mainForm.addEventListener('change', function(e){
+      var r = e.target.closest('input[name="id"]'); if(!r) return;
+      sync(r.value, r.getAttribute('data-variant-price'));
+    });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product — sticky bar",
+  "tag": "section",
+  "settings": [],
+  "presets": [{ "name": "Product — sticky bar" }]
+}
+{% endschema %}

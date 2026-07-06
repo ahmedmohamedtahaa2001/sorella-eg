@@ -1,0 +1,161 @@
+{%- comment -%}
+  Sorella — product card (.pcard) — real Shopify product data
+  Params:
+    product (object, required)
+    variant (string, default 'add') — one of:
+        'default'  Add-to-bag reveals on hover (.pcard__add)
+        'add'      single visible Add to bag (.pcard__actions)
+        'cta'      Add to bag + Buy it now
+        'plus'     round "+" quick-add on the price row (.pcard__plus)
+        'soldout'  desaturated, "Notify me" (.pcard--soldout)
+        'compact'  dense grid tile
+        'row'      horizontal list / cart upsell
+        'overlay'  editorial, copy over the image
+        'swatch'   size pills (.pcard__sizes) + Add to bag
+        'wish'     wishlist heart (.pcard__wish) + Add to bag
+    badge   (string, optional) — overrides the corner tag
+  Data: featured_image, title, price/compare_at_price, url, availability,
+        notes (metafields.sorella.notes → else first 3 tags), inspired-by,
+        rating (metafields.sorella.rating / review_count).
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: 'add'
+
+  assign pclass = 'pcard'
+  unless v == 'default'
+    assign pclass = pclass | append: ' pcard--' | append: v
+  endunless
+
+  comment
+    gradient backdrop behind the image — cycle m1..m4 by product id
+  endcomment
+  assign mgrad = product.id | modulo: 4 | plus: 1
+
+  assign img = product.featured_image
+  assign iw = 640
+  assign ih = 800
+  if img
+    assign ih = iw | divided_by: img.aspect_ratio | round
+  endif
+
+  assign notes = product.metafields.sorella.notes.value
+  if notes == blank
+    assign notes = product.tags | slice: 0, 3 | join: ' · '
+  endif
+
+  assign rating = product.metafields.sorella.rating
+  assign review_count = product.metafields.sorella.review_count
+
+  assign vid = product.selected_or_first_available_variant.id
+  assign avail = product.available
+
+  assign on_sale = false
+  if product.compare_at_price != blank and product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  comment -- sold-out state: explicit variant OR out of stock -- endcomment
+  assign is_soldout = false
+  if v == 'soldout' or avail == false
+    assign is_soldout = true
+  endif
+
+  comment -- which variants render the .pcard__actions block -- endcomment
+  assign has_actions = false
+  if v == 'add' or v == 'cta' or v == 'swatch' or v == 'wish' or v == 'soldout'
+    assign has_actions = true
+  endif
+-%}
+<article class="{{ pclass }}">
+  <div class="pcard__media pcard__m{{ mgrad }}">
+    {%- if badge != blank -%}
+      <div class="pcard__tags"><span class="tag tag--solid">{{ badge }}</span></div>
+    {%- elsif is_soldout -%}
+      <div class="pcard__tags"><span class="tag tag--muted">Sold out</span></div>
+    {%- elsif on_sale -%}
+      <div class="pcard__tags"><span class="tag tag--solid">Sale</span></div>
+    {%- endif -%}
+
+    <a href="{{ product.url }}" class="pcard__mediaLink" aria-label="{{ product.title | escape }}">
+      {%- if img -%}
+        <img src="{{ img | image_url: width: iw }}" alt="{{ img.alt | default: product.title | escape }}" width="{{ iw }}" height="{{ ih }}" loading="lazy">
+      {%- else -%}
+        <div class="b"></div>
+      {%- endif -%}
+    </a>
+
+    {%- if v == 'wish' -%}
+      <button type="button" class="pcard__wish" aria-label="Save {{ product.title | escape }} to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button>
+    {%- endif -%}
+
+    {%- if v == 'default' and is_soldout == false -%}
+      <div class="pcard__add">
+        <form action="{{ routes.cart_add_url }}" method="post">
+          <input type="hidden" name="id" value="{{ vid }}">
+          <button type="submit" name="add" class="btn btn--primary btn--sm btn--full">Add to bag · {{ product.price | money }}</button>
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="pcard__body">
+    {%- unless v == 'compact' -%}
+      {%- if notes != blank -%}<span class="pcard__notes">{{ notes }}</span>{%- endif -%}
+    {%- endunless -%}
+
+    <h3 class="pcard__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+
+    {%- unless v == 'compact' or v == 'overlay' -%}
+      {% render 'sorella-inspired-by', product: product %}
+    {%- endunless -%}
+
+    {%- if v == 'swatch' -%}
+      <div class="pcard__sizes"><button type="button">5ml</button><button type="button" class="on">50ml</button><button type="button">Bundle</button></div>
+    {%- endif -%}
+
+    {%- comment -%} standalone rating (plus variant sits it above the price row) {%- endcomment -%}
+    {%- if v == 'plus' -%}
+      {% render 'sorella-stars', rating: rating, count: review_count %}
+    {%- endif -%}
+
+    <div class="pcard__row">
+      {%- if v == 'plus' -%}
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+        {%- if is_soldout == false -%}
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ vid }}">
+            <button type="submit" name="add" class="pcard__plus" aria-label="Add {{ product.title | escape }} to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </form>
+        {%- endif -%}
+      {%- elsif v == 'row' -%}
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+        {%- if is_soldout -%}
+          <a href="{{ product.url }}" class="btn btn--ghost btn--sm">View</a>
+        {%- else -%}
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ vid }}">
+            <button type="submit" name="add" class="btn btn--primary btn--sm">Add to bag</button>
+          </form>
+        {%- endif -%}
+      {%- elsif v == 'compact' or v == 'swatch' -%}
+        {% render 'sorella-stars', rating: rating, size: 'sm' %}
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+      {%- else -%}
+        {% render 'sorella-stars', rating: rating, count: review_count %}
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if has_actions -%}
+      {%- if is_soldout -%}
+        <div class="pcard__actions"><button type="button" class="btn btn--ghost btn--full">✉ Notify me</button></div>
+      {%- else -%}
+        <form action="{{ routes.cart_add_url }}" method="post" class="pcard__actions">
+          <input type="hidden" name="id" value="{{ vid }}">
+          <button type="submit" name="add" class="btn btn--primary btn--full">Add to bag</button>
+          {%- if v == 'cta' -%}<button type="submit" name="checkout" class="btn btn--ghost btn--full">Buy it now</button>{%- endif -%}
+        </form>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</article>

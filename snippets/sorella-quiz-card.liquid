@@ -1,0 +1,26 @@
+{%- comment -%}
+  Sorella — collection-grid quiz interrupt card (.quizcard)
+  Matches the .pcard footprint so it drops straight into a .pgrid after ~4 products.
+  Params:
+    eyebrow (string) — small kicker, default "60-second quiz"
+    heading (string) — default "Not sure where to start?"
+    text    (string) — supporting line
+    label   (string) — button label, default "Take the scent quiz"
+    url     (string) — quiz / discovery destination, default routes.all_products_collection_url
+{%- endcomment -%}
+{%- liquid
+  assign qeyebrow = eyebrow | default: '60-second quiz'
+  assign qheading = heading | default: 'Not sure where to start?'
+  assign qlabel = label | default: 'Take the scent quiz'
+  assign qurl = url | default: routes.all_products_collection_url
+-%}
+<article class="pcard quizcard">
+  <a class="quizcard__inner" href="{{ qurl }}">
+    <span class="eyebrow quizcard__eyebrow">{{ qeyebrow }}</span>
+    <h3 class="quizcard__heading serif">{{ qheading }}</h3>
+    {%- if text != blank -%}<p class="quizcard__text">{{ text }}</p>{%- endif -%}
+    <span class="link-arrow quizcard__cta">{{ qlabel }}
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </a>
+</article>

@@ -1,0 +1,32 @@
+{%- comment -%}
+  Sorella — "Composed in three acts" notes pyramid (.pyramid). Each act reads
+  from metafields sorella.notes_top / notes_heart / notes_base. Falls back to
+  prototype defaults so the pyramid always renders.
+{%- endcomment -%}
+{%- liquid
+  assign top = product.metafields.sorella.notes_top.value | default: 'Saffron, bitter almond'
+  assign heart = product.metafields.sorella.notes_heart.value | default: 'Egyptian jasmine, cedar'
+  assign base = product.metafields.sorella.notes_base.value | default: 'Amberwood, fir resin, oud'
+-%}
+<div class="pdp">
+  <section class="pdp-sec">
+    <h2 class="pdp-sec__h">{{ section.settings.heading | default: 'Composed in three acts' }}</h2>
+    <div class="pyramid">
+      <div class="pyr pyr--top"><span class="pyr__act">Act I · Opening</span><span class="pyr__tier">Top notes</span><p class="pyr__notes">{{ top }}</p></div>
+      <div class="pyr pyr--heart"><span class="pyr__act">Act II · The heart</span><span class="pyr__tier">Heart notes</span><p class="pyr__notes">{{ heart }}</p></div>
+      <div class="pyr pyr--base"><span class="pyr__act">Act III · Dry-down</span><span class="pyr__tier">Base notes</span><p class="pyr__notes">{{ base }}</p></div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Product — notes",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Composed in three acts" },
+    { "type": "paragraph", "content": "Notes come from metafields sorella.notes_top / notes_heart / notes_base." }
+  ],
+  "presets": [{ "name": "Product — notes" }]
+}
+{% endschema %}

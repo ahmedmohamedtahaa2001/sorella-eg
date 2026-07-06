@@ -1,0 +1,81 @@
+/* ==========================================================================
+   Sorella UI Kit — extra component styles (light store aesthetic)
+   Loaded AFTER store.css; reuses its tokens (--ink, --accent, --line…).
+   Fills in every component the dark gallery shows, styled to match the store.
+   ========================================================================== */
+
+/* ATC microcopy + groupings */
+.atc-note{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);margin:0;}
+.atc-note .g{color:var(--accent);font-size:11px;}
+.atc-stack{display:flex;flex-direction:column;gap:9px;width:230px;}
+.atc-price-row{justify-content:space-between;padding-inline:22px;}
+.atc-price-row .p{opacity:.85;font-weight:600;font-variant-numeric:tabular-nums;}
+.btn.is-disabled{opacity:.5;pointer-events:none;}
+
+/* histogram */
+.hist{display:flex;flex-direction:column;gap:6px;min-width:230px;}
+.hist-row{display:grid;grid-template-columns:26px 1fr 36px;align-items:center;gap:10px;font-size:12px;color:var(--ink-2);}
+.htrack{height:6px;border-radius:var(--pill);background:rgba(0,0,0,.08);overflow:hidden;}
+.hfill{display:block;height:100%;background:var(--accent);}
+.hn{text-align:right;font-variant-numeric:tabular-nums;}
+
+/* attribute meters */
+.meterk{display:grid;grid-template-columns:84px 1fr;align-items:center;gap:12px;}
+.meterk>span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);}
+.mtrack{height:4px;border-radius:var(--pill);background:rgba(0,0,0,.08);overflow:hidden;}
+.mfill{display:block;height:100%;background:var(--accent);}
+
+/* star bar + sizes */
+.starbar{display:inline-flex;gap:3px;}
+.starbar i{width:20px;height:4px;border-radius:var(--pill);background:rgba(0,0,0,.12);}
+.starbar i.on{background:var(--accent);}
+.stars--lg{font-size:18px;}
+.stars--sm{font-size:11px;}
+
+/* badges */
+.tag--muted{background:transparent;color:var(--muted);border:1px solid var(--line-2);}
+.cart-badge{min-width:20px;height:20px;padding:0 6px;border-radius:var(--pill);background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:inline-grid;place-items:center;}
+
+/* inspired-by variants (pill / seal / disclaimer) */
+.ibp{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--pill);background:rgba(0,0,0,.05);border:1px solid var(--line-2);font-size:12px;font-weight:600;color:var(--ink);}
+.ibp .g{color:var(--accent);font-size:9px;}
+.ibp--solid{background:var(--accent);color:#fff;border-color:var(--accent);}
+.ibp--solid .g{color:#fff;}
+.ib-stamp{display:inline-flex;padding:2px;border:1px solid rgba(0,0,0,.4);border-radius:7px;}
+.ib-stamp i{display:inline-flex;padding:7px 12px;border:1px solid var(--line-2);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-style:normal;color:var(--ink);}
+.ib-disc{font-size:11px;color:var(--muted);line-height:1.45;max-width:54ch;}
+
+/* form fields + states */
+.field{display:flex;flex-direction:column;gap:7px;width:230px;}
+.field label{font-size:13px;font-weight:600;}
+.field input{padding:12px 16px;font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:12px;}
+.field input::placeholder{color:var(--muted);}
+.field input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;}
+.field .msg{font-size:12px;color:var(--ink-2);}
+.field--error input{border-color:var(--accent);}
+.field--success input{border-color:var(--muted);}
+
+/* pagination */
+.pag{display:inline-flex;align-items:center;gap:8px;}
+.pag a{min-width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--pill);border:1px solid transparent;font-weight:600;color:var(--ink);cursor:pointer;}
+.pag a:hover{border-color:var(--line-2);}
+.pag a.on{background:var(--accent);color:#fff;}
+.pag--dots a{min-width:10px;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(0,0,0,.18);border:0;}
+.pag--dots a.on{background:var(--accent);}
+
+/* social variants */
+.socials{display:inline-flex;gap:10px;}
+.socials a{width:42px;height:42px;border:1px solid var(--line-2);border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--ink);transition:.2s;}
+.socials a:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.socials--filled a{background:rgba(0,0,0,.05);border-color:transparent;}
+
+/* glass panel */
+.glasskit{background:rgba(255,255,255,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 30px rgba(0,0,0,.08);max-width:320px;}
+
+/* empty state */
+.empty{text-align:center;padding:34px 24px;display:flex;flex-direction:column;gap:10px;align-items:center;background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);max-width:340px;}
+.empty__ic{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.05);display:grid;place-items:center;font-size:22px;}
+
+/* small quantity variant */
+.qty--sm button{width:36px;height:42px;font-size:16px;}
+.qty--sm span{min-width:26px;}

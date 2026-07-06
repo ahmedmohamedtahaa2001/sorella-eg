@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorella — UI Kit</title>
+<meta name="description" content="Sorella's full ecommerce component kit — every component and variant, shown in the real store style.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="store.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  .kit-wrap{max-width:1240px;margin-inline:auto;padding-inline:32px;}
+  .kit-top{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(244,243,241,.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:60;}
+  .kit-top .brand{font-family:var(--font-display);font-size:22px;letter-spacing:.22em;text-transform:uppercase;}
+  .kit-top nav{display:flex;gap:20px;flex-wrap:wrap;}
+  .kit-top nav a{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);}
+  .kit-top nav a:hover{color:var(--ink);}
+  .kit-hero{padding:64px 0 12px;}
+  .kit-hero h1{font-family:var(--font-display);font-weight:400;font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-.02em;margin:14px 0 16px;}
+  .kit-hero p{color:var(--ink-2);max-width:56ch;font-size:18px;line-height:1.6;}
+  .kit-sec{padding-block:clamp(44px,5.5vw,72px);border-top:1px solid var(--line);}
+  .kit-sec__h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;}
+  .kit-sec__h h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.05;letter-spacing:-.02em;}
+  .kit-sec__h .lead{color:var(--ink-2);max-width:40ch;font-size:14px;}
+  .kit-row{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
+  .kit-item{display:flex;flex-direction:column;gap:11px;}
+  .kit-cap{font-size:12px;color:var(--muted);letter-spacing:.01em;}
+  .kit-cap b{color:var(--ink);font-weight:600;}
+  .kit-cap code{font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-2);}
+  .kit-panel{background:var(--surface);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm);}
+  .kit-swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;}
+  .kit-sw{border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);background:var(--surface);}
+  .kit-sw i{display:block;height:56px;}
+  .kit-sw div{padding:9px 12px;}
+  .kit-sw b{display:block;font-size:12px;color:var(--ink);font-weight:600;}
+  .kit-sw span{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="announce"><b>UI Kit</b> · every Sorella storefront component &amp; variant — assembled live at <a href="index-light.html" style="color:#fff;text-decoration:underline">index-light.html</a></div>
+
+<div class="kit-wrap">
+  <div class="kit-top">
+    <span class="brand">Sorella</span>
+    <nav><a href="#cards">Cards</a><a href="#atc">Add to cart</a><a href="#buybox">Buy box</a><a href="#reviews">Reviews</a><a href="#inspired">Inspired-by</a><a href="#tiles">Tiles</a><a href="#atoms">Atoms</a><a href="#palette">Palette</a></nav>
+    <a class="btn btn--primary btn--sm" href="index-light.html">View storefront →</a>
+  </div>
+
+  <header class="kit-hero">
+    <span class="eyebrow">Ecommerce UI kit · complete</span>
+    <h1>Every piece that<br>makes the store.</h1>
+    <p>The full component set — merchandised, not documented. Same warm paper, Fraunces display, and Pure-Black accent as the storefront. Everything monochrome and token-driven.</p>
+  </header>
+
+  <!-- PRODUCT CARDS -->
+  <section class="kit-sec" id="cards">
+    <div class="kit-sec__h"><div><span class="eyebrow">Merchandising</span><h2>Product cards</h2></div><p class="lead">Reveal-on-hover for dense grids · always-visible actions for conversion · sale state.</p></div>
+    <div class="kit-row">
+      <div class="kit-item" style="width:250px">
+        <article class="pcard"><div class="pcard__media pcard__m1"><div class="pcard__tags"><span class="tag tag--solid">Bestseller</span></div><div class="b"></div><div class="pcard__add"><button class="btn btn--primary btn--sm btn--full">Add to bag · LE 850</button></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Saffron · Amber · Cedar</span><h3 class="pcard__name">Bordeaux</h3><span class="ib">True to the original</span><div class="pcard__row"><span class="stars">★★★★★ <span class="n">4.9</span></span><span class="pcard__price">LE 850</span></div></div></article>
+        <span class="kit-cap"><b>Default</b> — Add to bag on hover</span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--plus"><div class="pcard__media pcard__m2"><div class="pcard__tags"><span class="tag tag--out">New</span></div><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Jasmine · Vanilla · Musk</span><h3 class="pcard__name">Baklava</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.8</span></span><div class="pcard__row"><span class="pcard__price">LE 780</span><button class="pcard__plus" aria-label="Add Baklava to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article>
+        <span class="kit-cap"><b>Quick-add “+”</b> — <code>.pcard--plus</code></span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--add"><div class="pcard__media pcard__m3"><div class="pcard__tags"><span class="tag tag--out">Low stock</span></div><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Oud · Rose · Leather</span><h3 class="pcard__name">ذهب · Dahab</h3><span class="ib">A Sorella Original</span><div class="pcard__row"><span class="stars">★★★★★ <span class="n">5.0</span></span><span class="pcard__price">LE 920</span></div>
+            <div class="pcard__actions"><button class="btn btn--primary btn--full">Add to bag</button></div></div></article>
+        <span class="kit-cap"><b>Add to bag visible</b> — <code>.pcard--add</code></span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--cta"><div class="pcard__media pcard__m4"><div class="pcard__tags"><span class="tag tag--solid">Bestseller</span></div><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Fig · Coconut · Sandalwood</span><h3 class="pcard__name">Sahel</h3><span class="ib">True to the original</span><div class="pcard__row"><span class="stars">★★★★★ <span class="n">4.7</span></span><span class="pcard__price">LE 690</span></div>
+            <div class="pcard__actions"><button class="btn btn--primary btn--full">Add to bag</button><button class="btn btn--ghost btn--full">Buy it now</button></div></div></article>
+        <span class="kit-cap"><b>Both visible</b> — <code>.pcard--cta</code></span>
+      </div>
+    </div>
+
+    <div class="kit-sec__h" style="margin-top:48px;margin-bottom:24px"><div><span class="eyebrow">More layouts &amp; states</span><h2 style="font-size:28px">Six more variants</h2></div></div>
+    <div class="kit-row">
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--soldout"><div class="pcard__media pcard__m1"><div class="pcard__tags"><span class="tag tag--muted">Sold out</span></div><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Amber · Incense · Oud</span><h3 class="pcard__name">Bordeaux Noir</h3><span class="ib">True to the original</span><div class="pcard__row"><span class="stars">★★★★★ <span class="n">4.9</span></span><span class="pcard__price">LE 990</span></div>
+            <div class="pcard__actions"><button class="btn btn--ghost btn--full">✉ Notify me</button></div></div></article>
+        <span class="kit-cap"><b>Sold out</b> — <code>.pcard--soldout</code></span>
+      </div>
+      <div class="kit-item" style="width:190px">
+        <article class="pcard pcard--compact"><div class="pcard__media pcard__m2"><div class="b"></div></div>
+          <div class="pcard__body"><h3 class="pcard__name">White Musk</h3><div class="pcard__row"><span class="stars stars--sm">★★★★★</span><span class="pcard__price">LE 420</span></div></div></article>
+        <span class="kit-cap"><b>Compact</b> — <code>.pcard--compact</code></span>
+      </div>
+      <div class="kit-item" style="width:380px">
+        <article class="pcard pcard--row"><div class="pcard__media pcard__m3"><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Oud · Rose · Leather</span><h3 class="pcard__name">ذهب · Dahab</h3><span class="ib">A Sorella Original</span><div class="pcard__row"><span class="pcard__price">LE 920</span><button class="btn btn--primary btn--sm">Add to bag</button></div></div></article>
+        <span class="kit-cap"><b>Horizontal</b> — list / cart upsell · <code>.pcard--row</code></span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--overlay"><div class="pcard__media pcard__m4"><div class="pcard__tags"><span class="tag tag--solid">Bestseller</span></div><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Fig · Coconut · Sandalwood</span><h3 class="pcard__name">Sahel</h3><div class="pcard__row"><span class="stars">★★★★★ <span class="n">4.7</span></span><span class="pcard__price">LE 690</span></div></div></article>
+        <span class="kit-cap"><b>Editorial overlay</b> — <code>.pcard--overlay</code></span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--swatch"><div class="pcard__media pcard__m1"><div class="b"></div></div>
+          <div class="pcard__body"><span class="pcard__notes">Saffron · Amber · Cedar</span><h3 class="pcard__name">Bordeaux</h3>
+            <div class="pcard__sizes"><button>5ml</button><button class="on">50ml</button><button>Bundle</button></div>
+            <div class="pcard__row"><span class="stars stars--sm">★★★★★</span><span class="pcard__price">LE 850</span></div>
+            <div class="pcard__actions"><button class="btn btn--primary btn--full">Add to bag</button></div></div></article>
+        <span class="kit-cap"><b>Size on card</b> — <code>.pcard--swatch</code></span>
+      </div>
+      <div class="kit-item" style="width:250px">
+        <article class="pcard pcard--wish"><div class="pcard__media pcard__m2"><div class="pcard__tags"><span class="tag tag--out">New</span></div><div class="b"></div><button class="pcard__wish" aria-label="Save to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button></div>
+          <div class="pcard__body"><span class="pcard__notes">Rose · Vanilla · Musk</span><h3 class="pcard__name">Baklava Rose</h3><span class="ib">True to the original</span><div class="pcard__row"><span class="stars">★★★★★ <span class="n">4.8</span></span><span class="pcard__price">LE 810</span></div>
+            <div class="pcard__actions"><button class="btn btn--primary btn--full">Add to bag</button></div></div></article>
+        <span class="kit-cap"><b>Wishlist heart</b> — <code>.pcard--wish</code></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD TO CART -->
+  <section class="kit-sec" id="atc">
+    <div class="kit-sec__h"><div><span class="eyebrow">The action</span><h2>Add-to-cart · 10 variants</h2></div><p class="lead">Pure-Black accent is the one loud mark. Copy stays brand-voice — anchor against prestige, never discount.</p></div>
+    <div class="kit-row" style="gap:26px">
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--primary btn--full">Add to bag</button></div><span class="kit-cap"><b>solid</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--primary btn--full atc-price-row"><span>Add to bag</span><span class="p">LE 850</span></button></div><span class="kit-cap"><b>solid-price</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--ghost btn--full">Add to bag</button></div><span class="kit-cap"><b>ghost</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--primary btn--full">Add to bag</button><p class="atc-note"><span class="g">✦</span> Made fresh in Egypt · lasts all evening</p></div><span class="kit-cap"><b>stacked</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--primary btn--full">Add to bag</button><p class="atc-note"><span class="g">◆</span> Free 5ml over LE 1,100</p></div><span class="kit-cap"><b>gift-threshold</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><div class="tester-line"><span class="lead" style="font-weight:500"><span class="g" style="color:var(--accent)">✦</span> Try it first — 5ml tester</span><b>LE 85</b></div></div><span class="kit-cap"><b>tester</b> — trust contract</span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--ghost btn--full">Add to bag</button><button class="btn btn--primary btn--full">Buy it now</button></div><span class="kit-cap"><b>split</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--primary btn--full">Pre-order</button><p class="atc-note">Ships in 2–3 weeks — first batch</p></div><span class="kit-cap"><b>preorder</b></span></div>
+      <div class="kit-item"><div class="atc-stack"><button class="btn btn--ghost btn--full is-disabled">✉ Sold out — notify me</button></div><span class="kit-cap"><b>sold-out</b></span></div>
+      <div class="kit-item"><div class="atc-stack" style="width:auto"><button class="btn btn--primary btn--sm">Add</button></div><span class="kit-cap"><b>mini</b> — card quick-add</span></div>
+    </div>
+  </section>
+
+  <!-- BUY BOX -->
+  <section class="kit-sec" id="buybox">
+    <div class="kit-sec__h"><div><span class="eyebrow">Product page</span><h2>The buy box</h2></div><p class="lead">Everything that converts a PDP, assembled from the atoms.</p></div>
+    <div class="kit-row">
+      <div class="kit-item" style="flex:1;min-width:340px;max-width:480px">
+        <div class="kit-panel" style="display:flex;flex-direction:column;gap:16px">
+          <div><span class="eyebrow">This week's spotlight</span><h3 class="spot__name" style="margin-top:6px">Bordeaux</h3></div>
+          <div class="stars">★★★★★ <span class="n">4.9 · 1,288 reviews</span></div>
+          <div class="spot__pr"><span class="now">LE 850</span><span class="anchor">Performs like bottles at four times the price</span></div>
+          <div class="notes"><div class="note"><k>Top</k><p>Saffron, bitter almond</p></div><div class="note"><k>Heart</k><p>Egyptian jasmine, cedar</p></div><div class="note"><k>Base</k><p>Amberwood, fir resin, oud</p></div></div>
+          <div class="sizes"><span class="size">5ml · LE 85</span><span class="size on">50ml · LE 850</span><span class="size">Bundle · LE 2,200</span></div>
+          <div class="buyrow"><div class="qty"><button aria-label="Decrease">−</button><span>1</span><button aria-label="Increase">+</button></div><button class="btn btn--primary btn--full">Add to bag — LE 850</button></div>
+          <div class="tester-line"><span>Not sure yet? <b>Try it first — add the 5ml tester</b></span><b>LE 85</b></div>
+        </div>
+        <span class="kit-cap"><b>Full buy box</b></span>
+      </div>
+      <div class="kit-item" style="flex:1;min-width:260px;gap:20px">
+        <div class="kit-item"><div class="notes" style="max-width:340px"><div class="note"><k>Top</k><p>Saffron, bitter almond</p></div><div class="note"><k>Heart</k><p>Egyptian jasmine, cedar</p></div><div class="note"><k>Base</k><p>Amberwood, fir resin, oud</p></div></div><span class="kit-cap"><b>Notes pyramid</b></span></div>
+        <div class="kit-row" style="gap:26px">
+          <div class="kit-item"><div class="sizes"><span class="size">5ml</span><span class="size on">50ml</span><span class="size">Bundle</span></div><span class="kit-cap"><b>Size ladder</b></span></div>
+          <div class="kit-item"><div class="qty"><button>−</button><span>1</span><button>+</button></div><span class="kit-cap"><b>Quantity</b></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS & RATINGS -->
+  <section class="kit-sec" id="reviews">
+    <div class="kit-sec__h"><div><span class="eyebrow">Trust</span><h2>Reviews &amp; ratings</h2></div><p class="lead">Honest histogram, longevity + projection meters, and raw Franco-Arabic quotes — kept verbatim.</p></div>
+    <div class="kit-row" style="gap:22px;margin-bottom:26px">
+      <div class="kit-item"><div class="kit-panel" style="display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="serif" style="font-size:44px;line-height:1">4.8</span><span class="stars">★★★★★</span><span class="kit-cap">1,288 verified reviews</span></div>
+        <div class="hist">
+          <div class="hist-row"><span>5★</span><span class="htrack"><span class="hfill" style="width:86%"></span></span><span class="hn">1108</span></div>
+          <div class="hist-row"><span>4★</span><span class="htrack"><span class="hfill" style="width:9%"></span></span><span class="hn">116</span></div>
+          <div class="hist-row"><span>3★</span><span class="htrack"><span class="hfill" style="width:3%"></span></span><span class="hn">38</span></div>
+          <div class="hist-row"><span>2★</span><span class="htrack"><span class="hfill" style="width:1%"></span></span><span class="hn">14</span></div>
+          <div class="hist-row"><span>1★</span><span class="htrack"><span class="hfill" style="width:1%"></span></span><span class="hn">12</span></div>
+        </div>
+      </div><span class="kit-cap"><b>Summary + histogram</b></span></div>
+    </div>
+    <div class="reviews">
+      <div class="review"><span class="stars">★★★★★ <span class="n">Verified buyer</span></span><p class="review__q">Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.</p>
+        <div class="meters"><div class="meterk"><span>Longevity</span><span class="mtrack"><span class="mfill" style="width:90%"></span></span></div><div class="meterk"><span>Projection</span><span class="mtrack"><span class="mfill" style="width:70%"></span></span></div></div>
+        <div class="review__by"><span class="review__av">F</span><div><div class="review__n">Farida M.</div><span class="review__vb">✓ 50ml · Mar 2026</span></div></div></div>
+      <div class="review"><span class="stars">★★★★★</span><p class="review__q">El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.</p><div class="review__by"><span class="review__av">N</span><div><div class="review__n">Nour A.</div><span class="review__vb">✓ Verified buyer · Bundle</span></div></div></div>
+      <div class="review"><span class="stars">★★★★★</span><p class="review__q">Ordered the 5ml tester first, fell in love, came back for the 50ml.</p><div class="review__by"><span class="review__av">M</span><div><div class="review__n">Mariam S.</div><span class="review__vb">✓ Verified buyer · 5ml → 50ml</span></div></div></div>
+    </div>
+    <div class="kit-row" style="margin-top:24px">
+      <div class="kit-item" style="width:380px">
+        <div class="review review--product">
+          <span class="stars">★★★★★</span>
+          <p class="review__q">Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.</p>
+          <div class="review__by"><span class="review__av">F</span><div><div class="review__n">Farida M.</div><span class="review__vb">✓ Verified buyer · Mar 2026</span></div></div>
+          <a class="review__shopcard" href="#">
+            <span class="review__shopcard-thumb"><span class="b"></span></span>
+            <span class="review__shopcard-info"><span class="review__shopcard-k">Reviewed</span><span class="review__shopcard-name">Bordeaux</span><span class="review__shopcard-meta">50ml · LE 850 · ★ 4.9</span></span>
+            <span class="review__shopcard-btn">Shop</span>
+          </a>
+        </div>
+        <span class="kit-cap"><b>Shows the perfume</b> — shoppable strip · <code>.review--product</code></span>
+      </div>
+    </div>
+    <div class="kit-row" style="gap:26px;margin-top:26px;align-items:center">
+      <div class="kit-item"><span class="stars">★★★★★ <span class="n">4.8 · 1,288 reviews</span></span><span class="kit-cap"><b>Compact</b> — under a title</span></div>
+      <div class="kit-item"><span class="tag tag--out" style="gap:7px">★★★★★ &nbsp;4.8</span><span class="kit-cap"><b>Badge</b></span></div>
+      <div class="kit-item"><span class="starbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="kit-cap"><b>Bar</b> rating</span></div>
+    </div>
+  </section>
+
+  <!-- INSPIRED-BY -->
+  <section class="kit-sec" id="inspired">
+    <div class="kit-sec__h"><div><span class="eyebrow">Brand-safe</span><h2>Inspired-by · 8 variants</h2></div><p class="lead">Default leads with craft — “True to the original” — never “dupe” or a trademark. Literal name-drop is opt-in, with a legal-hedge line.</p></div>
+    <div class="kit-row" style="gap:26px;align-items:center">
+      <div class="kit-item"><span class="ibp"><span class="g">◆</span> True to the original</span><span class="kit-cap"><b>craft</b> · default</span></div>
+      <div class="kit-item"><span class="ibp"><span class="g">◆</span> Masterfully reimagined</span><span class="kit-cap"><b>reimagined</b></span></div>
+      <div class="kit-item"><span class="ibp"><span class="g">✦</span> The Art of Inspiration</span><span class="kit-cap"><b>art</b></span></div>
+      <div class="kit-item"><span class="ibp ibp--solid"><span class="g">✓</span> A Sorella Original</span><span class="kit-cap"><b>original</b> · house mark</span></div>
+      <div class="kit-item"><span class="ibp"><span class="g">✦</span> Inspired by Baccarat Rouge 540</span><span class="kit-cap"><b>inspired</b> · opt-in</span></div>
+      <div class="kit-item"><span class="ib" style="display:inline-flex">True to the original</span><span class="kit-cap"><b>line</b> · under product name</span></div>
+      <div class="kit-item"><span class="ib-stamp"><i>True to the original</i></span><span class="kit-cap"><b>stamp</b> · engraved seal</span></div>
+      <div class="kit-item" style="max-width:340px"><p class="ib-disc">Sorella is an independent fragrance house. We are not associated or affiliated with any brand mentioned.</p><span class="kit-cap"><b>disclaimer</b></span></div>
+    </div>
+  </section>
+
+  <!-- TILES -->
+  <section class="kit-sec" id="tiles">
+    <div class="kit-sec__h"><div><span class="eyebrow">Navigation</span><h2>Scent-world tiles</h2></div><p class="lead">Shop-by-vibe entry points with a gradient scrim and hover lift.</p></div>
+    <div class="worlds">
+      <a class="world world--1" href="#"><span class="world__k">Gourmand</span><h3>Dessert Table</h3><span class="shop">Shop →</span></a>
+      <a class="world world--2" href="#"><span class="world__k">Solar · Beachy</span><h3>Sahel Summer</h3><span class="shop">Shop →</span></a>
+      <a class="world world--3" href="#"><span class="world__k">Oriental</span><h3>Golden Hour</h3><span class="shop">Shop →</span></a>
+      <a class="world world--4" href="#"><span class="world__k">Musks · Oils</span><h3>Second Skin</h3><span class="shop">Shop →</span></a>
+    </div>
+  </section>
+
+  <!-- ATOMS -->
+  <section class="kit-sec" id="atoms">
+    <div class="kit-sec__h"><div><span class="eyebrow">Building blocks</span><h2>Atoms</h2></div><p class="lead">The small parts every section is built from.</p></div>
+
+    <div class="kit-row" style="gap:40px">
+      <div class="kit-item"><div class="kit-row"><button class="btn btn--primary">Add to bag</button><button class="btn btn--ghost">Buy it now</button><button class="btn btn--light" style="border:1px solid var(--line-2)">Notify me</button><button class="btn btn--primary btn--sm">Small</button></div><span class="kit-cap"><b>Buttons</b> — primary · ghost · light · small</span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px">
+      <div class="kit-item"><div class="kit-row" style="align-items:center"><span class="cart-badge">3</span><span class="tag tag--out">Sold out</span><span class="tag tag--solid">Sale</span><span class="tag tag--out">Oud</span><span class="tag tag--solid">New</span><span class="tag tag--solid">Bestseller</span><span class="tag tag--out">Limited</span><span class="tag tag--muted">Low stock</span><span class="tag tag--solid">Free 5ml</span><span class="tag tag--out">EDP</span></div><span class="kit-cap"><b>Badges &amp; tags</b> — 10</span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px">
+      <div class="kit-item"><div class="kit-row" style="align-items:center;gap:20px"><span class="stars stars--lg">★★★★★</span><span class="stars">★★★★★ <span class="n">4.8</span></span><span class="stars stars--sm">★★★★★</span><span class="starbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div><span class="kit-cap"><b>Star ratings</b> — lg · default · sm · bar</span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px">
+      <div class="kit-item"><div class="qty"><button>−</button><span>1</span><button>+</button></div><span class="kit-cap"><b>Quantity</b></span></div>
+      <div class="kit-item"><div class="qty qty--sm"><button>−</button><span>1</span><button>+</button></div><span class="kit-cap"><b>Quantity</b> · small</span></div>
+      <div class="kit-item"><div class="pag"><a class="on">1</a><a>2</a><a>3</a><a>→</a></div><span class="kit-cap"><b>Pagination</b> · numbered</span></div>
+      <div class="kit-item"><div class="pag pag--dots"><a></a><a class="on"></a><a></a></div><span class="kit-cap"><b>Pagination</b> · dots</span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px">
+      <div class="kit-item"><div class="field"><label>Email</label><input type="email" placeholder="your email address"></div><span class="kit-cap"><b>Field</b> · default</span></div>
+      <div class="kit-item"><div class="field field--error"><label>Email</label><input type="email" value="bad@"><span class="msg">Enter a valid email.</span></div><span class="kit-cap"><b>Field</b> · error</span></div>
+      <div class="kit-item"><div class="field field--success"><label>Email</label><input type="email" value="noor@sorella.eg"><span class="msg">Looks good.</span></div><span class="kit-cap"><b>Field</b> · success</span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px;align-items:flex-start">
+      <div class="kit-item"><div class="socials"><a href="#">IG</a><a href="#">TT</a><a href="#">FB</a></div><span class="kit-cap"><b>Social</b> · outline</span></div>
+      <div class="kit-item"><div class="socials socials--filled"><a href="#">IG</a><a href="#">TT</a><a href="#">FB</a></div><span class="kit-cap"><b>Social</b> · filled</span></div>
+      <div class="kit-item"><a class="link-arrow" href="#">Shop all bestsellers</a><span class="kit-cap"><b>Editorial link</b></span></div>
+    </div>
+
+    <div class="kit-row" style="gap:40px;margin-top:30px;align-items:flex-start">
+      <div class="kit-item"><div class="glasskit"><span class="serif" style="font-size:18px">Frosted glass</span><p class="kit-cap" style="margin-top:6px">One blurred layer — nav, hero, cart drawer, mega-menu.</p></div><span class="kit-cap"><b>Glass panel</b></span></div>
+      <div class="kit-item"><div class="empty"><span class="empty__ic">◠</span><span class="serif" style="font-size:18px">Your bag is empty</span><p class="kit-cap">Start with a 5ml tester for LE 85.</p><button class="btn btn--primary btn--sm">Shop bestsellers</button></div><span class="kit-cap"><b>Empty state</b></span></div>
+    </div>
+
+    <div class="kit-item" style="width:100%;margin-top:30px">
+      <div class="announce" style="border-radius:var(--pill)"><b>Free 5ml perfume</b> on orders over LE 1,100 — pick it in your cart</div>
+      <span class="kit-cap"><b>Announcement bar</b></span>
+    </div>
+
+    <div class="kit-item" style="width:100%;margin-top:24px">
+      <div class="news"><h2>First to know when a scent drops.</h2><p>Join the list for new releases and the occasional free 5ml.</p><form class="news__form" onsubmit="return false"><input type="email" placeholder="Your email address" aria-label="Email"><button class="btn btn--light" type="submit">Sign up</button></form></div>
+      <span class="kit-cap"><b>Newsletter band</b></span>
+    </div>
+  </section>
+
+  <!-- RECENTLY BUILT — storefront & PDP components -->
+  <section class="kit-sec" id="storefront">
+    <div class="kit-sec__h"><div><span class="eyebrow">Built for the audit funnel</span><h2>Storefront &amp; PDP components</h2></div><p class="lead">The recently-built merchandising, PDP, cart and discovery pieces — all live in the theme.</p></div>
+
+    <!-- price anchor -->
+    <div class="kit-row" style="gap:40px;margin-bottom:34px">
+      <div class="kit-item" style="max-width:460px">
+        <div class="pdp-price"><span class="retail" title="Comparable designer retail">LE 3,400</span><span class="now">LE 850</span><s class="was">LE 990</s><span class="save">Save LE 140</span><span class="anchor">Prestige performance for a fraction of designer retail</span></div>
+        <span class="kit-cap"><b>Price anchor</b> — retail vs Sorella + Save · <code>sorella-price-anchor</code></span>
+      </div>
+    </div>
+
+    <!-- bundle cards -->
+    <div class="kit-row" style="gap:20px;margin-bottom:38px">
+      <div class="kit-item" style="width:280px">
+        <article class="bundlecard">
+          <div class="pcard__media pcard__m2"><div class="pcard__tags"><span class="tag tag--solid">Bundle</span><span class="savebadge">Save 20%</span></div><div class="b"></div></div>
+          <div class="bundlecard__body"><h3 class="pcard__name">Evening Trio</h3><p class="bundlecard__items">Bordeaux + Baklava + Dahab · layer for evening</p><div class="bundlecard__row"><span class="pcard__price"><s>LE 2,750</s>LE 2,200</span></div><div class="bundlecard__actions"><button class="btn btn--primary btn--full">Add bundle</button></div></div>
+        </article>
+        <span class="kit-cap"><b>Bundle card</b> — compare-at + <b>SAVE %</b> · <code>sorella-bundle-card</code></span>
+      </div>
+      <div class="kit-item" style="width:280px">
+        <article class="bundlecard">
+          <div class="pcard__media pcard__m4"><div class="pcard__tags"><span class="tag tag--solid">Best value</span><span class="savebadge">Save 25%</span></div><div class="b"></div></div>
+          <div class="bundlecard__body"><h3 class="pcard__name">Discovery Set</h3><p class="bundlecard__items">5× 5ml testers · credit back on full size</p><div class="bundlecard__row"><span class="pcard__price"><s>LE 560</s>LE 420</span></div><div class="bundlecard__actions"><button class="btn btn--primary btn--full">Add set</button></div></div>
+        </article>
+        <span class="kit-cap"><b>Discovery set</b> variant</span>
+      </div>
+    </div>
+
+    <!-- trust bar 4-icon -->
+    <div class="kit-item" style="width:100%;margin-bottom:34px">
+      <div class="trustbar4 trustbar4--row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px">
+        <div class="trustitem trustitem--row"><span class="trustitem__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></span><div class="trustitem__text"><span class="trustitem__label">Fast shipping</span><span class="trustitem__sub">Ships in 2–4 days</span></div></div>
+        <div class="trustitem trustitem--row"><span class="trustitem__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg></span><div class="trustitem__text"><span class="trustitem__label">Easy exchange</span><span class="trustitem__sub">7-day unopened</span></div></div>
+        <div class="trustitem trustitem--row"><span class="trustitem__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 20h18z"/><path d="M8.5 13h7"/></svg></span><div class="trustitem__text"><span class="trustitem__label">Made in Egypt</span><span class="trustitem__sub">Poured to order</span></div></div>
+        <div class="trustitem trustitem--row"><span class="trustitem__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><div class="trustitem__text"><span class="trustitem__label">Lasts all day</span><span class="trustitem__sub">Oil-rich, into evening</span></div></div>
+      </div>
+      <span class="kit-cap"><b>Trust bar</b> — 4-icon · <code>sorella-trust-bar</code></span>
+    </div>
+
+    <!-- brand story + FAQ -->
+    <div class="kit-row" style="gap:20px;margin-bottom:38px;align-items:stretch">
+      <div class="kit-item" style="flex:1;min-width:300px">
+        <div class="kit-panel"><span class="eyebrow">Our story</span><h3 class="serif" style="font-size:26px;margin:10px 0 12px">Two sisters, one signature.</h3><p class="muted" style="font-size:15px">Sorella began at a kitchen table in Cairo — dessert-scented blends named for what we grew up on. <a href="#" class="link-arrow" style="margin-top:14px">Read our story</a></p></div>
+        <span class="kit-cap"><b>Brand story</b> · <code>sorella-brand-story</code></span>
+      </div>
+      <div class="kit-item" style="flex:1;min-width:300px">
+        <div class="faq"><div class="faq__acc acc">
+          <details open><summary>How long does the scent last?</summary><div class="acc__body">Oil-rich blends — all-day on skin, days on clothing.</div></details>
+          <details><summary>Can I try before the full size?</summary><div class="acc__body">Yes — a 5ml tester for LE 85 on every fragrance.</div></details>
+          <details><summary>Returns / exchange?</summary><div class="acc__body">Unopened exchange within 7 days; try the tester first.</div></details>
+        </div></div>
+        <span class="kit-cap"><b>FAQ accordion</b> · <code>sorella-faq</code></span>
+      </div>
+    </div>
+
+    <!-- quiz teaser -->
+    <div class="kit-item" style="width:100%;margin-bottom:34px">
+      <div class="quizteaser" style="background:var(--accent);color:#fff;border-radius:var(--r-lg);padding:clamp(32px,5vw,56px);text-align:center">
+        <div class="quizteaser__inner">
+          <span class="eyebrow" style="color:rgba(255,255,255,.6)">60-second quiz</span>
+          <h3 class="serif" style="font-size:clamp(26px,3.4vw,38px);margin:12px 0 10px">Find your signature scent.</h3>
+          <p style="color:rgba(255,255,255,.72);margin-bottom:20px">Four taps to your match — plus 10% off your first order.</p>
+          <div class="quizteaser__chips" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px">
+            <span class="quizteaser__chip" style="display:inline-flex;gap:8px;align-items:center;padding:10px 18px;border:1px solid rgba(255,255,255,.3);border-radius:999px">🌊 Fresh &amp; clean</span>
+            <span class="quizteaser__chip" style="display:inline-flex;gap:8px;align-items:center;padding:10px 18px;border:1px solid rgba(255,255,255,.3);border-radius:999px">🌸 Soft florals</span>
+            <span class="quizteaser__chip" style="display:inline-flex;gap:8px;align-items:center;padding:10px 18px;border:1px solid rgba(255,255,255,.3);border-radius:999px">🍯 Warm gourmand</span>
+            <span class="quizteaser__chip" style="display:inline-flex;gap:8px;align-items:center;padding:10px 18px;border:1px solid rgba(255,255,255,.3);border-radius:999px">🌲 Woody &amp; deep</span>
+          </div>
+          <button class="btn btn--light">Find your scent</button>
+          <div style="margin-top:14px"><a href="#" style="color:rgba(255,255,255,.6);font-size:13px;text-decoration:underline">or skip and shop bestsellers</a></div>
+        </div>
+      </div>
+      <span class="kit-cap"><b>Quiz / discovery teaser</b> · <code>sorella-quiz-teaser</code></span>
+    </div>
+
+    <!-- quiz interrupt card + collection toolbar -->
+    <div class="kit-row" style="gap:20px;margin-bottom:38px;align-items:flex-start">
+      <div class="kit-item" style="width:250px">
+        <article class="pcard quizcard" style="min-height:340px;display:flex"><a class="quizcard__inner" href="#" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:26px;text-align:center;width:100%"><span class="eyebrow">60-second quiz</span><h3 class="serif" style="font-size:22px">Not sure where to start?</h3><span class="link-arrow" style="justify-content:center">Take the scent quiz →</span></a></article>
+        <span class="kit-cap"><b>Quiz interrupt card</b> · <code>sorella-quiz-card</code></span>
+      </div>
+      <div class="kit-item" style="flex:1;min-width:340px">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--pill);padding:12px 18px">
+          <span class="muted" style="font-size:13px">48 products</span>
+          <span style="flex:1"></span>
+          <span class="colchips__chip" style="padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;font-weight:600">Filter</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;font-size:12px;font-weight:600">Sort: Best selling ▾</span>
+        </div>
+        <span class="kit-cap"><b>Collection toolbar</b> — Best-selling default sort + filters · <code>sorella-collection-toolbar</code></span>
+      </div>
+    </div>
+
+    <!-- cart drawer (static open) -->
+    <div class="kit-item" style="width:100%;margin-bottom:8px">
+      <div style="max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)"><b class="serif" style="font-size:20px">Your bag</b><span class="muted" style="font-size:13px">2 items ✕</span></div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--line)">
+          <div style="font-size:13px;margin-bottom:8px">You're <b>LE 250</b> away from a <b>free 5ml</b> 🎁</div>
+          <div style="height:7px;border-radius:999px;background:rgba(0,0,0,.08);overflow:hidden"><div style="height:100%;width:77%;background:var(--accent)"></div></div>
+        </div>
+        <div style="padding:8px 20px">
+          <div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)"><span style="width:48px;height:58px;border-radius:8px;background:linear-gradient(160deg,#e7e5e1,#d6d4d0);border:1px solid var(--line);flex:none"></span><div style="flex:1"><div class="serif" style="font-size:16px">Bordeaux</div><div class="muted" style="font-size:12px">50ml EDP</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="display:inline-flex;border:1px solid var(--line-2);border-radius:999px;font-size:13px"><span style="padding:4px 10px">−</span><span style="padding:4px 6px;font-weight:600">1</span><span style="padding:4px 10px">+</span></span><b style="font-size:14px">LE 850</b></div></div></div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--line)"><div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">You might also like</div><div style="display:flex;gap:8px;align-items:center"><span style="width:40px;height:48px;border-radius:6px;background:linear-gradient(160deg,#e7e5e1,#d6d4d0);flex:none"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">5ml tester</div><div class="muted" style="font-size:12px">LE 85</div></div><button class="btn btn--sm btn--ghost">Add</button></div></div>
+        <div style="padding:18px 20px;border-top:1px solid var(--line)"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>Subtotal</b><b>LE 850</b></div><button class="btn btn--primary btn--full">Checkout</button><div class="muted" style="font-size:12px;text-align:center;margin-top:8px">Shipping &amp; taxes at checkout</div></div>
+      </div>
+      <span class="kit-cap"><b>Cart drawer</b> — free-gift progress + picker, cross-sell, gift note · <code>sorella-cart-drawer</code></span>
+    </div>
+  </section>
+
+  <!-- PALETTE -->
+  <section class="kit-sec" id="palette">
+    <div class="kit-sec__h"><div><span class="eyebrow">Foundation</span><h2>Palette</h2></div><p class="lead">11 tokens, no hue. Pure White (dark) / Pure Black (light) is the only accent.</p></div>
+    <div class="kit-swatches">
+      <div class="kit-sw"><i style="background:#000"></i><div><b>Absolute Black</b><span>#000000</span></div></div>
+      <div class="kit-sw"><i style="background:#111"></i><div><b>Rich Charcoal</b><span>#111111</span></div></div>
+      <div class="kit-sw"><i style="background:#1A1A1A"></i><div><b>Obsidian</b><span>#1A1A1A</span></div></div>
+      <div class="kit-sw"><i style="background:#262626"></i><div><b>Graphite</b><span>#262626</span></div></div>
+      <div class="kit-sw"><i style="background:#3B3B3B"></i><div><b>Gunmetal</b><span>#3B3B3B</span></div></div>
+      <div class="kit-sw"><i style="background:#5C5C5C"></i><div><b>Slate Gray</b><span>#5C5C5C</span></div></div>
+      <div class="kit-sw"><i style="background:#8C8C8C"></i><div><b>Silver Smoke</b><span>#8C8C8C</span></div></div>
+      <div class="kit-sw"><i style="background:#C7C7C7"></i><div><b>Platinum</b><span>#C7C7C7</span></div></div>
+      <div class="kit-sw"><i style="background:#E8E8E8"></i><div><b>Pearl White</b><span>#E8E8E8</span></div></div>
+      <div class="kit-sw"><i style="background:#F5F5F5"></i><div><b>Ivory Mist</b><span>#F5F5F5</span></div></div>
+      <div class="kit-sw"><i style="background:#fff;box-shadow:inset 0 0 0 1px var(--line)"></i><div><b>Pure White</b><span>#FFFFFF</span></div></div>
+    </div>
+  </section>
+
+  <footer class="footer__bottom" style="border-top:1px solid var(--line);margin-top:40px">
+    <span>Sorella UI Kit · monochrome, token-driven · every component &amp; variant</span>
+    <span>See it assembled → <a href="index-light.html" style="color:var(--ink);text-decoration:underline">storefront</a></span>
+  </footer>
+</div>
+
+</body>
+</html>

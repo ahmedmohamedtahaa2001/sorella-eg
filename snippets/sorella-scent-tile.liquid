@@ -1,0 +1,25 @@
+{%- comment -%}
+  Sorella — scent-world navigation tile (.world)
+  Params:
+    title  (string, required) — the world name (h3)
+    kicker (string, optional) — small eyebrow above the title, e.g. "Gourmand"
+    url    (string, default '#') — link target
+    scheme (number 1-4, default 1) → .world--{scheme} gradient
+    image  (image/string, optional) — background image; else keeps the gradient
+    cta    (string, default 'Shop →') — the shop link label
+  Emits the .world tile markup.
+{%- endcomment -%}
+{%- liquid
+  assign sc = scheme | default: 1
+  assign href = url | default: '#'
+  assign label = cta | default: 'Shop →'
+  assign bg = ''
+  if image != blank
+    assign bg = image | image_url: width: 800
+  endif
+-%}
+<a class="world world--{{ sc }}" href="{{ href }}"{% if bg != blank %} style="background-image:url('{{ bg }}');background-size:cover;background-position:center;"{% endif %}>
+  {%- if kicker != blank -%}<span class="world__k">{{ kicker }}</span>{%- endif -%}
+  <h3>{{ title }}</h3>
+  <span class="shop">{{ label }}</span>
+</a>

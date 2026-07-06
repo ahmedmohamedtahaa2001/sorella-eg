@@ -1,0 +1,158 @@
+{%- comment -%}
+  Sorella — Main product (PDP hero + buy box). Real Shopify product data.
+  Reproduces component-library/product.html .pdp-hero. JS hooks in sorella.js:
+  [data-gallery]/[data-gallery-thumb]/[data-gallery-main], [data-qty].
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign p = product
+  assign cv = p.selected_or_first_available_variant
+
+  assign rating = p.metafields.sorella.rating
+  assign review_count = p.metafields.sorella.review_count
+
+  assign hook = p.metafields.sorella.hook.value
+  if hook == blank
+    assign hook = p.description | strip_html | truncatewords: 45
+  endif
+  if hook == blank
+    assign hook = 'Composed in three acts, the عطّار way — an opening that draws you in, a heart that warms, and a base that holds on your clothes for days.'
+  endif
+
+  assign chars_raw = p.metafields.sorella.character.value | default: 'Warm, Sweet, Evening, Long-lasting'
+  assign chars = chars_raw | split: ','
+
+  assign tester = p.metafields.sorella.tester_url.value | default: s.tester_url
+
+  assign thr = settings.free_gift_threshold | times: 100
+-%}
+<div class="pdp">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a><span>/</span>
+    {%- if p.collections.first != blank -%}<a href="{{ p.collections.first.url }}">{{ p.collections.first.title }}</a><span>/</span>{%- endif -%}
+    {{ p.title }}
+  </nav>
+
+  <div class="pdp-hero">
+    <!-- gallery -->
+    <div class="gallery" data-gallery>
+      <div class="gallery__thumbs">
+        {%- if p.images.size > 0 -%}
+          {%- for image in p.images limit: 6 -%}
+            <button type="button" class="gallery__thumb{% if forloop.first %} on{% endif %}" data-gallery-thumb data-full="{{ image | image_url: width: 1000 }}" aria-label="View {{ forloop.index }}">
+              <img src="{{ image | image_url: width: 150 }}" alt="{{ image.alt | default: p.title | escape }}" width="72" height="90" loading="lazy">
+            </button>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}<button type="button" class="gallery__thumb{% if forloop.first %} on{% endif %}" aria-label="View {{ i }}"><span class="b"></span></button>{%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="gallery__main" data-gallery-main>
+        {%- if s.hero_badge != blank -%}<div class="gallery__flag">{% render 'sorella-tag', label: s.hero_badge, style: 'solid' %}</div>{%- endif -%}
+        {%- if p.featured_image -%}
+          <img src="{{ p.featured_image | image_url: width: 1000 }}" alt="{{ p.featured_image.alt | default: p.title | escape }}" width="800" height="1000">
+        {%- else -%}
+          <div class="b"></div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- info / buy box -->
+    <div class="pdp-info">
+      <div class="pdp-info__top">
+        <span class="eyebrow">{{ s.eyebrow | default: 'Made fresh in Egypt' }}</span>
+        <button type="button" class="wishbtn" aria-label="Save {{ p.title | escape }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button>
+      </div>
+
+      <h1 class="pdp-title">{{ p.title }}</h1>
+      {% render 'sorella-inspired-by', product: p %}
+
+      {%- if rating != blank -%}
+        <a class="pdp-rating" href="#reviews">{% render 'sorella-stars', rating: rating, count: review_count %}</a>
+      {%- endif -%}
+
+      {% render 'sorella-price-anchor', product: p, variant: cv %}
+
+      <p class="pdp-hook">{{ hook }}</p>
+
+      <div class="chars">
+        {%- for c in chars -%}{%- assign cl = c | strip -%}{%- if cl != blank -%}<span class="char">{{ cl }}</span>{%- endif -%}{%- endfor -%}
+      </div>
+
+      <form action="{{ routes.cart_add_url }}" method="post" id="pdp-form-{{ section.id }}" data-pdp-form>
+        {%- if p.variants.size > 1 -%}
+          <div class="ladder2" data-sizes>
+            {%- for variant in p.variants -%}
+              <label class="ladder2__row">
+                <input type="radio" name="id" value="{{ variant.id }}" data-variant-price="{{ variant.price | money }}"{% if variant.id == cv.id %} checked{% endif %}{% unless variant.available %} disabled{% endunless %}>
+                <span class="ladder2__radio"></span>
+                <div>
+                  <div class="ladder2__name">{{ variant.title }}{% if variant.id == cv.id %} <span class="ladder2__best">Best value</span>{% endif %}</div>
+                  {%- unless variant.available -%}<div class="ladder2__sub">Currently unavailable</div>{%- endunless -%}
+                </div>
+                <span class="ladder2__price">{{ variant.price | money }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ cv.id }}">
+        {%- endif -%}
+
+        {%- if p.available -%}
+          <div class="buyrow2">
+            <div class="qty" data-qty>
+              <button type="button" data-qty-step="-1" aria-label="Decrease">−</button>
+              <input class="qty__val" data-qty-input name="quantity" type="text" inputmode="numeric" value="1" aria-label="Quantity">
+              <button type="button" data-qty-step="1" aria-label="Increase">+</button>
+            </div>
+            <button type="submit" name="add" class="btn btn--primary btn--full">Add to bag — {{ cv.price | money }}</button>
+          </div>
+          <button type="submit" name="checkout" class="btn btn--ghost btn--full">Buy it now</button>
+        {%- else -%}
+          <button type="button" class="btn btn--ghost btn--full" disabled>✉ Sold out — notify me</button>
+        {%- endif -%}
+      </form>
+
+      {%- if tester != blank -%}
+        <a class="tester-line" href="{{ tester }}"><span>Not sure yet? <b>Try it first — add the 5ml tester</b></span><b>{{ s.tester_price | default: 'LE 85' }}</b></a>
+      {%- endif -%}
+
+      {%- if thr > 0 -%}
+        {%- assign remaining = thr | minus: cart.total_price -%}
+        <div class="giftbar">
+          {%- if remaining > 0 -%}
+            {%- assign pct = cart.total_price | times: 100 | divided_by: thr -%}
+            <div class="giftbar__row"><span>◆</span> <span>You're <b>{{ remaining | money }}</b> away from a <b>free 5ml perfume</b></span></div>
+            <div class="giftbar__track"><div class="giftbar__fill" style="width:{{ pct }}%"></div></div>
+          {%- else -%}
+            <div class="giftbar__row"><span>◆</span> <span>You've unlocked a <b>free 5ml perfume</b> — pick it in your cart</span></div>
+            <div class="giftbar__track"><div class="giftbar__fill" style="width:100%"></div></div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="delivery"><span class="dot"></span> <span>{{ s.delivery_text | default: 'In stock · order today, ships within 24h · arrives in 2–4 days' }}</span></div>
+
+      <div class="trustrow">
+        <div><span class="ic">◆</span><span>Made fresh in Egypt<br>small-batch</span></div>
+        <div><span class="ic">✦</span><span>Free 5ml over<br>{{ settings.free_gift_threshold | prepend: 'LE ' }}</span></div>
+        <div><span class="ic">↺</span><span>Try the 5ml first —<br>no-risk</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product — hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Golden Hour · Made fresh in Egypt" },
+    { "type": "text", "id": "hero_badge", "label": "Gallery badge", "default": "Bestseller" },
+    { "type": "url", "id": "tester_url", "label": "Tester link (fallback)", "info": "Overridden by metafield sorella.tester_url." },
+    { "type": "text", "id": "tester_price", "label": "Tester price label", "default": "LE 85" },
+    { "type": "text", "id": "delivery_text", "label": "Delivery estimate", "default": "In stock · order today, ships within 24h · arrives in 2–4 days" }
+  ],
+  "presets": [{ "name": "Product — hero" }]
+}
+{% endschema %}

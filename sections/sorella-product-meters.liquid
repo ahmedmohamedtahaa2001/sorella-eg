@@ -1,0 +1,52 @@
+{%- comment -%}
+  Sorella — "How it wears" attribute meters (.attrs). Values 1–5 from
+  metafields sorella.{longevity,projection,warmth,sweetness} → width %.
+  Each meter is hidden when its metafield is blank.
+{%- endcomment -%}
+{%- liquid
+  assign lon = product.metafields.sorella.longevity.value
+  assign pro = product.metafields.sorella.projection.value
+  assign war = product.metafields.sorella.warmth.value
+  assign swe = product.metafields.sorella.sweetness.value
+  assign any = false
+  if lon != blank or pro != blank or war != blank or swe != blank
+    assign any = true
+  endif
+-%}
+{%- if any -%}
+<div class="pdp">
+  <section class="pdp-sec">
+    <h2 class="pdp-sec__h">{{ section.settings.heading | default: 'How it wears' }}</h2>
+    <div class="attrs">
+      {%- if lon != blank -%}
+        {%- assign w = lon | times: 20 -%}
+        <div class="attr"><div class="attr__top"><b>Longevity</b><span>{% if lon >= 4 %}Long — days on fabric{% elsif lon <= 2 %}Fleeting{% else %}Moderate wear{% endif %}</span></div><div class="attr__track"><div class="attr__fill" style="width:{{ w }}%"></div></div><div class="attr__scale"><span>Fleeting</span><span>All day</span></div></div>
+      {%- endif -%}
+      {%- if pro != blank -%}
+        {%- assign w = pro | times: 20 -%}
+        <div class="attr"><div class="attr__top"><b>Sillage / projection</b><span>{% if pro >= 4 %}Bold — room-filling{% elsif pro <= 2 %}Intimate — close to skin{% else %}Moderate — arm's reach{% endif %}</span></div><div class="attr__track"><div class="attr__fill" style="width:{{ w }}%"></div></div><div class="attr__scale"><span>Intimate</span><span>Room-filling</span></div></div>
+      {%- endif -%}
+      {%- if war != blank -%}
+        {%- assign w = war | times: 20 -%}
+        <div class="attr"><div class="attr__top"><b>Warmth</b><span>{% if war >= 4 %}Warm &amp; ambery{% elsif war <= 2 %}Fresh &amp; airy{% else %}Balanced{% endif %}</span></div><div class="attr__track"><div class="attr__fill" style="width:{{ w }}%"></div></div><div class="attr__scale"><span>Fresh</span><span>Warm</span></div></div>
+      {%- endif -%}
+      {%- if swe != blank -%}
+        {%- assign w = swe | times: 20 -%}
+        <div class="attr"><div class="attr__top"><b>Sweetness</b><span>{% if swe >= 4 %}Sweet, not cloying{% elsif swe <= 2 %}Dry{% else %}Softly sweet{% endif %}</span></div><div class="attr__track"><div class="attr__fill" style="width:{{ w }}%"></div></div><div class="attr__scale"><span>Dry</span><span>Sweet</span></div></div>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product — meters",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How it wears" },
+    { "type": "paragraph", "content": "Values come from product metafields sorella.longevity / projection / warmth / sweetness (1–5). A meter is hidden if its metafield is empty." }
+  ],
+  "presets": [{ "name": "Product — meters" }]
+}
+{% endschema %}

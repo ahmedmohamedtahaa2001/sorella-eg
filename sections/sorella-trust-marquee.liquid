@@ -1,0 +1,39 @@
+{%- if section.blocks.size > 0 -%}
+<div class="trustbar"><div class="trustbar__track">
+  {%- for block in section.blocks -%}
+    <span {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+  {%- endfor -%}
+  {%- comment -%} Duplicate run for a seamless CSS marquee loop {%- endcomment -%}
+  {%- for block in section.blocks -%}
+    <span aria-hidden="true">{{ block.settings.text }}</span>
+  {%- endfor -%}
+</div></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Trust marquee",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Made fresh in Egypt" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust marquee",
+      "blocks": [
+        { "type": "phrase", "settings": { "text": "Made fresh in Egypt" } },
+        { "type": "phrase", "settings": { "text": "True to the original" } },
+        { "type": "phrase", "settings": { "text": "Free 5ml over LE 1,100" } },
+        { "type": "phrase", "settings": { "text": "Try it first — LE 85" } },
+        { "type": "phrase", "settings": { "text": "Stays on all evening" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

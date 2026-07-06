@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="{{ settings.colors_navy | default: '#000000' }}">
+    <meta name="theme-color" content="#F4F3F1">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
@@ -26,14 +26,11 @@
 
     {{ content_for_header }}
 
-    {%- comment -%} Monochrome design foundation — tokens, merchant overrides, component atoms, variant partials {%- endcomment -%}
-    {{ 'base.css' | asset_url | stylesheet_tag }}
-    {% render 'sorella-color-vars' %}
-    {{ 'components.css' | asset_url | stylesheet_tag }}
-    {{ 'sorella-lib-cards.css' | asset_url | stylesheet_tag }}
-    {{ 'sorella-lib-pdp.css' | asset_url | stylesheet_tag }}
-    {{ 'sorella-lib-layout.css' | asset_url | stylesheet_tag }}
-    {{ 'sorella-lib-forms.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Light storefront design system (ported from the approved prototype) {%- endcomment -%}
+    {{ 'sorella-store.css' | asset_url | stylesheet_tag }}
+    {%- if request.page_type == 'product' -%}
+      {{ 'sorella-pdp.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
   </head>
@@ -41,10 +38,19 @@
   <body class="template-{{ request.page_type | handle }}">
     <a class="skip-to-content visually-hidden" href="#main-content">{{ 'general.accessibility.skip_to_content' | t }}</a>
 
+    {% sections 'header-group' %}
+
     <main id="main-content" role="main">
       {{ content_for_layout }}
     </main>
 
+    {% sections 'footer-group' %}
+
+    {%- if settings.cart_drawer_enabled -%}
+      {% section 'sorella-cart-drawer' %}
+    {%- endif -%}
+
     <script>window.Sorella = window.Sorella || {}; window.Sorella.moneyFormat = {{ shop.money_format | json }};</script>
+    <script src="{{ 'sorella.js' | asset_url }}" defer></script>
   </body>
 </html>

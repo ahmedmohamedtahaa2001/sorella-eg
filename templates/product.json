@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "sorella-main-product",
+      "settings": {
+        "eyebrow": "Golden Hour · Made fresh in Egypt",
+        "hero_badge": "Bestseller",
+        "tester_price": "LE 85",
+        "delivery_text": "In stock · order today, ships within 24h · arrives in 2–4 days"
+      }
+    },
+    "product-meters": {
+      "type": "sorella-product-meters",
+      "settings": { "heading": "How it wears" }
+    },
+    "product-notes": {
+      "type": "sorella-product-notes",
+      "settings": { "heading": "Composed in three acts" }
+    },
+    "product-details": {
+      "type": "sorella-product-details",
+      "blocks": {
+        "story": { "type": "item", "settings": { "title": "The story", "open": true, "body": "<p>Our reading of a modern icon — masterfully reimagined and made the عطّار way, on rich oils rather than alcohol, so it stays true to the original and lasts far longer. Blended in small batches in Egypt and poured to order.</p>" } },
+        "wear": { "type": "item", "settings": { "title": "How to wear it", "body": "<p>Spray on pulse points — wrists, neck, and once on the fabric of your scarf or collar, where oil-based scent lingers for days. Two sprays is plenty; this one carries.</p>" } },
+        "ingredients": { "type": "item", "settings": { "title": "Ingredients", "body": "<p>Alcohol-free perfume oil base. Full INCI on the carton.</p>" } },
+        "shipping": { "type": "item", "settings": { "title": "Shipping & returns", "body": "<p>Ships from Egypt in 2–4 days. Because fragrance is personal, we can't accept opened returns — which is exactly why we offer the 5ml tester: try it first, commit only when you love it.</p>" } }
+      },
+      "block_order": ["story", "wear", "ingredients", "shipping"],
+      "settings": { "heading": "The details" }
+    },
+    "related": {
+      "type": "sorella-related",
+      "settings": { "heading": "Complete the ritual", "product_count": 4 }
+    },
+    "sticky-atc": {
+      "type": "sorella-sticky-atc",
+      "settings": {}
+    }
+  },
+  "order": ["main-product", "product-meters", "product-notes", "product-details", "related", "sticky-atc"]
+}

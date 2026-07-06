@@ -1,0 +1,39 @@
+{%- comment -%}
+  Sorella — "Complete the ritual" related grid (.related). Uses Shopify product
+  recommendations; falls back to a chosen collection when none are returned.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign limit = s.product_count | default: 4
+-%}
+<div class="pdp">
+  <section class="pdp-sec">
+    <h2 class="pdp-sec__h">{{ s.heading | default: 'Complete the ritual' }}</h2>
+    <div class="related">
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        {%- for p in recommendations.products limit: limit -%}
+          {% render 'sorella-product-card', product: p, variant: 'add' %}
+        {%- endfor -%}
+      {%- elsif s.collection != blank and s.collection.products.size > 0 -%}
+        {%- for p in s.collection.products limit: limit -%}
+          {%- unless p.id == product.id -%}{% render 'sorella-product-card', product: p, variant: 'add' %}{%- endunless -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..limit) -%}{% render 'sorella-product-card', variant: 'add' %}{%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Product — related",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Complete the ritual" },
+    { "type": "range", "id": "product_count", "label": "Products shown", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "collection", "id": "collection", "label": "Fallback collection", "info": "Used when Shopify has no recommendations for this product." }
+  ],
+  "presets": [{ "name": "Product — related" }]
+}
+{% endschema %}

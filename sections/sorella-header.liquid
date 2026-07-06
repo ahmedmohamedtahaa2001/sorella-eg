@@ -1,0 +1,96 @@
+{%- liquid
+  assign brand = section.settings.brand_name | default: shop.name
+  assign menu = section.settings.menu
+  assign panel_id = 'MobileNav-' | append: section.id
+-%}
+<header class="header">
+  <div class="wrap header__row">
+    <nav class="mainnav" aria-label="Primary">
+      {%- if menu != blank and menu.links.size > 0 -%}
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">For Her</a>
+        <a href="{{ routes.all_products_collection_url }}">For Him</a>
+        <a href="{{ routes.all_products_collection_url }}">Bestsellers</a>
+        <a href="{{ routes.all_products_collection_url }}">Oils</a>
+      {%- endif -%}
+    </nav>
+
+    <a class="brand" href="{{ routes.root_url }}">{{ brand }}</a>
+
+    <div class="utils">
+      <button class="iconbtn header__burger" type="button" data-menu-toggle="{{ panel_id }}" aria-label="Menu" aria-controls="{{ panel_id }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="iconbtn" href="{{ routes.search_url }}" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a class="iconbtn" href="{{ routes.account_url }}" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5S20 17 20 21"/></svg>
+      </a>
+      <a class="iconbtn" href="{{ routes.cart_url }}" aria-label="Bag"{% if settings.cart_drawer_enabled %} data-cart-toggle="cart-drawer"{% endif %}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cartdot"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mnav" id="{{ panel_id }}" data-panel>
+  <div class="mnav__scrim" data-close></div>
+  <div class="mnav__panel" role="dialog" aria-label="Menu">
+    <button class="mnav__close" type="button" data-close aria-label="Close">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+    <nav aria-label="Mobile">
+      {%- if menu != blank and menu.links.size > 0 -%}
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">For Her</a>
+        <a href="{{ routes.all_products_collection_url }}">For Him</a>
+        <a href="{{ routes.all_products_collection_url }}">Bestsellers</a>
+        <a href="{{ routes.all_products_collection_url }}">Oils</a>
+      {%- endif -%}
+    </nav>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} .header__burger{ display:none; }
+  @media(max-width:900px){ #shopify-section-{{ section.id }} .header__burger{ display:inline-flex; } }
+  .mnav{ position:fixed; inset:0; z-index:80; visibility:hidden; opacity:0; transition:opacity .3s ease, visibility .3s ease; }
+  .mnav.is-open{ visibility:visible; opacity:1; }
+  .mnav__scrim{ position:absolute; inset:0; background:rgba(0,0,0,.42); }
+  .mnav__panel{ position:absolute; inset-block:0; inset-inline-start:0; width:min(82vw,320px); background:var(--page); padding:22px 24px; display:flex; flex-direction:column; gap:6px; transform:translateX(-100%); transition:transform .32s var(--ease); }
+  .mnav.is-open .mnav__panel{ transform:none; }
+  .mnav__close{ align-self:flex-end; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; margin-bottom:8px; }
+  .mnav__panel nav{ display:flex; flex-direction:column; }
+  .mnav__panel nav a{ font-family:var(--font-display); font-size:22px; padding:12px 0; border-bottom:1px solid var(--line); }
+  body.is-locked{ overflow:hidden; }
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "class": "header-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand wordmark",
+      "info": "Leave blank to use the store name."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,81 @@
+{%- comment -%}
+  Sorella — bundle card (.bundlecard) — real Shopify product data
+  Params:
+    product   (object, required) — the bundle product
+    items     (string, optional) — layering / "what's inside" line override
+    badge     (string, optional) — corner tag override
+  Shows: image, name, item/layering line, compare-at strikethrough,
+         "SAVE {n}%" badge (computed), price, Add-to-bag.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign mgrad = p.id | modulo: 4 | plus: 1
+
+  assign img = p.featured_image
+  assign iw = 720
+  assign ih = 720
+  if img
+    assign ih = iw | divided_by: img.aspect_ratio | round
+  endif
+
+  assign on_sale = false
+  if p.compare_at_price != blank and p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+
+  assign save_pct = 0
+  if on_sale
+    assign save_pct = p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price
+  endif
+
+  comment -- layering line: explicit param → metafield → first 3 tags -- endcomment
+  assign line = items
+  if line == blank
+    assign line = p.metafields.sorella.bundle_items.value
+  endif
+  if line == blank
+    assign line = p.tags | slice: 0, 3 | join: ' + '
+  endif
+
+  assign vid = p.selected_or_first_available_variant.id
+  assign avail = p.available
+-%}
+{%- if p != blank -%}
+<article class="bundlecard">
+  <div class="bundlecard__media pcard__m{{ mgrad }}">
+    <div class="bundlecard__tags">
+      {%- if badge != blank -%}
+        <span class="tag tag--solid">{{ badge }}</span>
+      {%- elsif avail == false -%}
+        <span class="tag tag--muted">Sold out</span>
+      {%- endif -%}
+      {%- if save_pct > 0 -%}<span class="savebadge">Save {{ save_pct }}%</span>{%- endif -%}
+    </div>
+    <a href="{{ p.url }}" class="pcard__mediaLink" aria-label="{{ p.title | escape }}">
+      {%- if img -%}
+        <img src="{{ img | image_url: width: iw }}" alt="{{ img.alt | default: p.title | escape }}" width="{{ iw }}" height="{{ ih }}" loading="lazy">
+      {%- else -%}
+        <div class="b"></div>
+      {%- endif -%}
+    </a>
+  </div>
+  <div class="bundlecard__body">
+    <h3 class="bundlecard__name serif"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+    {%- if line != blank -%}<p class="bundlecard__items">{{ line }}</p>{%- endif -%}
+    <div class="bundlecard__row">
+      <span class="bundlecard__price">
+        {%- if on_sale -%}<s>{{ p.compare_at_price | money }}</s>{%- endif -%}
+        {{ p.price | money }}
+      </span>
+    </div>
+    {%- if avail -%}
+      <form action="{{ routes.cart_add_url }}" method="post" class="bundlecard__actions">
+        <input type="hidden" name="id" value="{{ vid }}">
+        <button type="submit" name="add" class="btn btn--primary btn--full">Add bundle to bag</button>
+      </form>
+    {%- else -%}
+      <a href="{{ p.url }}" class="btn btn--ghost btn--full bundlecard__actions">View bundle</a>
+    {%- endif -%}
+  </div>
+</article>
+{%- endif -%}

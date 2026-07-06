@@ -1,0 +1,100 @@
+{%- comment -%}
+  Sorella — cart drawer line item (.cartline)
+  Params:
+    item    (line_item object, required for real lines)
+    variant (string, default 'drawer'):
+        'drawer'   thumb · title/variant · qty stepper · line price · remove   (default)
+        'compact'  denser row, smaller thumb (cross-sell / tight lists)
+        'gift'     unlocked free reward — read-only, "Free" price, no stepper/remove
+        'summary'  static order-summary row — thumb · title · "qty × price", no controls
+    reward_title (string) — override title text for the 'gift' variant
+    reward_meta  (string) — small meta line for the 'gift' variant (e.g. "5ml tester")
+
+  Progressive: quantity uses name="updates[{{ item.key }}]" so the wrapping
+  {% form 'cart' %} + "Update bag" submit works with no JS. The [data-qty]
+  steppers bump the input; JS AJAX (POST /cart/change.js on change) is where
+  this becomes instant — see note in sections/sorella-cart-drawer.liquid.
+  Remove is a GET link to routes.cart_change_url (quantity=0), also no-JS safe.
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: 'drawer'
+  assign klass = 'cartline cartline--' | append: v
+-%}
+
+{%- if v == 'gift' -%}
+  {%- comment -%} Unlocked free-reward line (rendered from a product/variant, not a cart line) {%- endcomment -%}
+  <div class="{{ klass }}">
+    <div class="cartline__thumb">
+      {%- if item.featured_image or item.image -%}
+        {%- assign gimg = item.featured_image | default: item.image -%}
+        <img src="{{ gimg | image_url: width: 160 }}" alt="{{ gimg.alt | default: item.title | escape }}" width="80" height="96" loading="lazy">
+      {%- else -%}
+        <span class="cartline__b"></span>
+      {%- endif -%}
+    </div>
+    <div class="cartline__info">
+      <span class="cartline__title">{{ reward_title | default: item.title }}</span>
+      {%- if reward_meta != blank -%}<span class="cartline__meta">{{ reward_meta }}</span>{%- endif -%}
+    </div>
+    <span class="cartline__price cartline__price--free">Free 🎁</span>
+  </div>
+
+{%- else -%}
+  {%- liquid
+    assign iw = 160
+    assign ih = 192
+    if item.image
+      assign ih = iw | divided_by: item.image.aspect_ratio | round
+    endif
+    assign vt = item.variant.title
+    if item.product.has_only_default_variant
+      assign vt = blank
+    endif
+  -%}
+  <div class="{{ klass }}" data-cart-line{% if item.key %} data-line-key="{{ item.key }}"{% endif %}>
+    <a class="cartline__thumb" href="{{ item.url }}" aria-label="{{ item.product_title | escape }}">
+      {%- if item.image -%}
+        <img src="{{ item.image | image_url: width: iw }}" alt="{{ item.image.alt | default: item.product_title | escape }}" width="{{ iw }}" height="{{ ih }}" loading="lazy">
+      {%- else -%}
+        <span class="cartline__b"></span>
+      {%- endif -%}
+    </a>
+
+    <div class="cartline__info">
+      <a class="cartline__title" href="{{ item.url }}">{{ item.product_title }}</a>
+      {%- if vt != blank -%}<span class="cartline__meta">{{ vt }}</span>{%- endif -%}
+      {%- if item.selling_plan_allocation -%}<span class="cartline__meta">{{ item.selling_plan_allocation.selling_plan.name }}</span>{%- endif -%}
+
+      {%- unless v == 'summary' -%}
+        <div class="cartline__controls">
+          <div class="cartline__qty" data-qty>
+            <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
+            <input
+              type="number"
+              class="cartline__qtyinput"
+              name="updates[{{ item.key }}]"
+              value="{{ item.quantity }}"
+              min="0"
+              inputmode="numeric"
+              aria-label="Quantity for {{ item.product_title | escape }}"
+              data-qty-input>
+            <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
+          </div>
+          <a class="cartline__remove" href="{{ routes.cart_change_url }}?id={{ item.key }}&amp;quantity=0" data-cart-remove aria-label="Remove {{ item.product_title | escape }}">Remove</a>
+        </div>
+      {%- endunless -%}
+    </div>
+
+    <div class="cartline__aside">
+      {%- if v == 'summary' -%}
+        <span class="cartline__meta">{{ item.quantity }} ×</span>
+      {%- endif -%}
+      <span class="cartline__price">
+        {%- if item.original_line_price > item.final_line_price -%}
+          <s>{{ item.original_line_price | money }}</s>
+        {%- endif -%}
+        {{ item.final_line_price | money }}
+      </span>
+    </div>
+  </div>
+{%- endif -%}

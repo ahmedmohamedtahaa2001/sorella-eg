@@ -1,0 +1,67 @@
+{%- comment -%}
+  Sorella — 4-icon trust bar (audit §2.9 / §8)
+  Distinct from the running .trustbar marquee — uses .trustbar4.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign lay = s.item_layout | default: 'row'
+-%}
+<section class="sec sec--tight"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
+  <div class="wrap">
+    <div class="trustbar4 trustbar4--{{ lay }}">
+      {%- for block in section.blocks -%}
+        {% render 'sorella-trust-item', icon: block.settings.icon, label: block.settings.label, subtext: block.settings.subtext, layout: lay %}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust bar (4 icons)",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select", "id": "item_layout", "label": "Item layout", "default": "stacked",
+      "options": [
+        { "value": "row", "label": "Icon beside text" },
+        { "value": "stacked", "label": "Icon above, centered" }
+      ]
+    },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "trust" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "shipping",
+          "options": [
+            { "value": "shipping", "label": "Shipping" },
+            { "value": "returns", "label": "Returns / exchange" },
+            { "value": "egypt", "label": "Made in Egypt" },
+            { "value": "longevity", "label": "Longevity" },
+            { "value": "tester", "label": "Tester" },
+            { "value": "leaf", "label": "Leaf / natural" },
+            { "value": "star", "label": "Star" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Fast shipping" },
+        { "type": "text", "id": "subtext", "label": "Subtext", "default": "Ships in 2–4 days" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar (4 icons)",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "shipping", "label": "Fast shipping", "subtext": "Ships in 2–4 days" } },
+        { "type": "item", "settings": { "icon": "returns", "label": "Easy exchange", "subtext": "7-day unopened exchange" } },
+        { "type": "item", "settings": { "icon": "egypt", "label": "Made in Egypt", "subtext": "Blended fresh, poured to order" } },
+        { "type": "item", "settings": { "icon": "longevity", "label": "Lasts all day", "subtext": "Oil-rich, into the evening" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

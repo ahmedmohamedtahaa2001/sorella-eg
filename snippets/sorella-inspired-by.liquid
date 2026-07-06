@@ -1,0 +1,52 @@
+{%- comment -%}
+  Sorella — inspired-by craft line / pill (.ib, .ibp)
+  Brand-safe: NEVER outputs "dupe" or a bare trademark.
+  Params (either a product, or an explicit variant + name):
+    product (object, optional) — reads metafields:
+        sorella.is_original (bool) → "A Sorella Original"
+        sorella.inspired_by (text) → "Inspired by {name}"
+        otherwise                  → "True to the original" (line)
+    variant (string, optional) — overrides derivation:
+        'craft'      → .ibp  "True to the original"   (default pill)
+        'reimagined' → .ibp  "Masterfully reimagined"
+        'art'        → .ibp  "The Art of Inspiration"
+        'original'   → .ibp--solid "A Sorella Original"
+        'inspired'   → .ibp  "Inspired by {name}"
+        'line'       → .ib   "True to the original"    (under product name)
+    name (string, optional) — the reference name for 'inspired'
+{%- endcomment -%}
+{%- liquid
+  assign v = variant
+  assign nm = name
+
+  if v == blank
+    assign io = product.metafields.sorella.is_original.value
+    assign ib = product.metafields.sorella.inspired_by.value
+    if io
+      assign v = 'original'
+    elsif ib != blank
+      assign v = 'inspired'
+      assign nm = ib
+    else
+      assign v = 'line'
+    endif
+  endif
+
+  if v == 'inspired' and nm == blank
+    assign v = 'line'
+  endif
+-%}
+{%- case v -%}
+  {%- when 'line' -%}
+    <span class="ib">True to the original</span>
+  {%- when 'craft' -%}
+    <span class="ibp"><span class="g">◆</span> True to the original</span>
+  {%- when 'reimagined' -%}
+    <span class="ibp"><span class="g">◆</span> Masterfully reimagined</span>
+  {%- when 'art' -%}
+    <span class="ibp"><span class="g">✦</span> The Art of Inspiration</span>
+  {%- when 'original' -%}
+    <span class="ibp ibp--solid"><span class="g">✓</span> A Sorella Original</span>
+  {%- when 'inspired' -%}
+    <span class="ibp"><span class="g">✦</span> Inspired by {{ nm | escape }}</span>
+{%- endcase -%}

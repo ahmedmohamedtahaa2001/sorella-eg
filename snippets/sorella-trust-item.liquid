@@ -1,0 +1,40 @@
+{%- comment -%}
+  Sorella — trust item (.trustitem) for the 4-icon trust bar (audit §2.9 / §8)
+  Params:
+    icon    (string) — 'shipping' | 'returns' | 'egypt' | 'longevity' | 'tester' | 'leaf' | 'star'
+    label   (string, required)
+    subtext (string, optional)
+    layout  (string) — 'row' | 'stacked' (default 'row')
+{%- endcomment -%}
+{%- liquid
+  assign ic = icon | default: 'shipping'
+  assign lay = layout | default: 'row'
+-%}
+{%- if label != blank -%}
+<div class="trustitem trustitem--{{ lay }}">
+  <span class="trustitem__icon" aria-hidden="true">
+    {%- case ic -%}
+      {%- when 'shipping' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+      {%- when 'returns' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg>
+      {%- when 'egypt' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 20h18z"/><path d="M8.5 13h7"/></svg>
+      {%- when 'longevity' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      {%- when 'tester' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-4 8a2 2 0 0 0 1.8 3h8.4A2 2 0 0 0 18 17l-4-8V3"/></svg>
+      {%- when 'leaf' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8 0 16-4 16-16 0 0-13-2-15 8a5 5 0 0 0 3 6"/><path d="M9 15c3-3 7-4 7-4"/></svg>
+      {%- when 'star' -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6L20 9.3l-4 4 1 5.7L12 16l-5 3 1-5.7-4-4 5.4-.7z"/></svg>
+      {%- else -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    {%- endcase -%}
+  </span>
+  <div class="trustitem__text">
+    <span class="trustitem__label">{{ label }}</span>
+    {%- if subtext != blank -%}<span class="trustitem__sub">{{ subtext }}</span>{%- endif -%}
+  </div>
+</div>
+{%- endif -%}

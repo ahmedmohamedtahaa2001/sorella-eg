@@ -1,0 +1,140 @@
+{%- comment -%}
+  Sorella — collection toolbar. Sticky result-count + Sort dropdown (defaults
+  to Best selling) + Shopify storefront filters (collection.filters) as
+  no-JS <details> dropdowns. Real GET <form> that preserves sort_by + filter
+  params. Optional mobile chip-bar of sub-collection links.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+
+  comment -- current applied sort; fall back to Best selling -- endcomment
+  assign current_sort = collection.sort_by
+  if current_sort == blank
+    assign current_sort = collection.default_sort_by
+  endif
+  if current_sort == blank
+    assign current_sort = 'best-selling'
+  endif
+
+  comment -- count active filter values (for the clear row) -- endcomment
+  assign active_count = 0
+  for f in collection.filters
+    for v in f.active_values
+      assign active_count = active_count | plus: 1
+    endfor
+    if f.type == 'price_range'
+      if f.min_value.value != blank or f.max_value.value != blank
+        assign active_count = active_count | plus: 1
+      endif
+    endif
+  endfor
+-%}
+<section class="coltoolbar" id="{{ section.id }}">
+  {%- if s.show_subnav and s.subnav != blank and linklists[s.subnav].links.size > 0 -%}
+    <div class="colchips" aria-label="Browse collections">
+      <div class="colchips__track">
+        {%- for link in linklists[s.subnav].links -%}
+          <a class="colchips__chip{% if link.active or link.current %} on{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <form method="get" class="coltoolbar__form">
+    <div class="wrap coltoolbar__bar">
+      <span class="coltoolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</span>
+
+      {%- if s.show_filters and collection.filters.size > 0 -%}
+        <div class="coltoolbar__filters">
+          {%- for filter in collection.filters -%}
+            <details class="colfilter">
+              <summary class="colfilter__summary">
+                {{ filter.label }}
+                {%- if filter.active_values.size > 0 -%}<span class="colfilter__n">{{ filter.active_values.size }}</span>{%- endif -%}
+                <svg class="colfilter__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="colfilter__panel">
+                {%- case filter.type -%}
+                  {%- when 'price_range' -%}
+                    <div class="colfilter__price">
+                      <label>
+                        <span>Min</span>
+                        <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ 0 | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal" onchange="this.form.submit()">
+                      </label>
+                      <label>
+                        <span>Max</span>
+                        <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal" onchange="this.form.submit()">
+                      </label>
+                    </div>
+                  {%- else -%}
+                    <ul class="colfilter__list">
+                      {%- for value in filter.values -%}
+                        <li>
+                          <label class="colfilter__opt{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                            <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} onchange="this.form.submit()">
+                            <span class="colfilter__label">{{ value.label }}</span>
+                            <span class="colfilter__count">{{ value.count }}</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                {%- endcase -%}
+              </div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <label class="coltoolbar__sort">
+        <span class="coltoolbar__sortlabel">Sort</span>
+        <select name="sort_by" class="coltoolbar__select" onchange="this.form.submit()" aria-label="Sort products">
+          <option value="best-selling"{% if current_sort == 'best-selling' %} selected{% endif %}>Best selling</option>
+          <option value="created-descending"{% if current_sort == 'created-descending' %} selected{% endif %}>Newest</option>
+          <option value="price-ascending"{% if current_sort == 'price-ascending' %} selected{% endif %}>Price: low to high</option>
+          <option value="price-descending"{% if current_sort == 'price-descending' %} selected{% endif %}>Price: high to low</option>
+          <option value="manual"{% if current_sort == 'manual' %} selected{% endif %}>Top rated</option>
+        </select>
+        <svg class="coltoolbar__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </label>
+
+      <noscript><button type="submit" class="btn btn--primary btn--sm coltoolbar__apply">Apply</button></noscript>
+    </div>
+
+    {%- if active_count > 0 -%}
+      <div class="wrap coltoolbar__active">
+        {%- for filter in collection.filters -%}
+          {%- for value in filter.active_values -%}
+            <a class="coltoolbar__chip" href="{{ value.url_to_remove }}">
+              {{ value.label }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </a>
+          {%- endfor -%}
+          {%- if filter.type == 'price_range' -%}
+            {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+              <a class="coltoolbar__chip" href="{{ filter.url_to_remove }}">
+                {{ filter.min_value.value | default: 0 | money }} &ndash; {{ filter.max_value.value | default: filter.range_max | money }}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <a class="coltoolbar__clear" href="{{ collection.url }}?sort_by={{ current_sort }}">Clear all</a>
+      </div>
+    {%- endif -%}
+  </form>
+</section>
+
+{% schema %}
+{
+  "name": "Collection toolbar",
+  "tag": "section",
+  "class": "coltoolbar-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_filters", "label": "Show storefront filters", "default": true, "info": "Filters come from Search & Discovery / Online Store filter settings." },
+    { "type": "header", "content": "Mobile sub-collection chips" },
+    { "type": "checkbox", "id": "show_subnav", "label": "Show sub-collection chip bar", "default": true },
+    { "type": "link_list", "id": "subnav", "label": "Chip-bar menu", "info": "A horizontally-scrollable bar of collection links (mobile-friendly, not hamburger-only)." }
+  ],
+  "presets": [{ "name": "Collection toolbar" }]
+}
+{% endschema %}

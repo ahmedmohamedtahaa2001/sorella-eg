@@ -1,0 +1,177 @@
+{%- comment -%}
+  Sorella — Cart drawer (right-side slide-in). Light monochrome.
+  Panel id="cart-drawer" · [data-panel] — opened by any [data-cart-toggle] or
+  [data-menu-toggle="cart-drawer"] (see assets/sorella.js). Esc / scrim / [data-close] close it.
+
+  Real Shopify: cart, cart.items, routes.cart_url / routes.cart_change_url,
+  {% form 'cart' %}. Settings: settings.free_gift_threshold (LE, default 1100),
+  settings.gift_collection (free 5ml rewards), settings.cross_sell_collection.
+
+  Progressive by default (forms POST to /cart, GET removes). Where AJAX enhances:
+    • qty steppers → POST /cart/change.js on [data-qty-input] change (instant, no reload)
+    • remove links [data-cart-remove] → same, then re-render the drawer
+    • gift-picker + cross-sell add buttons → POST /cart/add.js, then re-open drawer
+  No dark patterns: no countdowns, no fake stock, nothing pre-checked.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign threshold = s.free_gift_threshold | default: 1100
+  assign threshold_cents = threshold | times: 100
+  assign remaining = threshold_cents | minus: cart.total_price
+  if remaining < 0
+    assign remaining = 0
+  endif
+  assign unlocked = false
+  if cart.total_price >= threshold_cents and threshold_cents > 0
+    assign unlocked = true
+  endif
+  assign pct = 0
+  if threshold_cents > 0
+    assign pct = cart.total_price | times: 100 | divided_by: threshold_cents
+    if pct > 100
+      assign pct = 100
+    endif
+  endif
+  assign gift_coll = s.gift_collection
+  assign xsell_coll = s.cross_sell_collection
+-%}
+
+<div class="cartdrawer" id="cart-drawer" data-panel>
+  <div class="cartdrawer__scrim" data-close></div>
+  <aside class="cartdrawer__panel" role="dialog" aria-modal="true" aria-label="{{ s.heading | default: 'Your bag' | escape }}">
+
+    <header class="cartdrawer__head">
+      <h2 class="cartdrawer__title serif">{{ s.heading | default: 'Your bag' }}<span class="cartdrawer__count">{{ cart.item_count }}</span></h2>
+      <button class="cartdrawer__close" type="button" data-close aria-label="Close bag">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+
+    {%- if cart.item_count > 0 -%}
+      <div class="cartdrawer__body">
+
+        {%- comment -%} ── Free-gift progress bar ── {%- endcomment -%}
+        {%- if threshold_cents > 0 -%}
+          <div class="cart-gift">
+            <div class="cart-gift__row">
+              {%- if unlocked -%}
+                <span><b>You've unlocked a free 5ml</b> 🎁 — pick your reward below.</span>
+              {%- else -%}
+                <span>You're <b>{{ remaining | money }}</b> away from a <b>free 5ml</b> tester.</span>
+              {%- endif -%}
+            </div>
+            <div class="cart-gift__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}">
+              <span class="cart-gift__fill" style="width:{{ pct }}%"></span>
+            </div>
+          </div>
+
+          {%- comment -%} ── Free-gift picker — disabled until threshold reached ── {%- endcomment -%}
+          {%- if gift_coll != blank and gift_coll.products.size > 0 -%}
+            <div class="cart-gift-picker{% unless unlocked %} is-locked{% endunless %}" aria-label="Free 5ml rewards">
+              <span class="cart-gift-picker__label eyebrow">
+                {%- if unlocked -%}Choose your free 5ml{%- else -%}Unlock at {{ threshold_cents | money }}{%- endif -%}
+              </span>
+              <div class="cart-gift-picker__grid">
+                {%- for gp in gift_coll.products limit: 8 -%}
+                  {%- assign gvid = gp.selected_or_first_available_variant.id -%}
+                  <form action="{{ routes.cart_add_url }}" method="post" class="cart-gift-opt" data-gift-add>
+                    <input type="hidden" name="id" value="{{ gvid }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="properties[_gift]" value="true">
+                    <button type="submit" name="add" class="cart-gift-opt__btn" {% unless unlocked %}disabled aria-disabled="true"{% endunless %} title="{{ gp.title | escape }}">
+                      {%- if gp.featured_image -%}
+                        <img src="{{ gp.featured_image | image_url: width: 120 }}" alt="{{ gp.featured_image.alt | default: gp.title | escape }}" width="60" height="72" loading="lazy">
+                      {%- else -%}
+                        <span class="cartline__b"></span>
+                      {%- endif -%}
+                      <span class="cart-gift-opt__name">{{ gp.title }}</span>
+                    </button>
+                  </form>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- comment -%} ── Line items + gift note (one cart form, no add-to-cart forms nested) ── {%- endcomment -%}
+        {%- form 'cart', cart, class: 'cartdrawer__lines' -%}
+          <ul class="cartdrawer__list">
+            {%- for item in cart.items -%}
+              <li>{% render 'sorella-cart-line', item: item, variant: 'drawer' %}</li>
+            {%- endfor -%}
+          </ul>
+
+          <div class="cartdrawer__note">
+            <label class="cartdrawer__note-label" for="cart-gift-note">{{ s.note_label | default: 'Add a gift note' }}</label>
+            <textarea id="cart-gift-note" name="attributes[Gift note]" class="cartdrawer__note-field" rows="2" placeholder="{{ s.note_placeholder | default: 'A message for someone special (optional)' | escape }}">{{ cart.attributes['Gift note'] }}</textarea>
+          </div>
+
+          <noscript><button type="submit" name="update" class="btn btn--ghost btn--full btn--sm cartdrawer__update">Update bag</button></noscript>
+        {%- endform -%}
+
+        {%- comment -%} ── Paid cross-sell rail (own add forms — kept outside the cart form) ── {%- endcomment -%}
+        {%- if xsell_coll != blank and xsell_coll.products.size > 0 -%}
+          <div class="cartdrawer__xsell">
+            <span class="eyebrow">{{ s.xsell_heading | default: 'You might also like' }}</span>
+            <div class="cartdrawer__xsell-grid">
+              {%- for xp in xsell_coll.products limit: 3 -%}
+                {% render 'sorella-product-card', product: xp, variant: 'compact' %}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── Sticky footer: subtotal + checkout (own cart form) ── {%- endcomment -%}
+      <footer class="cartdrawer__foot">
+        <div class="cartdrawer__subtotal">
+          <span>Subtotal</span>
+          <b>{{ cart.total_price | money }}</b>
+        </div>
+        {%- form 'cart', cart, class: 'cartdrawer__checkout' -%}
+          <button type="submit" name="checkout" class="btn btn--primary btn--full">{{ s.checkout_label | default: 'Checkout' }}</button>
+        {%- endform -%}
+        <p class="cartdrawer__fineprint">{{ s.fineprint | default: 'Shipping & taxes calculated at checkout' }}</p>
+      </footer>
+
+    {%- else -%}
+      {%- comment -%} ── Empty state ── {%- endcomment -%}
+      <div class="cartdrawer__empty">
+        <div class="cartdrawer__empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </div>
+        <p class="cartdrawer__empty-title serif">{{ s.empty_heading | default: 'Your bag is empty' }}</p>
+        <p class="cartdrawer__empty-text">{{ s.empty_text | default: 'Discover a scent that feels like you.' }}</p>
+        <a href="{{ s.empty_url | default: routes.all_products_collection_url }}" class="btn btn--primary" data-close>{{ s.empty_label | default: 'Shop bestsellers' }}</a>
+      </div>
+    {%- endif -%}
+
+  </aside>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Header" },
+    { "type": "text", "id": "heading", "label": "Title", "default": "Your bag" },
+    { "type": "header", "content": "Free-gift reward" },
+    { "type": "paragraph", "content": "Threshold + reward collection are set in Theme settings → Cart (settings.free_gift_threshold, settings.gift_collection)." },
+    { "type": "header", "content": "Gift note" },
+    { "type": "text", "id": "note_label", "label": "Note label", "default": "Add a gift note" },
+    { "type": "text", "id": "note_placeholder", "label": "Note placeholder", "default": "A message for someone special (optional)" },
+    { "type": "header", "content": "Cross-sell" },
+    { "type": "text", "id": "xsell_heading", "label": "Cross-sell heading", "default": "You might also like" },
+    { "type": "paragraph", "content": "Cross-sell collection is set in Theme settings → Cart (settings.cross_sell_collection)." },
+    { "type": "header", "content": "Footer" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout button", "default": "Checkout" },
+    { "type": "text", "id": "fineprint", "label": "Fine print", "default": "Shipping & taxes calculated at checkout" },
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_heading", "label": "Empty heading", "default": "Your bag is empty" },
+    { "type": "text", "id": "empty_text", "label": "Empty text", "default": "Discover a scent that feels like you." },
+    { "type": "text", "id": "empty_label", "label": "Empty button label", "default": "Shop bestsellers" },
+    { "type": "url", "id": "empty_url", "label": "Empty button link" }
+  ]
+}
+{% endschema %}
