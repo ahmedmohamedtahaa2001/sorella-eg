@@ -9,15 +9,7 @@
     "free_gift_threshold": 1100,
     "card_image_ratio": "media--4x5",
     "card_quick_add": true,
-    "currency_code_enabled": true,
-    "sections": {
-      "sorella-cart-drawer": {
-        "type": "sorella-cart-drawer",
-        "settings": {
-          "upsell_collection": "5-ml-testers"
-        }
-      }
-    }
+    "currency_code_enabled": true
   },
   "presets": {
     "Sorella": {

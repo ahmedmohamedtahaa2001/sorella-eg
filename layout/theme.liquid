@@ -26,10 +26,10 @@
 
     {{ content_for_header }}
 
+    {%- comment -%} Monochrome design foundation — tokens, merchant overrides, component atoms, variant partials {%- endcomment -%}
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {% render 'sorella-color-vars' %}
     {{ 'components.css' | asset_url | stylesheet_tag }}
-    {%- comment -%} Component-library variant partials — load after components.css so modifiers win {%- endcomment -%}
     {{ 'sorella-lib-cards.css' | asset_url | stylesheet_tag }}
     {{ 'sorella-lib-pdp.css' | asset_url | stylesheet_tag }}
     {{ 'sorella-lib-layout.css' | asset_url | stylesheet_tag }}
@@ -41,22 +41,10 @@
   <body class="template-{{ request.page_type | handle }}">
     <a class="skip-to-content visually-hidden" href="#main-content">{{ 'general.accessibility.skip_to_content' | t }}</a>
 
-    {% sections 'header-group' %}
-
     <main id="main-content" role="main">
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
-
-    {%- comment -%} Cart drawer lives outside main so it overlays all pages {%- endcomment -%}
-    {%- if settings.cart_drawer_enabled -%}
-      {% section 'sorella-cart-drawer' %}
-    {%- endif -%}
-
-    <div class="scrim" data-shared-scrim></div>
-
     <script>window.Sorella = window.Sorella || {}; window.Sorella.moneyFormat = {{ shop.money_format | json }};</script>
-    <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>
 </html>
