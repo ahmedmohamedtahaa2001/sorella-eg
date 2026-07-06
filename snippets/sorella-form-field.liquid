@@ -1,27 +1,100 @@
 {%- comment -%}
-  sorella-form-field — text / email / tel / textarea (§9).
+  sorella-form-field — param-driven form control (§9).
+  DEFAULT variant reproduces the original stacked label + control exactly.
+
   Params:
-    type (string) — 'text' (default) | 'email' | 'tel' | 'textarea' | 'password'
+    type    (string) — 'text' (default) | 'email' | 'tel' | 'password' | 'search'
+                       | 'textarea' | 'select'
+    variant (string) — 'default' (default) | 'floating' | 'inline' | 'with-icon'
+                       | 'search' | 'sm' | 'lg'
+    state   (string) — '' | 'error' | 'success'  (visual + aria)
     id (string, required) · name (string, required) · label (string, required)
-    value (string) · required (boolean) · placeholder (string) · autocomplete (string) · rows (number)
+    value (string) · required (boolean) · placeholder (string)
+    autocomplete (string) · rows (number, textarea)
+    icon (string) — icon name for 'with-icon' / 'search' variants
+    options (array) — [value,label] pairs OR array of strings, for type 'select'
+    help (string) · message (string) — helper / error/success message
 {%- endcomment -%}
 {%- liquid
   assign field_type = type | default: 'text'
+  assign field_variant = variant | default: 'default'
   assign field_rows = rows | default: 5
+  assign field_state = state | default: ''
+  assign wrap_class = 'sorella-field'
+  if field_variant != 'default'
+    assign wrap_class = wrap_class | append: ' sorella-field--' | append: field_variant
+  endif
+  if field_state != blank
+    assign wrap_class = wrap_class | append: ' sorella-field--' | append: field_state
+  endif
+  assign is_floating = false
+  if field_variant == 'floating'
+    assign is_floating = true
+  endif
 -%}
-<div class="sorella-field">
-  <label class="sorella-field__label t-caption-strong" for="{{ id }}">
-    {{ label }}{% if required %} <span aria-hidden="true">*</span>{% endif %}
-  </label>
-  {%- if field_type == 'textarea' -%}
-    <textarea id="{{ id }}" name="{{ name }}" rows="{{ field_rows }}"
-      {% if required %}required{% endif %}
-      {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}>{{ value }}</textarea>
-  {%- else -%}
-    <input type="{{ field_type }}" id="{{ id }}" name="{{ name }}"
-      value="{{ value }}"
-      {% if required %}required{% endif %}
-      {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}
-      {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}>
+<div class="{{ wrap_class }}">
+  {%- unless is_floating -%}
+    <label class="sorella-field__label t-caption-strong" for="{{ id }}">
+      {{ label }}{% if required %} <span aria-hidden="true">*</span>{% endif %}
+    </label>
+  {%- endunless -%}
+
+  {%- capture control_extra -%}{% if field_state == 'error' %} aria-invalid="true"{% endif %}{% if message != blank %} aria-describedby="{{ id }}-msg"{% endif %}{%- endcapture -%}
+
+  {%- case field_variant -%}
+    {%- when 'with-icon', 'search' -%}
+      {%- assign field_icon = icon | default: 'search' -%}
+      <div class="sorella-field__control">
+        <span class="sorella-field__icon text-mist" aria-hidden="true">{% render 'sorella-icon', name: field_icon, size: 18 %}</span>
+        <input type="{{ field_type }}" id="{{ id }}" name="{{ name }}" value="{{ value }}"
+          {% if required %}required{% endif %}
+          {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}
+          {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}{{ control_extra }}>
+      </div>
+
+    {%- when 'floating' -%}
+      <div class="sorella-field__control">
+        {%- if field_type == 'textarea' -%}
+          <textarea id="{{ id }}" name="{{ name }}" rows="{{ field_rows }}" placeholder=" "
+            {% if required %}required{% endif %}{{ control_extra }}>{{ value }}</textarea>
+        {%- else -%}
+          <input type="{{ field_type }}" id="{{ id }}" name="{{ name }}" value="{{ value }}" placeholder=" "
+            {% if required %}required{% endif %}
+            {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}{{ control_extra }}>
+        {%- endif -%}
+        <label class="sorella-field__float-label t-caption" for="{{ id }}">
+          {{ label }}{% if required %} <span aria-hidden="true">*</span>{% endif %}
+        </label>
+      </div>
+
+    {%- else -%}
+      {%- if field_type == 'textarea' -%}
+        <textarea id="{{ id }}" name="{{ name }}" rows="{{ field_rows }}"
+          {% if required %}required{% endif %}
+          {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}{{ control_extra }}>{{ value }}</textarea>
+      {%- elsif field_type == 'select' -%}
+        <select id="{{ id }}" name="{{ name }}" {% if required %}required{% endif %}{{ control_extra }}>
+          {%- if placeholder != blank -%}<option value="" disabled {% if value == blank %}selected{% endif %}>{{ placeholder | escape }}</option>{%- endif -%}
+          {%- for opt in options -%}
+            {%- if opt.first -%}
+              <option value="{{ opt.first }}" {% if value == opt.first %}selected{% endif %}>{{ opt.last }}</option>
+            {%- else -%}
+              <option value="{{ opt }}" {% if value == opt %}selected{% endif %}>{{ opt }}</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select>
+      {%- else -%}
+        <input type="{{ field_type }}" id="{{ id }}" name="{{ name }}"
+          value="{{ value }}"
+          {% if required %}required{% endif %}
+          {% if autocomplete != blank %}autocomplete="{{ autocomplete }}"{% endif %}
+          {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}{{ control_extra }}>
+      {%- endif -%}
+  {%- endcase -%}
+
+  {%- if message != blank -%}
+    <p id="{{ id }}-msg" class="sorella-field__msg t-caption {% if field_state == 'success' %}sorella-field__msg--success{% else %}sorella-field__msg--error{% endif %}" role="{% if field_state == 'error' %}alert{% else %}status{% endif %}">{{ message }}</p>
+  {%- elsif help != blank -%}
+    <p class="sorella-field__help t-caption text-mist">{{ help }}</p>
   {%- endif -%}
 </div>

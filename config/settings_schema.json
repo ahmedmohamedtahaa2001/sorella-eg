@@ -92,77 +92,77 @@
       },
       {
         "type": "paragraph",
-        "content": "Defaults match the Sorella navy design system. Changing these updates the whole theme — translucent glass surfaces follow automatically."
+        "content": "Defaults match the Sorella monochrome luxury palette (Absolute Black → Pure White, no colour accent). Changing these updates the whole theme — translucent glass surfaces follow automatically."
       },
       {
         "type": "color",
         "id": "colors_navy",
-        "label": "Canvas (navy)",
-        "default": "#0a1420"
+        "label": "Canvas (Absolute Black)",
+        "default": "#000000"
       },
       {
         "type": "color",
         "id": "colors_parchment",
-        "label": "Text (parchment)",
-        "default": "#F2EEE7"
+        "label": "Text (Pearl White)",
+        "default": "#E8E8E8"
       },
       {
         "type": "color",
         "id": "colors_gold",
-        "label": "Accent (gold)",
-        "default": "#C79C5A"
+        "label": "Accent (Pure White)",
+        "default": "#FFFFFF"
       },
       {
         "type": "color",
         "id": "colors_ink",
-        "label": "Ink (footer, text on gold, photo overlays)",
-        "default": "#1C1F24"
+        "label": "Ink (footer, text on accent, photo overlays)",
+        "default": "#000000"
       },
       {
         "type": "color",
         "id": "colors_slate",
-        "label": "Slate (secondary surfaces)",
-        "default": "#3A4452"
+        "label": "Graphite (secondary surfaces)",
+        "default": "#262626"
       },
       {
         "type": "color",
         "id": "colors_mist",
-        "label": "Mist (muted text, hairlines)",
-        "default": "#9AA3AD"
+        "label": "Silver (muted text, hairlines)",
+        "default": "#8C8C8C"
       },
       {
         "type": "header",
-        "content": "Navy elevation scale"
+        "content": "Elevation scale (black → gunmetal)"
       },
       {
         "type": "color",
         "id": "colors_navy_lowest",
-        "label": "Navy — deepest wells",
-        "default": "#050f1b"
+        "label": "Deepest wells (Absolute Black)",
+        "default": "#000000"
       },
       {
         "type": "color",
         "id": "colors_navy_low",
-        "label": "Navy — low containers",
-        "default": "#121c29"
+        "label": "Low containers (Rich Charcoal)",
+        "default": "#111111"
       },
       {
         "type": "color",
         "id": "colors_navy_container",
-        "label": "Navy — cards & panels",
-        "default": "#16202d"
+        "label": "Cards & panels (Obsidian)",
+        "default": "#1A1A1A"
       },
       {
         "type": "color",
         "id": "colors_navy_high",
-        "label": "Navy — raised containers",
-        "default": "#212b38"
+        "label": "Raised / hover (Graphite)",
+        "default": "#262626"
       },
       {
         "type": "color",
         "id": "colors_navy_bright",
-        "label": "Navy — media placeholder",
-        "default": "#2b3543"
+        "label": "Media placeholder (Gunmetal)",
+        "default": "#3B3B3B"
       }
     ]
   },

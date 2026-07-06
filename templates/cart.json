@@ -1,6 +1,0 @@
-{
-  "sections": {
-    "main": { "type": "sorella-main-cart", "settings": {} }
-  },
-  "order": ["main"]
-}

@@ -1,14 +1,25 @@
 {%- comment -%}
   sorella-product-card — solid catalog card, gold hover border, no blur (§9).
-  Variants: default / quick-add / compact — sold-out demotion is automatic.
-  Quick add lives INSIDE the media as a bottom-center parchment pill,
-  revealed on hover/focus (always visible on touch and for 'compact').
+  sold-out demotion is automatic on every variant.
+  Quick add (default/quick-add/compact) lives INSIDE the media as a bottom-center
+  parchment pill, revealed on hover/focus (always visible on touch and 'compact').
   Params:
     product  (object, required)
-    variant  (string) — 'default' (default) | 'quick-add' | 'compact'
+    variant  (string) — see list below (default 'default')
     ratio    (string) — media ratio class; falls back to settings.card_image_ratio
-    quick_add (boolean) — override settings.card_quick_add
+    quick_add (boolean) — override settings.card_quick_add (default/quick-add/compact)
     lazy     (boolean) — lazy-load image (default true)
+    eyebrow  (string) — small over-title label for 'featured' / 'editorial'
+  Variants (9):
+    default   — full catalog card                        (existing — unchanged)
+    quick-add — full card, tighter body                  (existing — unchanged)
+    compact   — impulse SKU, always-on add               (existing — unchanged)
+    horizontal— list row: media left, body right
+    minimal   — image + name + price only
+    featured  — large hero card with eyebrow + PDP price
+    bundle    — set framing with a "Set" tag + add
+    editorial — full-bleed media with overlay title/price
+    gift      — gift framing with "Gift ready" note + add
 {%- endcomment -%}
 {%- liquid
   assign card_variant = variant | default: 'default'
@@ -45,7 +56,146 @@
   if product.compare_at_price > product.price
     assign on_sale = true
   endif
+
+  assign choose_label = 'products.product.choose_options' | t
+  assign quick_label = 'products.product.quick_add' | t
 -%}
+{%- comment -%} Reusable media (featured image + placeholder) for the added variants {%- endcomment -%}
+{%- capture card_image -%}
+  {%- if product.featured_media -%}
+    {{ product.featured_media.preview_image | image_url: width: 600 | image_tag:
+      loading: loading,
+      sizes: '(max-width: 640px) 45vw, 280px',
+      widths: '240, 320, 400, 600',
+      alt: product.featured_media.alt | default: product.title | escape }}
+  {%- else -%}
+    {{ 'product-1' | placeholder_svg_tag: 'media__placeholder' }}
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture card_badges -%}
+  <div class="sorella-card__badges">
+    {%- if on_sale and is_available -%}{% render 'sorella-badge', variant: 'sale' %}{%- endif -%}
+    {%- unless is_available -%}{% render 'sorella-badge', variant: 'sold-out' %}{%- endunless -%}
+  </div>
+{%- endcapture -%}
+{%- capture card_add -%}
+  {%- if product.variants.size > 1 -%}
+    {% render 'sorella-button', label: choose_label, href: product.url, style: 'primary', size: 'sm', full: true %}
+  {%- else -%}
+    {%- form 'product', product, class: 'sorella-card__form' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      {% render 'sorella-button', label: quick_label, style: 'primary', size: 'sm', full: true, type: 'submit' %}
+    {%- endform -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- case card_variant -%}
+
+  {%- when 'horizontal' -%}
+    <article class="sorella-card sorella-card--horizontal{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <a class="sorella-card__link sorella-card__media-wrap" href="{{ product.url }}">
+        <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        {{ card_badges }}
+      </a>
+      <div class="sorella-card__body">
+        {%- if inspired != blank -%}{% render 'sorella-inspired-by-tag', name: inspired %}{%- endif -%}
+        <h3 class="sorella-card__title t-headline"><a href="{{ product.url }}" dir="auto">{{ product.title }}</a></h3>
+        {%- if notes_summary != blank -%}<p class="sorella-card__notes" dir="auto">{{ notes_summary }}</p>{%- endif -%}
+        <div class="sorella-card__ledger">
+          <div class="sorella-card__price">{% render 'sorella-price', product: product, context: 'card' %}</div>
+          {%- if is_available -%}<div class="sorella-card__buy">{{ card_add }}</div>{%- endif -%}
+        </div>
+      </div>
+    </article>
+
+  {%- when 'minimal' -%}
+    <article class="sorella-card sorella-card--minimal{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <a class="sorella-card__link sorella-card__media-wrap" href="{{ product.url }}">
+        <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        {{ card_badges }}
+      </a>
+      <div class="sorella-card__body">
+        <h3 class="sorella-card__title t-title"><a href="{{ product.url }}" dir="auto">{{ product.title }}</a></h3>
+        <div class="sorella-card__price">{% render 'sorella-price', product: product, context: 'card' %}</div>
+      </div>
+    </article>
+
+  {%- when 'featured' -%}
+    <article class="sorella-card sorella-card--featured{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <a class="sorella-card__link sorella-card__media-wrap" href="{{ product.url }}">
+        <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        {{ card_badges }}
+      </a>
+      <div class="sorella-card__body">
+        {%- if eyebrow != blank -%}
+          <p class="sorella-card__eyebrow t-eyebrow text-mist">{{ eyebrow }}</p>
+        {%- elsif inspired != blank -%}
+          {% render 'sorella-inspired-by-tag', name: inspired %}
+        {%- endif -%}
+        <h3 class="sorella-card__title t-display-md"><a href="{{ product.url }}" dir="auto">{{ product.title }}</a></h3>
+        {%- if notes_summary != blank -%}<p class="sorella-card__notes" dir="auto">{{ notes_summary }}</p>{%- endif -%}
+        <div class="sorella-card__ledger">
+          <div class="sorella-card__price">{% render 'sorella-price', product: product, style: 'pdp', context: 'pdp' %}</div>
+          {%- if is_available -%}<div class="sorella-card__buy">{{ card_add }}</div>{%- endif -%}
+        </div>
+      </div>
+    </article>
+
+  {%- when 'bundle' -%}
+    <article class="sorella-card sorella-card--bundle{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <div class="sorella-card__media-wrap">
+        <a class="sorella-card__link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+          <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        </a>
+        <div class="sorella-card__badges">
+          {% render 'sorella-badge', variant: 'tag', label: 'Set' %}
+          {%- unless is_available -%}{% render 'sorella-badge', variant: 'sold-out' %}{%- endunless -%}
+        </div>
+      </div>
+      <div class="sorella-card__body">
+        <h3 class="sorella-card__title t-headline"><a href="{{ product.url }}" dir="auto">{{ product.title }}</a></h3>
+        {%- if notes_summary != blank -%}<p class="sorella-card__notes" dir="auto">{{ notes_summary }}</p>{%- endif -%}
+        <div class="sorella-card__ledger">
+          <div class="sorella-card__price">{% render 'sorella-price', product: product, style: 'compare-inline', context: 'card' %}</div>
+          {%- if is_available -%}<div class="sorella-card__buy">{{ card_add }}</div>{%- endif -%}
+        </div>
+      </div>
+    </article>
+
+  {%- when 'editorial' -%}
+    <article class="sorella-card sorella-card--editorial{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <a class="sorella-card__link sorella-card__media-wrap" href="{{ product.url }}">
+        <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        {{ card_badges }}
+        <div class="sorella-card__overlay">
+          {%- if eyebrow != blank -%}<p class="sorella-card__eyebrow t-eyebrow">{{ eyebrow }}</p>{%- endif -%}
+          <h3 class="sorella-card__title t-headline">{{ product.title }}</h3>
+          <div class="sorella-card__price">{% render 'sorella-price', product: product, context: 'card', on_dark: true %}</div>
+        </div>
+      </a>
+    </article>
+
+  {%- when 'gift' -%}
+    <article class="sorella-card sorella-card--gift{% unless is_available %} sorella-card--sold-out{% endunless %}">
+      <div class="sorella-card__media-wrap">
+        <a class="sorella-card__link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+          <div class="media {{ ratio_class }} sorella-card__media">{{ card_image }}</div>
+        </a>
+        <div class="sorella-card__badges">
+          {% render 'sorella-badge', variant: 'gift' %}
+          {%- unless is_available -%}{% render 'sorella-badge', variant: 'sold-out' %}{%- endunless -%}
+        </div>
+      </div>
+      <div class="sorella-card__body">
+        <h3 class="sorella-card__title t-headline"><a href="{{ product.url }}" dir="auto">{{ product.title }}</a></h3>
+        <p class="sorella-card__gift-note t-caption text-mist">{% render 'sorella-icon', name: 'gift', size: 13 %} Gift wrap available</p>
+        <div class="sorella-card__ledger">
+          <div class="sorella-card__price">{% render 'sorella-price', product: product, context: 'card' %}</div>
+          {%- if is_available -%}<div class="sorella-card__buy">{{ card_add }}</div>{%- endif -%}
+        </div>
+      </div>
+    </article>
+
+  {%- else -%}
 <article class="sorella-card sorella-card--{{ card_variant }}{% unless is_available %} sorella-card--sold-out{% endunless %}">
   <div class="sorella-card__media-wrap">
     <a class="sorella-card__link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
@@ -78,10 +228,8 @@
     {%- if is_available and show_quick_add -%}
       <div class="sorella-card__actions">
         {%- if product.variants.size > 1 -%}
-          {%- assign choose_label = 'products.product.choose_options' | t -%}
           {% render 'sorella-button', label: choose_label, href: product.url, style: 'primary', size: 'sm', full: true %}
         {%- else -%}
-          {%- assign quick_label = 'products.product.quick_add' | t -%}
           {%- form 'product', product, class: 'sorella-card__form' -%}
             <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
             {% render 'sorella-button', label: quick_label, style: 'primary', size: 'sm', full: true, type: 'submit' %}
@@ -118,3 +266,4 @@
     </div>
   </div>
 </article>
+{%- endcase -%}

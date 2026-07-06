@@ -1,10 +1,49 @@
 {%- comment -%}
-  sorella-empty-state — branded empty / no-results (§9).
-  Params: heading (string), text (string), cta_label (string), cta_url (string), icon (string)
+  sorella-empty-state — branded empty / no-results block (§9).
+  DEFAULT reproduces the original output exactly (icon? / heading / text / cta).
+
+  Params:
+    variant (string) — 'default' | 'cart' | 'search' | 'collection' | '404'
+                       | 'wishlist' | 'order' | 'compact' | 'with-cta'
+    heading (string) · text (string) · icon (string)
+    cta_label (string) · cta_url (string)
+    Preset variants supply a default icon + copy when heading/icon omitted;
+    any passed param always overrides the preset.
 {%- endcomment -%}
-<div class="sorella-empty-state">
-  {%- if icon != blank -%}<span class="sorella-empty-state__icon text-gold">{% render 'sorella-icon', name: icon, size: 40 %}</span>{%- endif -%}
-  {%- if heading != blank -%}<p class="t-display-md">{{ heading }}</p>{%- endif -%}
-  {%- if text != blank -%}<p class="t-body text-mist">{{ text }}</p>{%- endif -%}
+{%- liquid
+  assign es_variant = variant | default: 'default'
+  assign es_icon = icon
+  assign es_heading = heading
+  assign es_text = text
+  assign es_class = 'sorella-empty-state'
+  if es_variant != 'default'
+    assign es_class = es_class | append: ' sorella-empty-state--' | append: es_variant
+  endif
+
+  case es_variant
+    when 'cart'
+      assign es_icon = es_icon | default: 'bag'
+      assign es_heading = es_heading | default: 'Your bag is empty'
+    when 'search'
+      assign es_icon = es_icon | default: 'search'
+      assign es_heading = es_heading | default: 'No results found'
+    when 'collection'
+      assign es_icon = es_icon | default: 'filter'
+      assign es_heading = es_heading | default: 'Nothing here yet'
+    when '404'
+      assign es_icon = es_icon | default: 'x-circle'
+      assign es_heading = es_heading | default: 'Page not found'
+    when 'wishlist'
+      assign es_icon = es_icon | default: 'heart'
+      assign es_heading = es_heading | default: 'Your wishlist is empty'
+    when 'order'
+      assign es_icon = es_icon | default: 'truck'
+      assign es_heading = es_heading | default: 'No orders yet'
+  endcase
+-%}
+<div class="{{ es_class }}">
+  {%- if es_icon != blank -%}<span class="sorella-empty-state__icon text-gold">{% render 'sorella-icon', name: es_icon, size: 40 %}</span>{%- endif -%}
+  {%- if es_heading != blank -%}<p class="t-display-md">{{ es_heading }}</p>{%- endif -%}
+  {%- if es_text != blank -%}<p class="t-body text-mist">{{ es_text }}</p>{%- endif -%}
   {%- if cta_label != blank -%}{% render 'sorella-button', label: cta_label, href: cta_url | default: routes.all_products_collection_url, style: 'primary' %}{%- endif -%}
 </div>

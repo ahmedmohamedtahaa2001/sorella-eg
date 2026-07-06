@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="{{ settings.colors_navy | default: '#0a1420' }}">
+    <meta name="theme-color" content="{{ settings.colors_navy | default: '#000000' }}">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
@@ -29,6 +29,11 @@
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {% render 'sorella-color-vars' %}
     {{ 'components.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Component-library variant partials — load after components.css so modifiers win {%- endcomment -%}
+    {{ 'sorella-lib-cards.css' | asset_url | stylesheet_tag }}
+    {{ 'sorella-lib-pdp.css' | asset_url | stylesheet_tag }}
+    {{ 'sorella-lib-layout.css' | asset_url | stylesheet_tag }}
+    {{ 'sorella-lib-forms.css' | asset_url | stylesheet_tag }}
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
   </head>

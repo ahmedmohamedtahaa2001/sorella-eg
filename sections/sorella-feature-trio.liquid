@@ -115,6 +115,7 @@
   .sorella-feature-trio__flag {
     position: absolute; inset-block-start: 0; left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1; /* paints above the card's ::after gold rule, which otherwise strikes through the text */
     white-space: nowrap;
     padding: 6px 14px; border-radius: var(--radius-pill);
     background: var(--color-ink);

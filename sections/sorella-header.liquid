@@ -17,6 +17,7 @@
   if start_transparent
     assign nav_state_class = 'sorella-nav--transparent'
   endif
+  assign nav_layout_class = 'sorella-nav--' | append: s.nav_layout | default: 'sorella-nav--center-links'
 
   assign nav_bg_alpha = s.scrolled_opacity | default: 100 | divided_by: 100.0
 
@@ -28,7 +29,7 @@
   assign menu_links = s.menu.links
 -%}
 
-<header class="sorella-nav {{ nav_state_class }}"
+<header class="sorella-nav {{ nav_state_class }} {{ nav_layout_class }}"
   data-sorella-nav
   data-scroll-hide="{{ s.scroll_hide }}"
   data-scroll-trigger="{{ s.scroll_trigger | default: 100 }}"
@@ -114,6 +115,23 @@
   </div>
 </header>
 
+{%- comment -%} Mobile chip-bar — horizontally-scrollable quick routes (Thomson-Carter pattern) {%- endcomment -%}
+{%- if s.mobile_chipbar -%}
+  <nav class="sorella-chipbar" aria-label="{{ 'general.accessibility.primary_nav' | t }}">
+    <ul class="sorella-chipbar__track">
+      {%- if menu_links.size > 0 -%}
+        {%- for link in menu_links -%}
+          <li><a class="sorella-chipbar__chip t-caption-strong" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for title in fallback_titles -%}
+          <li><a class="sorella-chipbar__chip t-caption-strong" href="{{ routes.collections_url }}/{{ fallback_handles[forloop.index0] }}">{{ title }}</a></li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
 {%- comment -%} Mobile drawer — full-height glass (§9.5, §10) {%- endcomment -%}
 <aside class="sorella-drawer sorella-drawer--start" id="mobile-drawer" data-panel data-scrim="[data-shared-scrim]" role="dialog" aria-modal="true" aria-hidden="true" aria-label="{{ 'general.accessibility.menu' | t }}">
   <div class="sorella-drawer__panel glass-panel">
@@ -172,15 +190,22 @@
   "name": "Header",
   "settings": [
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Intended main menu: For Her, For Him, Unisex, Perfume Oil, Bundles (each linking to its collection). Until a menu is assigned, the header shows these five collection links as a built-in fallback." },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "nav_layout", "label": "Nav layout", "default": "center-links", "options": [
+      { "value": "center-links", "label": "Logo left · links centered" },
+      { "value": "logo-center", "label": "Logo centered · links left" },
+      { "value": "minimal", "label": "Minimal · logo + icons only" }
+    ] },
+    { "type": "checkbox", "id": "mobile_chipbar", "label": "Show mobile scroll chip-bar under header", "default": false, "info": "A horizontally-scrollable row of quick category chips on phones — one-tap routing to top collections." },
     { "type": "header", "content": "Scroll behavior" },
     { "type": "checkbox", "id": "transparent_top", "label": "Transparent over homepage hero", "default": true },
     { "type": "range", "id": "top_offset", "label": "Transparent-state offset from top of page", "min": 0, "max": 60, "step": 1, "unit": "px", "default": 25, "info": "Space above the navbar while it is still transparent at the top of the page." },
     { "type": "range", "id": "scroll_trigger", "label": "Scroll distance before the background appears", "min": 10, "max": 200, "step": 5, "unit": "%", "default": 100, "info": "Percentage of the viewport height. At 100%, the navbar gains its background after scrolling one full screen; scrolling back up restores the transparent state." },
     { "type": "checkbox", "id": "scroll_hide", "label": "Hide navbar on scroll down, reveal on scroll up", "default": false },
     { "type": "header", "content": "Scrolled colors" },
-    { "type": "color", "id": "scrolled_bg", "label": "Scrolled background color", "default": "#0a1420", "info": "Design system navy canvas — the color the navbar fades to once scrolled." },
+    { "type": "color", "id": "scrolled_bg", "label": "Scrolled background color", "default": "#111111", "info": "Rich Charcoal — the color the navbar fades to once scrolled." },
     { "type": "range", "id": "scrolled_opacity", "label": "Scrolled background opacity", "min": 50, "max": 100, "step": 1, "unit": "%", "default": 100 },
-    { "type": "color", "id": "scrolled_text", "label": "Scrolled text & icon color", "default": "#F2EEE7" }
+    { "type": "color", "id": "scrolled_text", "label": "Scrolled text & icon color", "default": "#E8E8E8" }
   ],
   "enabled_on": { "groups": ["header"] }
 }

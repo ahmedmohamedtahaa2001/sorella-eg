@@ -33,14 +33,36 @@
 }
 
 /* --------------------------------------------------------------------------
-   Inspired-by tag (§9)
+   Inspired-by / true-to-original tag (§9) — 8 variants
+   Monochrome: white-wash pill, white type; the "craft" badge is the default.
    -------------------------------------------------------------------------- */
 .sorella-inspired-by {
   display: inline-flex; align-items: center; gap: var(--space-xxs);
   padding: 4px 10px; border-radius: var(--radius-pill);
-  background: var(--color-gold-15); color: var(--color-gold);
-  border: 1px solid var(--color-gold-40);
+  background: var(--color-gold-15); color: var(--color-parchment);
+  border: 1px solid var(--color-mist-25);
 }
+.sorella-inspired-by .sorella-icon { color: var(--color-gold); flex: none; }
+/* original — inverted: solid white seal, black type (the house mark) */
+.sorella-inspired-by--original { background: var(--color-parchment); color: var(--color-ink); border-color: transparent; }
+.sorella-inspired-by--original .sorella-icon { color: var(--color-ink); }
+/* line — quiet underlined caption under a product name */
+.sorella-inspired-by__line {
+  display: inline-block; padding-block-end: 2px;
+  border-block-end: 1px solid var(--color-mist-25);
+}
+/* stamp — engraved square seal for the PDP */
+.sorella-inspired-by__stamp {
+  display: inline-flex; padding: 2px;
+  border: 1px solid var(--color-gold-40); border-radius: var(--radius-xs);
+}
+.sorella-inspired-by__stamp-inner {
+  display: inline-flex; align-items: center;
+  padding: 7px 12px; color: var(--color-gold);
+  border: 1px solid var(--color-mist-25); border-radius: 3px;
+}
+/* disclaimer — legal hedge fine print */
+.sorella-inspired-by__disclaimer { margin: 0; max-width: 60ch; }
 
 /* --------------------------------------------------------------------------
    Star rating (§9)
@@ -53,6 +75,7 @@
    -------------------------------------------------------------------------- */
 .sorella-card {
   display: flex; flex-direction: column;
+  height: 100%;
   background: var(--color-navy-container); color: var(--color-parchment);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-parchment-08);
@@ -95,28 +118,56 @@
   position: absolute; inset-block-start: var(--space-sm); inset-inline-start: var(--space-sm);
   display: flex; gap: var(--space-xs); flex-wrap: wrap; z-index: 1;
 }
+/* Body — one skeleton for every card: content zone grows, ledger anchors.
+   Whatever the content mix (notes, rating, description), every card in a
+   row ends on the same hairline ledger, so rows read as one set. */
 .sorella-card__body {
+  flex: 1;
   display: flex; flex-direction: column; gap: var(--space-xs);
   padding: var(--space-md);
   align-items: flex-start;
 }
-
-/* Meta row — title + notes on the left, gold price on the right */
-.sorella-card__meta {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: var(--space-sm); width: 100%;
+.sorella-card__id {
+  width: 100%; min-width: 0;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--space-xxs);
 }
-.sorella-card__id { min-width: 0; }
-.sorella-card__title { line-height: 1.2; } /* scale from .t-headline (24) */
+.sorella-card__title {
+  font-size: 20px; line-height: 1.25; /* scale down from .t-headline (24) */
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .sorella-card__title a { color: inherit; unicode-bidi: plaintext; }
+.sorella-card__title a:hover { color: var(--color-gold); }
 .sorella-card__notes {
-  margin: var(--space-xxs) 0 0;
+  margin: 0; max-width: 100%;
   font-family: var(--font-body); font-size: 10px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.4;
   color: color-mix(in srgb, var(--color-parchment) 40%, transparent);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sorella-card__desc {
+  margin: 0; width: 100%;
+  color: var(--color-parchment-65);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Ledger — hairline rule the card always ends on; gold price sits on it,
+   the single Buy Now action fills the rest of the line. */
+.sorella-card__ledger {
+  margin-block-start: auto;
+  width: 100%;
+  padding-block-start: var(--space-sm);
+  border-block-start: 1px solid var(--color-parchment-12);
+  display: flex; align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 .sorella-card__price { flex: none; }
 .sorella-card__price .sorella-price { color: var(--color-gold); }
+.sorella-card__buy { flex: 1 1 132px; min-width: 0; }
+.sorella-card__buy .btn { width: 100%; min-height: 40px; }
 
 /* Quick add — parchment pill floating bottom-center of the media */
 .sorella-card__actions {
@@ -161,6 +212,107 @@
 }
 .sorella-card--compact .sorella-card__notes { display: none; }
 .sorella-card--compact .sorella-card__price .t-price { font-size: 19px; }
+
+/* --------------------------------------------------------------------------
+   Quick-buy modal (§9) — centered dialog over the shared scrim. Opened by a
+   card's Buy Now [data-open-target]; closed by [data-close] / Esc / scrim.
+   visibility gates tab order while closed; z above drawers (110).
+   ::before deepens the shared scrim (Ink 70% → ~88%) only while this dialog
+   is up, so the glass panel reads against a near-black field; it inherits
+   pointer-events: none, so scrim clicks still close the dialog.
+   -------------------------------------------------------------------------- */
+.sorella-modal {
+  position: fixed; inset: 0; z-index: 120;
+  display: grid; place-items: center;
+  padding: var(--space-lg);
+  pointer-events: none;
+  visibility: hidden;
+}
+.sorella-modal::before {
+  content: ""; position: absolute; inset: 0;
+  background: var(--color-ink-60);
+  opacity: 0;
+  transition: opacity var(--dur-drawer) var(--ease-out);
+}
+.sorella-modal.is-open { visibility: visible; }
+.sorella-modal.is-open::before { opacity: 1; }
+.sorella-modal__panel {
+  position: relative;
+  width: min(620px, 100%);
+  max-height: min(88vh, 680px);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  pointer-events: auto;
+  color: var(--color-parchment);
+  border-color: color-mix(in srgb, var(--color-parchment) 22%, transparent);
+  box-shadow: var(--shadow-glass), inset 0 1px 0 var(--color-parchment-12);
+  opacity: 0; transform: translateY(14px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sorella-modal__panel {
+    transition: opacity var(--dur-structural) var(--ease-swift),
+                transform var(--dur-spatial) var(--ease-swift);
+  }
+}
+.sorella-modal.is-open .sorella-modal__panel { opacity: 1; transform: none; }
+.sorella-modal__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-md); padding: var(--space-lg);
+  border-block-end: var(--border-hairline);
+}
+.sorella-modal__body {
+  display: grid; grid-template-columns: 180px 1fr;
+  gap: var(--space-lg); padding: var(--space-lg);
+}
+.sorella-modal__media { border-radius: var(--radius-md); overflow: hidden; align-self: start; }
+.sorella-modal__info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-sm); min-width: 0; }
+.sorella-modal__desc { margin: 0; color: color-mix(in srgb, var(--color-parchment) 70%, transparent); }
+.sorella-modal__form {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: var(--space-md); width: 100%; margin-block-start: var(--space-xs);
+}
+/* Variant radio pills — visually-hidden radio drives the sibling label card;
+   checked = gold border + gold wash, disabled = dimmed sold-out card. */
+.sorella-modal__options { border: 0; padding: 0; margin: 0; min-width: 0; }
+.sorella-modal__options legend { padding: 0; margin-block-end: var(--space-sm); }
+.sorella-modal__option-grid { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.sorella-modal__option {
+  flex: 1 1 calc(50% - var(--space-sm));
+  min-width: 128px; min-height: 56px;
+  display: flex; flex-direction: column; justify-content: center; gap: var(--space-xxs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-mist-25);
+  border-radius: var(--radius-md);
+  background: var(--color-parchment-08);
+  cursor: pointer;
+  transition: border-color var(--dur-structural) var(--ease-out),
+              background-color var(--dur-structural) var(--ease-out);
+}
+.sorella-modal__option:hover { border-color: var(--color-mist-40); }
+.sorella-modal__option-price { color: var(--color-parchment-65); }
+.sorella-modal__options input:checked + .sorella-modal__option {
+  border-color: var(--color-gold);
+  background: var(--color-gold-15);
+}
+.sorella-modal__options input:checked + .sorella-modal__option .sorella-modal__option-price { color: var(--color-gold); }
+.sorella-modal__options input:focus-visible + .sorella-modal__option {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+.sorella-modal__options input:disabled + .sorella-modal__option {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.sorella-modal__options input:disabled + .sorella-modal__option .sorella-modal__option-name { text-decoration: line-through; }
+.sorella-modal__qty-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-md);
+}
+@media (max-width: 560px) {
+  .sorella-modal { padding: var(--space-md); }
+  .sorella-modal__body { grid-template-columns: 1fr; }
+  .sorella-modal__media { max-width: 220px; }
+}
 
 /* --------------------------------------------------------------------------
    Pagination (§9)
@@ -387,10 +539,9 @@
 /* --------------------------------------------------------------------------
    Testimonial glass card (§9)
    -------------------------------------------------------------------------- */
-.sorella-testimonial { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg); height: 100%; }
+.sorella-testimonial { display: flex; flex-direction: column; gap: var(--space-md); padding: var(--space-lg); height: 100%; }
 .sorella-testimonial__quote { color: var(--color-parchment); }
-.sorella-testimonial__meta { display: flex; align-items: center; gap: var(--space-xs); margin-block-start: auto; }
-.sorella-testimonial__verified { display: inline-flex; align-items: center; gap: 4px; color: var(--color-gold); }
+.sorella-testimonial__meta { display: flex; align-items: center; gap: var(--space-sm); margin-block-start: auto; }
 
 /* --------------------------------------------------------------------------
    Notes pyramid (§9) — top / heart / base
@@ -546,3 +697,131 @@
 .sorella-account__table th, .sorella-account__table td { text-align: start; padding: var(--space-sm) var(--space-md); border-block-end: 1px solid var(--color-mist-25); }
 .sorella-account__grid { display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-xl); align-items: start; }
 @media (max-width: 833px) { .sorella-account__grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   PRIORITY CONVERSION COMPONENTS (monochrome) — added for the component library
+   Accent = Pure White; surfaces = Obsidian/Graphite; borders = white-alpha.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ATC button (snippets/sorella-atc-button.liquid) — 10 variants
+   -------------------------------------------------------------------------- */
+.sorella-atc { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+/* solid-price — label left, price right, on the white pill */
+.sorella-atc__solid-price { justify-content: space-between; gap: var(--space-md); padding-inline: var(--space-lg); }
+.sorella-atc__solid-price .sorella-atc__price { color: var(--color-ink); opacity: 0.85; }
+
+/* stacked / gift / preorder microcopy line */
+.sorella-atc__note {
+  display: inline-flex; align-items: center; gap: var(--space-xs);
+  justify-content: center; text-align: center; margin: 0;
+}
+.sorella-atc__note .sorella-icon { flex: none; color: var(--color-parchment); }
+.sorella-atc__note--gift { color: var(--color-parchment); }
+.sorella-atc__note--gift .sorella-icon { color: var(--color-gold); }
+
+/* tester cross-sell — the no-returns trust CTA. Quiet obsidian pill, white text. */
+.sorella-atc__tester {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);
+  width: 100%; min-height: 48px; padding: 10px var(--space-lg);
+  background: var(--color-navy-container);
+  color: var(--color-parchment);
+  border: 1px solid var(--color-mist-25);
+  border-radius: var(--radius-pill);
+  transition: border-color var(--dur-hover) var(--ease-out),
+              background-color var(--dur-hover) var(--ease-out),
+              transform var(--dur-press) var(--ease-out);
+}
+.sorella-atc__tester:hover { background: var(--color-navy-high); border-color: var(--color-gold-40); }
+.sorella-atc__tester:active { transform: scale(0.98); }
+.sorella-atc__tester-lead { display: inline-flex; align-items: center; gap: var(--space-xs); font-size: 14px; font-weight: 500; }
+.sorella-atc__tester-lead .sorella-icon { color: var(--color-gold); flex: none; }
+.sorella-atc__tester-price { color: var(--color-parchment); white-space: nowrap; }
+
+/* split — add + dynamic-checkout stacked */
+.sorella-atc--split { gap: var(--space-sm); }
+
+/* sold-out notify — ghost, silver */
+.sorella-atc__soldout { color: var(--color-mist); border-color: var(--color-mist-40); }
+.sorella-atc__soldout:hover { color: var(--color-parchment); border-color: var(--color-gold-40); background: var(--color-gold-15); }
+
+/* mini — one-tap card add: white pill, black label, compact */
+.sorella-atc__mini { background: var(--color-parchment); color: var(--color-ink); border: 0; }
+.sorella-atc__mini:hover { background: var(--color-gold); }
+
+/* --------------------------------------------------------------------------
+   Review box (snippets/sorella-review-box.liquid) — 8 variants
+   -------------------------------------------------------------------------- */
+.sorella-review__quote {
+  color: var(--color-parchment); margin: 0;
+  /* raw Franco-Arabic renders verbatim; keep bidi honest */
+  unicode-bidi: plaintext;
+}
+.sorella-review__verified {
+  display: inline-flex; align-items: center; gap: var(--space-xxs);
+  color: var(--color-parchment);
+}
+.sorella-review__verified .sorella-icon { color: var(--color-gold); flex: none; }
+
+/* compact — stars + score + count, one line, links to #reviews */
+.sorella-review--compact { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.sorella-review--compact:hover .sorella-review__inline { text-decoration: underline; text-underline-offset: 3px; }
+.sorella-review__inline { color: var(--color-parchment); }
+
+/* badge — chip */
+.sorella-review--badge {
+  display: inline-flex; align-items: center; gap: var(--space-xs);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  background: var(--color-gold-15); border: 1px solid var(--color-mist-25);
+}
+
+/* meter — longevity / projection slider */
+.sorella-review__meters { display: flex; flex-direction: column; gap: var(--space-xs); }
+.sorella-review__meter { display: grid; grid-template-columns: 84px 1fr; align-items: center; gap: var(--space-sm); }
+.sorella-review__meter-label { text-transform: uppercase; letter-spacing: 0.06em; }
+.sorella-review__meter-track {
+  height: 4px; border-radius: var(--radius-pill);
+  background: var(--color-mist-25); overflow: hidden;
+}
+.sorella-review__meter-fill { display: block; height: 100%; background: var(--color-gold); border-radius: inherit; }
+
+/* histogram — honest 5★→1★ distribution */
+.sorella-review__histogram { display: flex; flex-direction: column; gap: var(--space-xxs); min-width: 200px; }
+.sorella-review__hist-row { display: grid; grid-template-columns: 28px 1fr 32px; align-items: center; gap: var(--space-sm); }
+.sorella-review__hist-track { height: 6px; border-radius: var(--radius-pill); background: var(--color-mist-25); overflow: hidden; }
+.sorella-review__hist-fill { display: block; height: 100%; background: var(--color-gold); border-radius: inherit; }
+.sorella-review__hist-count { text-align: end; font-variant-numeric: tabular-nums; }
+
+/* summary — big score + histogram side by side */
+.sorella-review__summary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xl); }
+.sorella-review__summary-score { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-xs); }
+.sorella-review__big { color: var(--color-gold); line-height: 1; }
+.sorella-review__summary-count { text-decoration: underline; text-underline-offset: 3px; }
+
+/* card — full structured review */
+.sorella-review--card {
+  display: flex; flex-direction: column; gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--color-navy-container);
+  border: 1px solid var(--color-mist-25);
+  border-radius: var(--radius-lg);
+  height: 100%;
+}
+.sorella-review__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); }
+.sorella-review__foot { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-block-start: auto; padding-block-start: var(--space-sm); }
+.sorella-review__size {
+  padding: 3px 9px; border-radius: var(--radius-pill);
+  background: var(--color-gold-15); border: 1px solid var(--color-mist-25);
+  color: var(--color-parchment);
+}
+
+/* photo — image + card body */
+.sorella-review--photo { display: grid; grid-template-columns: 160px 1fr; gap: var(--space-lg); align-items: start; }
+.sorella-review__photo { border-radius: var(--radius-md); flex: none; }
+.sorella-review__card-body { display: flex; flex-direction: column; gap: var(--space-sm); }
+@media (max-width: 560px) { .sorella-review--photo { grid-template-columns: 1fr; } }
+
+/* cell — homepage glass testimonial */
+.sorella-review--cell { display: flex; flex-direction: column; gap: var(--space-md); padding: var(--space-lg); height: 100%; }
+.sorella-review--cell .sorella-review__meta { display: flex; align-items: center; gap: var(--space-sm); margin-block-start: auto; flex-wrap: wrap; }

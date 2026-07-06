@@ -2,7 +2,8 @@
   sorella-bento-collections — curated CATEGORY bento grid (Art Direction §5).
   Marketing surface: asymmetric spans signal importance. Per §7.3 category cells
   are photographic tiles only — NO blob field here.
-  Reuses the sorella-bento-cell snippet; each cell falls back to its linked collection.
+  Reuses the sorella-bento-cell snippet; each cell falls back to its linked product
+  (e.g. a bundle) first, then to its linked collection.
   Homepage guardrail: max 9 cells (≤9) — enforced via schema max_blocks.
   Fully schema-driven: layout, spacing, colors, typography, borders, and icons are
   wired to the shared .bento / .sorella-bento-cell CSS through scoped custom
@@ -25,9 +26,10 @@
         {%- liquid
           assign b = block.settings
           assign coll = collections[b.collection]
-          assign link = b.link | default: coll.url
-          assign heading = b.heading | default: coll.title
-          assign image = b.image | default: coll.featured_image
+          assign prod = b.product
+          assign link = b.link | default: prod.url | default: coll.url
+          assign heading = b.heading | default: prod.title | default: coll.title
+          assign image = b.image | default: prod.featured_image | default: coll.featured_image
           assign cell_video = nil
           if b.media_type == 'video'
             assign cell_video = b.video
@@ -198,7 +200,8 @@
       "name": "Cell",
       "settings": [
         { "type": "collection", "id": "collection", "label": "Collection" },
-        { "type": "url", "id": "link", "label": "Custom link", "info": "Overrides the collection URL." },
+        { "type": "product", "id": "product", "label": "Product", "info": "Optional. A product (e.g. a bundle) takes priority over the collection for the title, image, and link." },
+        { "type": "url", "id": "link", "label": "Custom link", "info": "Overrides the product or collection URL." },
         {
           "type": "select", "id": "media_type", "label": "Media type", "default": "image",
           "options": [
@@ -206,12 +209,12 @@
             { "value": "video", "label": "Video" }
           ]
         },
-        { "type": "image_picker", "id": "image", "label": "Image", "info": "Overrides the collection featured image." },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Overrides the product or collection featured image." },
         { "type": "image_picker", "id": "image_tablet", "label": "Image (tablet)", "info": "Optional. Shown below 1024px." },
         { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional. Shown below 736px." },
         { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Overrides the derived alt text." },
         { "type": "video", "id": "video", "label": "Video", "info": "Plays muted on a loop when media type is Video." },
-        { "type": "text", "id": "heading", "label": "Heading", "info": "Overrides the collection title." },
+        { "type": "text", "id": "heading", "label": "Heading", "info": "Overrides the product or collection title." },
         { "type": "text", "id": "subheading", "label": "Subheading" },
         { "type": "text", "id": "cta", "label": "CTA label", "default": "Shop" },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow" },

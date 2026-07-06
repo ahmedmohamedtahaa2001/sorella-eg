@@ -1,12 +1,33 @@
-{%- comment -%} sorella-social-links — theme-setting driven social icon row (40px circular buttons) {%- endcomment -%}
-<ul class="sorella-socials">
+{%- comment -%}
+  sorella-social-links — theme-setting driven social icon row (§9).
+  DEFAULT reproduces the original 40px circular-button row exactly.
+
+  Params:
+    variant (string) — 'default' (circle) | 'inline' | 'filled' | 'outline'
+                       | 'minimal' | 'large' | 'with-labels' | 'footer' | 'vertical'
+    size    (number) — icon px (default 20)
+  Sources: settings.social_instagram / _tiktok / _facebook.
+{%- endcomment -%}
+{%- liquid
+  assign so_variant = variant | default: 'default'
+  assign so_size = size | default: 20
+  assign so_class = 'sorella-socials'
+  if so_variant != 'default'
+    assign so_class = so_class | append: ' sorella-socials--' | append: so_variant
+  endif
+  assign show_labels = false
+  if so_variant == 'with-labels'
+    assign show_labels = true
+  endif
+-%}
+<ul class="{{ so_class }}">
   {%- if settings.social_instagram != blank -%}
-    <li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.instagram' | t }}">{% render 'sorella-icon', name: 'instagram', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.instagram' | t }}">{% render 'sorella-icon', name: 'instagram', size: so_size %}{% if show_labels %}<span class="sorella-socials__label t-caption">Instagram</span>{% endif %}</a></li>
   {%- endif -%}
   {%- if settings.social_tiktok != blank -%}
-    <li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.tiktok' | t }}">{% render 'sorella-icon', name: 'tiktok', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.tiktok' | t }}">{% render 'sorella-icon', name: 'tiktok', size: so_size %}{% if show_labels %}<span class="sorella-socials__label t-caption">TikTok</span>{% endif %}</a></li>
   {%- endif -%}
   {%- if settings.social_facebook != blank -%}
-    <li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook' | t }}">{% render 'sorella-icon', name: 'facebook', size: 20 %}</a></li>
+    <li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook' | t }}">{% render 'sorella-icon', name: 'facebook', size: so_size %}{% if show_labels %}<span class="sorella-socials__label t-caption">Facebook</span>{% endif %}</a></li>
   {%- endif -%}
 </ul>

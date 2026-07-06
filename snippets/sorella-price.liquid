@@ -1,13 +1,31 @@
 {%- comment -%}
-  sorella-price — regular / sale / from (Design System §9, "sorella-price").
+  sorella-price — money display. Monochrome; accent price renders pure white (§9).
+  NOTE: the selector param is `style` because `variant` is reserved for a
+  Shopify variant OBJECT (variant-specific price). Default 'auto' reproduces
+  the original regular / sale / from behaviour exactly.
   Params:
-    product (object) — for "from" ranges & compare_at
-    variant (object) — overrides product for a specific variant price
-    price   (number) — raw price fallback
-    context (string) — 'card' | 'pdp' | 'cart' (affects size class)
-    on_dark (boolean) — Parchment price on dark, else Gold on light
+    product      (object) — for "from" ranges, compare_at, price_min/max
+    variant      (object) — overrides product for a specific variant price
+    price        (number) — raw price fallback (cents)
+    context      (string) — 'card' | 'pdp' | 'cart' (size class on 'auto')
+    on_dark      (boolean)— parchment price on dark, else white accent
+    style        (string) — variant selector, see list below
+    ml           (number) — bottle volume for 'per-ml' (default 50)
+    member_price (number) — members price (cents) for 'member'
+  Variants (9):
+    auto           — regular / sale / from, auto-detected (default — unchanged)
+    sale           — current + struck compare-at
+    from           — "From {price}"
+    pdp            — large price + struck compare + "Save {amount}"
+    compare-inline — struck compare-at then current, inline
+    per-ml         — current + "{price} / ml" unit price
+    installment    — current + "or 4 × {price}"
+    range          — "{min} – {max}" across variants
+    member         — members price + struck retail + "Members"
 {%- endcomment -%}
 {%- liquid
+  assign price_style = style | default: 'auto'
+
   assign show_from = false
   if variant == blank and product and product.price_varies
     assign show_from = true
@@ -36,14 +54,89 @@
     assign current_money = current | money
     assign compare_money = compare | money
   endif
+
+  assign has_compare = false
+  if compare and compare > current
+    assign has_compare = true
+  endif
+  assign ctx = context | default: 'card'
 -%}
-<span class="sorella-price sorella-price--{{ context | default: 'card' }}{% if compare and compare > current %} sorella-price--on-sale{% endif %}">
-  {%- if show_from -%}
-    <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: current_money }}</span>
-  {%- else -%}
-    <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
-    {%- if compare and compare > current -%}
-      <s class="t-caption text-mist sorella-price__compare">{{ compare_money }}</s>
+{%- case price_style -%}
+  {%- when 'sale' -%}
+    <span class="sorella-price sorella-price--{{ ctx }}{% if has_compare %} sorella-price--on-sale{% endif %}">
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+      {%- if has_compare -%}<s class="t-caption text-mist sorella-price__compare">{{ compare_money }}</s>{%- endif -%}
+    </span>
+
+  {%- when 'from' -%}
+    <span class="sorella-price sorella-price--{{ ctx }}">
+      <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: current_money }}</span>
+    </span>
+
+  {%- when 'pdp' -%}
+    <span class="sorella-price sorella-price--pdp{% if has_compare %} sorella-price--on-sale{% endif %}">
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+      {%- if has_compare -%}
+        {%- assign saved = compare | minus: current -%}
+        {%- if settings.currency_code_enabled -%}{%- assign saved_money = saved | money_with_currency -%}{%- else -%}{%- assign saved_money = saved | money -%}{%- endif -%}
+        <s class="t-body-sm text-mist sorella-price__compare">{{ compare_money }}</s>
+        <span class="sorella-price__save t-caption-strong">Save {{ saved_money }}</span>
+      {%- endif -%}
+    </span>
+
+  {%- when 'compare-inline' -%}
+    <span class="sorella-price sorella-price--inline{% if has_compare %} sorella-price--on-sale{% endif %}">
+      {%- if has_compare -%}<s class="t-caption text-mist sorella-price__compare">{{ compare_money }}</s>{%- endif -%}
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+    </span>
+
+  {%- when 'per-ml' -%}
+    {%- assign vol = ml | default: 50 -%}
+    {%- assign per = current | divided_by: vol -%}
+    {%- if settings.currency_code_enabled -%}{%- assign per_money = per | money_with_currency -%}{%- else -%}{%- assign per_money = per | money -%}{%- endif -%}
+    <span class="sorella-price sorella-price--unit">
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+      <span class="sorella-price__unit t-caption text-mist">{{ per_money }} / ml</span>
+    </span>
+
+  {%- when 'installment' -%}
+    {%- assign inst = current | divided_by: 4 -%}
+    {%- if settings.currency_code_enabled -%}{%- assign inst_money = inst | money_with_currency -%}{%- else -%}{%- assign inst_money = inst | money -%}{%- endif -%}
+    <span class="sorella-price sorella-price--installment">
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+      <span class="sorella-price__installment t-caption text-mist">or 4 × {{ inst_money }}</span>
+    </span>
+
+  {%- when 'range' -%}
+    {%- if settings.currency_code_enabled -%}
+      {%- assign min_money = product.price_min | money_with_currency -%}
+      {%- assign max_money = product.price_max | money_with_currency -%}
+    {%- else -%}
+      {%- assign min_money = product.price_min | money -%}
+      {%- assign max_money = product.price_max | money -%}
     {%- endif -%}
-  {%- endif -%}
-</span>
+    <span class="sorella-price sorella-price--range">
+      <span class="t-price {{ price_color_class }}">{{ min_money }}{% if product.price_max > product.price_min %} – {{ max_money }}{% endif %}</span>
+    </span>
+
+  {%- when 'member' -%}
+    {%- assign m_price = member_price | default: current -%}
+    {%- if settings.currency_code_enabled -%}{%- assign m_money = m_price | money_with_currency -%}{%- else -%}{%- assign m_money = m_price | money -%}{%- endif -%}
+    <span class="sorella-price sorella-price--member">
+      {%- if member_price and current > member_price -%}<s class="t-caption text-mist sorella-price__compare">{{ current_money }}</s>{%- endif -%}
+      <span class="t-price {{ price_color_class }} sorella-price__current">{{ m_money }}</span>
+      <span class="sorella-price__member t-caption text-mist">Members</span>
+    </span>
+
+  {%- else -%}
+    <span class="sorella-price sorella-price--{{ ctx }}{% if has_compare %} sorella-price--on-sale{% endif %}">
+      {%- if show_from -%}
+        <span class="t-price {{ price_color_class }}">{{ 'products.product.from_price' | t: price: current_money }}</span>
+      {%- else -%}
+        <span class="t-price {{ price_color_class }} sorella-price__current">{{ current_money }}</span>
+        {%- if has_compare -%}
+          <s class="t-caption text-mist sorella-price__compare">{{ compare_money }}</s>
+        {%- endif -%}
+      {%- endif -%}
+    </span>
+{%- endcase -%}

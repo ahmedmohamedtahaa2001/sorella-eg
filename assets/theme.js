@@ -80,6 +80,9 @@
     Array.prototype.push.apply(nodes, scope.querySelectorAll(REVEAL_SELECTOR));
     nodes.forEach(function (el) {
       if (el.classList.contains('reveal-pending') || el.classList.contains('is-revealed')) return;
+      // Overlays ([data-panel] drawers/modals) choreograph their own
+      // entrances; scroll-reveal opacity would fight their transitions.
+      if (el.closest('[data-panel]')) return;
       el.classList.add('reveal-pending');
       getRevealObserver().observe(el);
     });
@@ -478,6 +481,29 @@
     });
   }
 
+  /* ----------------------------------------------------------------------
+     Quick-buy modal — variant radio pills (name="id") swap the displayed
+     price using the [data-quick-buy-price-map] JSON the snippet renders
+     (pre-rendered sorella-price markup per variant, so sale/compare-at
+     formatting stays identical to Liquid). Delegated once at document level
+     so AJAX-swapped sections keep working.
+     ---------------------------------------------------------------------- */
+  function initQuickBuy() {
+    document.addEventListener('change', function (e) {
+      var input = e.target;
+      if (!input.matches || !input.matches('.sorella-modal__form input[type="radio"][name="id"]')) return;
+      var modal = input.closest('.sorella-modal');
+      var form = input.closest('form');
+      var host = modal && modal.querySelector('[data-quick-buy-price]');
+      var mapEl = form && form.querySelector('[data-quick-buy-price-map]');
+      if (!host || !mapEl) return;
+      var map;
+      try { map = JSON.parse(mapEl.textContent); } catch (err) { return; }
+      var html = map[input.value];
+      if (html) host.innerHTML = html;
+    });
+  }
+
   function initCartLineActions() {
     document.addEventListener('click', function (e) {
       var change = e.target.closest('[data-line-change]');
@@ -608,6 +634,169 @@
   }
 
   /* ----------------------------------------------------------------------
+     Carousel swiper — sections/sorella-product-carousel.liquid rail.
+     [data-carousel-root] scopes a [data-carousel-track] with optional
+     [data-carousel-prev]/[data-carousel-next] arrows and a
+     [data-carousel-progress] fill. Native scroll + snap stays the engine;
+     arrows page by ~80% of the viewport, the fill mirrors scroll position.
+     Init guard lives on the track so AJAX-swapped sections re-init.
+     ---------------------------------------------------------------------- */
+  function initCarousels(root) {
+    var scope = root || document;
+    var roots = [];
+    if (scope !== document && scope.matches && scope.matches('[data-carousel-root]')) roots.push(scope);
+    Array.prototype.push.apply(roots, scope.querySelectorAll('[data-carousel-root]'));
+    roots.forEach(function (el) {
+      var track = el.querySelector('[data-carousel-track]');
+      if (!track || track.dataset.carouselInit === 'true') return;
+      track.dataset.carouselInit = 'true';
+      var prev = el.querySelector('[data-carousel-prev]');
+      var next = el.querySelector('[data-carousel-next]');
+      var fill = el.querySelector('[data-carousel-progress]');
+      var forward = getComputedStyle(track).direction === 'rtl' ? -1 : 1;
+      var autoplayMs = parseInt(el.getAttribute('data-carousel-autoplay') || '0', 10);
+
+      function maxScroll() { return track.scrollWidth - track.clientWidth; }
+      function position() { return Math.min(Math.abs(track.scrollLeft), maxScroll()); }
+
+      function setDisabled(btn, state) {
+        if (!btn) return;
+        btn.classList.toggle('is-disabled', state);
+        btn.setAttribute('aria-disabled', String(state));
+      }
+
+      function update() {
+        var max = maxScroll();
+        var done = max <= 1;
+        var pos = Math.min(Math.abs(track.scrollLeft), max);
+        if (prev) prev.hidden = done;
+        if (next) next.hidden = done;
+        if (fill) {
+          var visible = done ? 1 : track.clientWidth / track.scrollWidth;
+          var progress = done ? 0 : (pos / max) * (1 - visible);
+          fill.style.width = ((visible + progress) * 100).toFixed(2) + '%';
+        }
+        setDisabled(prev, pos <= 1);
+        setDisabled(next, pos >= max - 1);
+      }
+
+      function page(dir) {
+        track.scrollBy({
+          left: cardStep() * dir * forward,
+          behavior: reduceMotion ? 'auto' : 'smooth'
+        });
+      }
+
+      /* Autoplay — one card per tick, back to the start after the last.
+         Holds while hovered, keyboard-focused, dragging, off-screen,
+         tab-hidden, or while any modal/drawer locks the page (body
+         .is-locked — e.g. a quick-buy dialog opened from this rail); off
+         entirely under reduced motion. Mouse clicks leave focus behind
+         without :focus-visible, so they don't stall it. */
+      var timer = null;
+      var hovered = false, dragging = false, inView = true;
+
+      function keyboardInside() {
+        try { return !!el.querySelector(':focus-visible'); } catch (err) { return false; }
+      }
+
+      function cardStep() {
+        var item = track.firstElementChild;
+        if (!item) return Math.max(track.clientWidth * 0.8, 200);
+        var styles = getComputedStyle(track);
+        var gap = parseFloat(styles.columnGap || styles.gap) || 0;
+        return item.getBoundingClientRect().width + gap;
+      }
+
+      function autoTick() {
+        if (reduceMotion || document.hidden || hovered || dragging || !inView) return;
+        if (document.body.classList.contains('is-locked')) return;
+        if (keyboardInside()) return;
+        var max = maxScroll();
+        if (max <= 1) return;
+        if (position() >= max - 1) {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          track.scrollBy({ left: cardStep() * forward, behavior: 'smooth' });
+        }
+      }
+
+      function startAutoplay() {
+        if (!autoplayMs || timer) return;
+        timer = setInterval(autoTick, autoplayMs);
+      }
+
+      function restartAutoplay() {
+        if (!timer) return;
+        clearInterval(timer);
+        timer = null;
+        startAutoplay();
+      }
+
+      if (prev) prev.addEventListener('click', function () { page(-1); restartAutoplay(); });
+      if (next) next.addEventListener('click', function () { page(1); restartAutoplay(); });
+
+      el.addEventListener('pointerenter', function () { hovered = true; });
+      el.addEventListener('pointerleave', function () { hovered = false; });
+
+      if (autoplayMs && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          inView = entries[0].isIntersecting;
+        }, { threshold: 0.3 }).observe(el);
+      }
+      startAutoplay();
+
+      /* Drag to scroll — mouse only; touch already pans natively. Snap is
+         released via .is-dragging while the pointer holds the rail, and a
+         drag that ends on a card link must not navigate. */
+      var dragStartX = 0, dragStartScroll = 0, dragMoved = false;
+
+      track.addEventListener('pointerdown', function (e) {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        dragging = true;
+        dragMoved = false;
+        dragStartX = e.clientX;
+        dragStartScroll = track.scrollLeft;
+        track.classList.add('is-dragging');
+      });
+      track.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - dragStartX;
+        if (!dragMoved && Math.abs(dx) > 4) {
+          dragMoved = true;
+          try { track.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+        if (dragMoved) track.scrollLeft = dragStartScroll - dx;
+      });
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        track.classList.remove('is-dragging');
+        if (dragMoved) restartAutoplay();
+      }
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointercancel', endDrag);
+      track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+      track.addEventListener('click', function (e) {
+        if (dragMoved) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragMoved = false;
+        }
+      }, true);
+
+      var ticking = false;
+      track.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { ticking = false; update(); });
+      }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    });
+  }
+
+  /* ----------------------------------------------------------------------
      Product recommendations — sections/sorella-product-carousel.liquid emits
      [data-recommendations][data-url] (Section Rendering API endpoint). Fetch
      the section re-rendered with the recommendations drop and swap in its
@@ -628,6 +817,8 @@
           var fresh = doc.querySelector('[data-recommendations]');
           if (fresh && fresh.querySelector('.sorella-card')) {
             el.innerHTML = fresh.innerHTML;
+            initPanels(el);
+            initCarousels(el);
             initReveal(el);
           }
         })
@@ -648,7 +839,9 @@
     initGallery();
     initFilters();
     initAddToCart();
+    initQuickBuy();
     initCartLineActions();
+    initCarousels(document);
     initRecommendations(document);
     initReveal(document);
     applyMotionPreference();
@@ -671,6 +864,7 @@
     initVariantSelectors(root);
     initGallery(root);
     initFilters(root);
+    initCarousels(root);
     initRecommendations(root);
     initReveal(root);
     applyMotionPreference();

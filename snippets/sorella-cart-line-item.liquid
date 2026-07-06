@@ -1,33 +1,95 @@
 {%- comment -%}
-  sorella-cart-line-item — compact line-item card (§9). Used in drawer + cart page.
-  Params: line (line_item object, required), index (number, required — 1-based line index)
+  sorella-cart-line-item — line-item card for drawer + cart + order summary (§9).
+  DEFAULT reproduces the original interactive drawer/cart line exactly.
+
+  Params:
+    line  (line_item object, required)
+    index (number, required — 1-based line index)
+    variant (string) — 'default' | 'compact' | 'upsell' | 'gift'
+                       | 'unavailable' | 'editable' | 'readonly' | 'with-note'
+      compact     — tighter media, no qty stepper (static count)
+      upsell      — highlighted "add-on" framing
+      gift        — free 5ml gift row (no remove / no qty)
+      unavailable — sold-out / no longer available state
+      readonly    — static row for order summary (no controls)
+      with-note   — shows line.properties note below title
 {%- endcomment -%}
-<li class="sorella-line" data-line-item>
+{%- liquid
+  assign cl_variant = variant | default: 'default'
+  assign cl_class = 'sorella-line'
+  if cl_variant != 'default'
+    assign cl_class = cl_class | append: ' sorella-line--' | append: cl_variant
+  endif
+  assign is_readonly = false
+  if cl_variant == 'readonly' or cl_variant == 'gift' or cl_variant == 'compact'
+    assign is_readonly = true
+  endif
+  assign is_gift = false
+  if cl_variant == 'gift'
+    assign is_gift = true
+  endif
+  assign media_w = 160
+  if cl_variant == 'compact' or cl_variant == 'readonly'
+    assign media_w = 120
+  endif
+-%}
+<li class="{{ cl_class }}" data-line-item>
   <a class="sorella-line__media media media--1x1" href="{{ line.url }}">
     {%- if line.image -%}
-      {{ line.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: line.title | escape }}
+      {{ line.image | image_url: width: media_w | image_tag: loading: 'lazy', alt: line.title | escape }}
     {%- endif -%}
   </a>
   <div class="sorella-line__body">
     <div class="sorella-line__top">
       <a class="sorella-line__title t-body-strong" href="{{ line.url }}" dir="auto">{{ line.product.title }}</a>
-      <a class="sorella-line__remove sorella-line__hit" href="{{ line.url_to_remove }}"
-         data-line="{{ index }}" data-line-change="0" aria-label="{{ 'cart.general.remove' | t }}">
-        {% render 'sorella-icon', name: 'close', size: 16 %}
-      </a>
+      {%- unless is_readonly or is_gift -%}
+        <a class="sorella-line__remove sorella-line__hit" href="{{ line.url_to_remove }}"
+           data-line="{{ index }}" data-line-change="0" aria-label="{{ 'cart.general.remove' | t }}">
+          {% render 'sorella-icon', name: 'close', size: 16 %}
+        </a>
+      {%- endunless -%}
     </div>
     {%- unless line.product.has_only_default_variant -%}
       <span class="t-caption text-mist" dir="auto">{{ line.variant.title }}</span>
     {%- endunless -%}
+
+    {%- if is_gift -%}
+      <span class="sorella-line__badge t-caption-strong text-gold">{% render 'sorella-icon', name: 'gift', size: 14 %} {{ 'cart.general.free_gift_unlocked' | t | default: 'Free gift' }}</span>
+    {%- endif -%}
+
+    {%- if cl_variant == 'unavailable' -%}
+      <span class="sorella-line__badge t-caption text-mist">{% render 'sorella-icon', name: 'x-circle', size: 14 %} {{ 'products.product.sold_out' | t }}</span>
+    {%- endif -%}
+
+    {%- if cl_variant == 'with-note' and line.properties != empty -%}
+      {%- for prop in line.properties -%}
+        {%- unless prop.last == blank or prop.first == '_' -%}
+          <span class="sorella-line__note t-caption text-mist" dir="auto">{{ prop.first }}: {{ prop.last }}</span>
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+
     <div class="sorella-line__bottom">
-      {%- assign qty_down = line.quantity | minus: 1 -%}
-      {%- assign qty_up = line.quantity | plus: 1 -%}
-      <div class="sorella-line__qty">
-        <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_down }}" data-line="{{ index }}" data-line-change="{{ qty_down }}" aria-label="{{ 'products.product.decrease_quantity' | t }}">{% render 'sorella-icon', name: 'minus', size: 14 %}</a>
-        <span class="sorella-line__qty-value t-caption-strong">{{ line.quantity }}</span>
-        <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_up }}" data-line="{{ index }}" data-line-change="{{ qty_up }}" aria-label="{{ 'products.product.increase_quantity' | t }}">{% render 'sorella-icon', name: 'plus', size: 14 %}</a>
-      </div>
-      <span class="t-price text-gold">{{ line.final_line_price | money }}</span>
+      {%- if is_readonly or cl_variant == 'unavailable' -%}
+        {%- unless is_gift -%}
+          <span class="sorella-line__qty-static t-caption text-mist">Qty {{ line.quantity }}</span>
+        {%- else -%}
+          <span></span>
+        {%- endunless -%}
+      {%- else -%}
+        {%- assign qty_down = line.quantity | minus: 1 -%}
+        {%- assign qty_up = line.quantity | plus: 1 -%}
+        <div class="sorella-line__qty">
+          <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_down }}" data-line="{{ index }}" data-line-change="{{ qty_down }}" aria-label="{{ 'products.product.decrease_quantity' | t }}">{% render 'sorella-icon', name: 'minus', size: 14 %}</a>
+          <span class="sorella-line__qty-value t-caption-strong">{{ line.quantity }}</span>
+          <a class="sorella-line__qty-btn sorella-line__hit" href="{{ routes.cart_change_url }}?line={{ index }}&quantity={{ qty_up }}" data-line="{{ index }}" data-line-change="{{ qty_up }}" aria-label="{{ 'products.product.increase_quantity' | t }}">{% render 'sorella-icon', name: 'plus', size: 14 %}</a>
+        </div>
+      {%- endif -%}
+      {%- if is_gift -%}
+        <span class="t-price text-gold">{{ 0 | money }}</span>
+      {%- else -%}
+        <span class="t-price text-gold">{{ line.final_line_price | money }}</span>
+      {%- endif -%}
     </div>
   </div>
 </li>

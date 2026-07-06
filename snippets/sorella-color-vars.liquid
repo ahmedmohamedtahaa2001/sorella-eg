@@ -7,21 +7,21 @@
 {%- endcomment -%}
 <style>
   :root {
-    --color-ink: {{ settings.colors_ink | default: '#1C1F24' }};
-    --color-slate: {{ settings.colors_slate | default: '#3A4452' }};
-    --color-mist: {{ settings.colors_mist | default: '#9AA3AD' }};
-    --color-parchment: {{ settings.colors_parchment | default: '#F2EEE7' }};
-    --color-gold: {{ settings.colors_gold | default: '#C79C5A' }};
-    --color-navy: {{ settings.colors_navy | default: '#0a1420' }};
-    --color-navy-lowest: {{ settings.colors_navy_lowest | default: '#050f1b' }};
-    --color-navy-low: {{ settings.colors_navy_low | default: '#121c29' }};
-    --color-navy-container: {{ settings.colors_navy_container | default: '#16202d' }};
-    --color-navy-high: {{ settings.colors_navy_high | default: '#212b38' }};
-    --color-navy-bright: {{ settings.colors_navy_bright | default: '#2b3543' }};
-    {%- assign c_ink = settings.colors_ink | default: '#1C1F24' -%}
-    {%- assign c_parchment = settings.colors_parchment | default: '#F2EEE7' -%}
-    {%- assign c_mist = settings.colors_mist | default: '#9AA3AD' -%}
-    {%- assign c_gold = settings.colors_gold | default: '#C79C5A' %}
+    --color-ink: {{ settings.colors_ink | default: '#000000' }};
+    --color-slate: {{ settings.colors_slate | default: '#262626' }};
+    --color-mist: {{ settings.colors_mist | default: '#8C8C8C' }};
+    --color-parchment: {{ settings.colors_parchment | default: '#E8E8E8' }};
+    --color-gold: {{ settings.colors_gold | default: '#FFFFFF' }};
+    --color-navy: {{ settings.colors_navy | default: '#000000' }};
+    --color-navy-lowest: {{ settings.colors_navy_lowest | default: '#000000' }};
+    --color-navy-low: {{ settings.colors_navy_low | default: '#111111' }};
+    --color-navy-container: {{ settings.colors_navy_container | default: '#1A1A1A' }};
+    --color-navy-high: {{ settings.colors_navy_high | default: '#262626' }};
+    --color-navy-bright: {{ settings.colors_navy_bright | default: '#3B3B3B' }};
+    {%- assign c_ink = settings.colors_ink | default: '#000000' -%}
+    {%- assign c_parchment = settings.colors_parchment | default: '#E8E8E8' -%}
+    {%- assign c_mist = settings.colors_mist | default: '#8C8C8C' -%}
+    {%- assign c_gold = settings.colors_gold | default: '#FFFFFF' %}
     --color-ink-90: {{ c_ink | color_modify: 'alpha', 0.90 }};
     --color-ink-70: {{ c_ink | color_modify: 'alpha', 0.70 }};
     --color-ink-60: {{ c_ink | color_modify: 'alpha', 0.60 }};

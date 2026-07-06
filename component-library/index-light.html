@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorella — Monochrome Component Library (Light)</title>
+<meta name="description" content="Sorella's monochrome (Absolute Black → Pure White) Shopify component library — palette, buttons, reviews, dupe referencing, and the full variant set.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles-light.css">
+</head>
+<body>
+
+<!-- announcement -->
+<div class="strip strip--dark">Free 5ml perfume on orders over LE 1,100 — pick it in your cart</div>
+
+<!-- nav -->
+<header class="nav">
+  <span class="nav__brand">Sorella</span>
+  <nav class="nav__links">
+    <a href="#palette">Palette</a>
+    <a href="#buttons">Buttons</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#inspired">Inspired-by</a>
+    <a href="#atoms">Atoms</a>
+  </nav>
+  <a class="btn btn--primary btn--sm" href="#">Shop</a>
+</header>
+
+<div class="wrap">
+
+  <!-- hero -->
+  <section class="hero">
+    <span class="hero__glow" aria-hidden="true"></span>
+    <span class="eyebrow">Phase 0 · Light mode · Reusable component library</span>
+    <h1 class="display">Monochrome<br>System</h1>
+    <p class="sub">A luxury fragrance house built from value, not colour. Absolute Black grounds every surface; Pure White is the single accent — it plays the exact role gold once did: buttons, price, active state, the one mark that draws the eye. Everything is token-driven, so the whole theme re-skins from one file.</p>
+    <div class="stats">
+      <div><b>11</b><span>palette tokens</span></div>
+      <div><b>22</b><span>reusable snippets</span></div>
+      <div><b>180+</b><span>documented variants</span></div>
+      <div><b>0</b><span>hues · pure grayscale</span></div>
+    </div>
+  </section>
+
+  <!-- palette -->
+  <section class="section" id="palette">
+    <div class="section__head"><h2>Palette</h2><p>No hue. Hierarchy comes from value and a single white glow — the Le Labo / Byredo register.</p></div>
+    <div class="sw-grid">
+      <div class="sw"><i style="background:#000"></i><div><b>Absolute Black</b><span>#000000</span></div></div>
+      <div class="sw"><i style="background:#111"></i><div><b>Rich Charcoal</b><span>#111111</span></div></div>
+      <div class="sw"><i style="background:#1A1A1A"></i><div><b>Obsidian</b><span>#1A1A1A</span></div></div>
+      <div class="sw"><i style="background:#262626"></i><div><b>Graphite</b><span>#262626</span></div></div>
+      <div class="sw"><i style="background:#3B3B3B"></i><div><b>Gunmetal</b><span>#3B3B3B</span></div></div>
+      <div class="sw"><i style="background:#5C5C5C"></i><div><b>Slate Gray</b><span>#5C5C5C</span></div></div>
+      <div class="sw"><i style="background:#8C8C8C"></i><div><b>Silver Smoke</b><span>#8C8C8C</span></div></div>
+      <div class="sw"><i style="background:#C7C7C7"></i><div><b>Platinum</b><span>#C7C7C7</span></div></div>
+      <div class="sw"><i style="background:#E8E8E8"></i><div><b>Pearl White</b><span>#E8E8E8</span></div></div>
+      <div class="sw"><i style="background:#F5F5F5"></i><div><b>Ivory Mist</b><span>#F5F5F5</span></div></div>
+      <div class="sw"><i style="background:#fff"></i><div><b>Pure White · accent</b><span>#FFFFFF</span></div></div>
+    </div>
+  </section>
+
+  <!-- buttons / ATC -->
+  <section class="section" id="buttons">
+    <div class="section__head"><h2>Add-to-cart button</h2><p>The one loud mark: Pure White fill, black label. Copy stays brand-voice — anchor against prestige, never discount.</p><span class="count">10 variants</span></div>
+    <div class="demo-grid">
+      <div class="demo"><span class="demo__label">solid · default</span><button class="btn btn--primary btn--full">Add to bag</button></div>
+      <div class="demo"><span class="demo__label">solid-price</span><button class="btn btn--primary btn--full atc-price"><span>Add to bag</span><span class="p t-price">LE 850</span></button></div>
+      <div class="demo"><span class="demo__label">ghost</span><button class="btn btn--ghost btn--full">Add to bag</button></div>
+      <div class="demo"><span class="demo__label">stacked</span><div class="stack"><button class="btn btn--primary btn--full">Add to bag</button><p class="atc-note"><span class="g">✦</span> Made fresh in Egypt · stays on all evening</p></div></div>
+      <div class="demo"><span class="demo__label">gift-threshold</span><div class="stack"><button class="btn btn--primary btn--full">Add to bag</button><p class="atc-note"><span class="g">◆</span> Free 5ml on orders over LE 1,100</p></div></div>
+      <div class="demo"><span class="demo__label">tester · trust contract</span><a class="tester" href="#"><span class="lead"><span class="g">✦</span> Try it first — 5ml tester</span><span class="price">LE 85</span></a></div>
+      <div class="demo"><span class="demo__label">split</span><div class="stack"><button class="btn btn--ghost btn--full">Add to bag</button><button class="btn btn--primary btn--full">Buy it now</button></div></div>
+      <div class="demo"><span class="demo__label">preorder</span><div class="stack"><button class="btn btn--primary btn--full">Pre-order</button><p class="atc-note">Ships in 2–3 weeks — first batch</p></div></div>
+      <div class="demo"><span class="demo__label">sold-out</span><button class="btn btn--ghost soldout btn--full">✉ Sold out — notify me</button></div>
+      <div class="demo"><span class="demo__label">mini · card quick-add</span><button class="btn btn--sm mini">Add</button></div>
+    </div>
+  </section>
+
+  <!-- product card + notes -->
+  <section class="section">
+    <div class="section__head"><h2>Product card &amp; notes</h2><p>Solid Obsidian card, white price, border lifts toward white on hover. Notes pyramid stacks top → heart → base.</p></div>
+    <div class="demo-grid">
+      <div class="demo"><span class="demo__label">product card</span>
+        <div class="card">
+          <div class="card__media"><span class="bottle"></span><div class="card__badges"><span class="badge badge--pill badge--solid">Bestseller</span></div></div>
+          <div class="card__body">
+            <span class="card__notes">Saffron · Amber · Cedar</span>
+            <span class="card__title">Bordeaux</span>
+            <span class="ib ib-line">True to the original</span>
+            <div class="card__ledger"><span class="card__price">LE 850</span><button class="btn btn--sm mini">Add</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo wide"><span class="demo__label">notes pyramid</span>
+        <div class="notes">
+          <div class="note-tier note-tier--top"><span class="note-tier__label">Top</span><p class="note-tier__body">Saffron, bitter almond</p></div>
+          <div class="note-tier note-tier--heart"><span class="note-tier__label">Heart</span><p class="note-tier__body">Egyptian jasmine, cedar</p></div>
+          <div class="note-tier note-tier--base"><span class="note-tier__label">Base</span><p class="note-tier__body">Amberwood, fir resin, oud</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- reviews -->
+  <section class="section" id="reviews">
+    <div class="section__head"><h2>Review box</h2><p>Verified buyer, an honest 5★→1★ histogram, longevity + projection meters, raw Franco-Arabic quotes kept verbatim.</p><span class="count">8 variants</span></div>
+    <div class="demo-grid">
+      <div class="demo wide"><span class="demo__label">summary + histogram</span>
+        <div class="rv-summary">
+          <div class="rv-score"><span class="rv-big">4.8</span><span class="stars">★★★★★</span><a class="rv-count" href="#">1,288 verified reviews</a></div>
+          <div class="hist">
+            <div class="hist-row"><span>5★</span><span class="track"><span class="fill" style="width:86%"></span></span><span class="n">1108</span></div>
+            <div class="hist-row"><span>4★</span><span class="track"><span class="fill" style="width:9%"></span></span><span class="n">116</span></div>
+            <div class="hist-row"><span>3★</span><span class="track"><span class="fill" style="width:3%"></span></span><span class="n">38</span></div>
+            <div class="hist-row"><span>2★</span><span class="track"><span class="fill" style="width:1%"></span></span><span class="n">14</span></div>
+            <div class="hist-row"><span>1★</span><span class="track"><span class="fill" style="width:1%"></span></span><span class="n">12</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo"><span class="demo__label">card + meters</span>
+        <div class="rv-card">
+          <div class="rv-head"><span class="stars">★★★★★</span><span class="verified"><span class="c">✓</span> Verified buyer</span></div>
+          <p class="rv-quote" dir="auto">Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.</p>
+          <div class="meters">
+            <div class="meter"><span>Longevity</span><span class="track"><span class="fill" style="width:90%"></span></span></div>
+            <div class="meter"><span>Projection</span><span class="track"><span class="fill" style="width:70%"></span></span></div>
+          </div>
+          <div class="rv-foot"><b>Farida M.</b><span class="rv-size">50ml EDP</span><span class="rv-date">Mar 2026</span></div>
+        </div>
+      </div>
+      <div class="demo"><span class="demo__label">compact · badge · meter · bar</span>
+        <div class="stack" style="gap:18px;">
+          <span class="stars">★★★★★ <span class="num">4.8</span> <span class="ct">· 1,288 reviews</span></span>
+          <span class="badge badge--pill badge--wash inline" style="gap:8px;">★★★★★ <b style="color:var(--c-white)">4.8</b></span>
+          <span class="starbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- inspired-by -->
+  <section class="section" id="inspired">
+    <div class="section__head"><h2>Inspired-by · dupe referencing</h2><p>Brand-safe by design: the default leads with craft — “True to the original” — never “dupe” or a trademark. The literal “Inspired by {name}” mode is an explicit opt-in, paired with a legal-hedge line.</p><span class="count">8 variants</span></div>
+    <div class="demo-grid">
+      <div class="demo"><span class="demo__label">craft · default</span><span class="ib"><span class="g">◆</span> True to the original</span></div>
+      <div class="demo"><span class="demo__label">reimagined</span><span class="ib"><span class="g">◆</span> Masterfully reimagined</span></div>
+      <div class="demo"><span class="demo__label">art</span><span class="ib"><span class="g">✦</span> The Art of Inspiration</span></div>
+      <div class="demo"><span class="demo__label">original · house mark</span><span class="ib ib--orig">✓ A Sorella Original</span></div>
+      <div class="demo"><span class="demo__label">inspired · opt-in</span><span class="ib"><span class="g">✦</span> Inspired by Baccarat Rouge 540</span></div>
+      <div class="demo"><span class="demo__label">line · under product name</span><span class="ib-line">True to the original</span></div>
+      <div class="demo"><span class="demo__label">stamp · engraved seal</span><span class="ib-stamp"><i>True to the original</i></span></div>
+      <div class="demo"><span class="demo__label">disclaimer</span><p class="ib-disc">Sorella is an independent fragrance house. We are not associated or affiliated with any brand mentioned.</p></div>
+    </div>
+  </section>
+
+  <!-- atoms -->
+  <section class="section" id="atoms">
+    <div class="section__head"><h2>Atom library</h2><p>Every reusable snippet is variant-driven on the same tokens — one <code>variant</code>/<code>style</code> param, monochrome throughout.</p><span class="count">17 snippets</span></div>
+    <div class="demo-grid">
+
+      <div class="demo wide"><span class="demo__label">badges · 10</span><div class="inline">
+        <span class="badge badge--cart">3</span>
+        <span class="badge badge--pill badge--outline">Sold out</span>
+        <span class="badge badge--pill badge--solid">Sale</span>
+        <span class="badge badge--pill badge--wash">Oud</span>
+        <span class="badge badge--pill badge--solid">New</span>
+        <span class="badge badge--pill badge--solid">Bestseller</span>
+        <span class="badge badge--pill badge--wash">Limited</span>
+        <span class="badge badge--pill badge--muted">Low stock</span>
+        <span class="badge badge--pill badge--solid">Free 5ml</span>
+        <span class="badge badge--pill badge--outline">EDP</span>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">star rating · sizes + bar</span><div class="stack">
+        <span class="stars stars--lg">★★★★★</span>
+        <span class="stars">★★★★★ <span class="num">4.8</span></span>
+        <span class="stars stars--sm">★★★★★</span>
+        <span class="starbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">quantity + chips</span><div class="stack">
+        <span class="qty"><button>−</button><input value="1" aria-label="Quantity"><button>+</button></span>
+        <div class="chips"><span class="chip on">30ml</span><span class="chip">50ml</span><span class="chip">Oil</span></div>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">size ladder</span>
+        <div class="ladder">
+          <div class="ladder__row"><span>5ml tester</span><span class="ladder__price">LE 85</span></div>
+          <div class="ladder__row on"><span class="inline" style="gap:8px;">50ml EDP <span class="best">Best value</span></span><span class="ladder__price">LE 850</span></div>
+          <div class="ladder__row"><span>Bundle of 3</span><span class="ladder__price">LE 2,200</span></div>
+        </div>
+      </div>
+
+      <div class="demo"><span class="demo__label">form fields · states</span><div class="stack">
+        <div class="field"><label>Email</label><input type="email" placeholder="your email address"></div>
+        <div class="field field--error"><label>Email</label><input type="email" value="bad@"><span class="msg">Enter a valid email.</span></div>
+        <div class="field field--success"><label>Email</label><input type="email" value="noor@sorella.eg"><span class="msg">Looks good.</span></div>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">newsletter · inline</span>
+        <div class="stack">
+          <p class="t-caption text-mist">Join the list — first to know when a drop lands.</p>
+          <div class="inline" style="gap:8px;flex-wrap:nowrap;"><input class="field" style="flex:1;padding:12px 16px;background:transparent;border:1px solid var(--hair2);border-radius:var(--r-sm);color:var(--parchment);" type="email" placeholder="Email"><button class="btn btn--primary">Sign up</button></div>
+        </div>
+      </div>
+
+      <div class="demo"><span class="demo__label">pagination</span><div class="stack" style="gap:18px;">
+        <nav class="pag"><a class="on">1</a><a>2</a><a>3</a><a>→</a></nav>
+        <nav class="pag pag--dots"><a></a><a class="on"></a><a></a></nav>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">social links</span><div class="stack">
+        <div class="socials"><a href="#">IG</a><a href="#">TT</a><a href="#">FB</a></div>
+        <div class="socials socials--filled"><a href="#">IG</a><a href="#">TT</a><a href="#">FB</a></div>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">trust cell</span><div class="stack" style="gap:18px;">
+        <div class="trust"><span class="trust__icon">◆</span><span class="t-caption-strong" style="color:var(--c-white)">Made fresh in Egypt</span><span class="t-caption text-mist">Small-batch, poured to order</span></div>
+        <div class="trust trust--h"><span class="trust__icon">✦</span><span><span class="t-caption-strong" style="color:var(--c-white)">Free 5ml over LE 1,100</span><br><span class="t-caption text-mist">Pick it in your cart</span></span></div>
+      </div></div>
+
+      <div class="demo"><span class="demo__label">glass panel</span>
+        <div class="glass"><span class="t-caption-strong" style="color:var(--c-white)">Frosted glass</span><p class="t-caption text-mist" style="margin-top:6px;">One blurred layer — nav dock, hero, cart drawer, mega-menu. Everything else is solid.</p></div>
+      </div>
+
+      <div class="demo"><span class="demo__label">buttons · base</span><div class="stack">
+        <button class="btn btn--primary">Primary</button>
+        <button class="btn btn--ghost">Ghost</button>
+        <button class="btn btn--text">Text link →</button>
+      </div></div>
+
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Every value flows from <code>base.css</code> tokens → the whole theme re-skins from one file.</span>
+    <span>Sorella · From our bond to your senses</span>
+  </footer>
+
+</div>
+</body>
+</html>

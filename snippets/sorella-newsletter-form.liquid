@@ -1,12 +1,25 @@
 {%- comment -%}
-  sorella-newsletter-form — inline / stacked email capture (§9).
-  Uses Shopify customer form (newsletter tag). Params:
-    layout (string) — 'inline' (default) | 'stacked'
-    button_label (string)
-    field_id (string) — unique input id when several forms share a page
+  sorella-newsletter-form — Shopify customer (newsletter) email capture (§9).
+  DEFAULT (layout 'inline') reproduces the original markup exactly.
+
+  Params:
+    layout  (string) — 'inline' (default) | 'stacked' | 'minimal' | 'boxed'
+                       | 'glass' | 'footer' | 'hero' | 'split'
+    button_label (string) · field_id (string, unique id)
+    consent (boolean) — append a consent checkbox row
+    heading (string) · text (string) — optional lead copy (hero/boxed/glass)
 {%- endcomment -%}
-{%- assign nl_field_id = field_id | default: 'newsletter-email' -%}
-<div class="sorella-newsletter-form sorella-newsletter-form--{{ layout | default: 'inline' }}">
+{%- liquid
+  assign nl_layout = layout | default: 'inline'
+  assign nl_field_id = field_id | default: 'newsletter-email'
+-%}
+<div class="sorella-newsletter-form sorella-newsletter-form--{{ nl_layout }}">
+  {%- if heading != blank or text != blank -%}
+    <div class="sorella-newsletter-form__lead">
+      {%- if heading != blank -%}<p class="t-display-sm">{{ heading }}</p>{%- endif -%}
+      {%- if text != blank -%}<p class="t-body-sm text-mist">{{ text }}</p>{%- endif -%}
+    </div>
+  {%- endif -%}
   {%- form 'customer', class: 'sorella-newsletter-form__form' -%}
     <input type="hidden" name="contact[tags]" value="newsletter">
     {%- if form.posted_successfully? -%}
@@ -30,6 +43,12 @@
         {%- assign newsletter_submit_label = 'general.newsletter.submit' | t -%}
       {%- endif -%}
       {% render 'sorella-button', label: newsletter_submit_label, style: 'primary', type: 'submit' %}
+      {%- if consent -%}
+        <label class="sorella-newsletter-form__consent t-caption text-mist">
+          <input type="checkbox" name="contact[accepts_marketing]" value="true" required>
+          <span>{{ 'general.newsletter.label' | t }}</span>
+        </label>
+      {%- endif -%}
     {%- endif -%}
   {%- endform -%}
 </div>

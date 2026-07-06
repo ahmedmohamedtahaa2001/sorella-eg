@@ -2,22 +2,52 @@
   sorella-glass-panel — base glass wrapper (Art Direction §8.4).
   Wraps pre-captured markup. Blur budget applies (§8.4) — only for nav dock,
   hero, brand-story, cart drawer, mega-menu. Elsewhere prefer a solid surface.
+
+  Base .glass-panel styles live in assets/base.css (do not redefine).
+  Variant modifier classes live in assets/sorella-lib-layout.css.
+
   Params:
     content (string, required) — captured HTML to place inside
-    variant (string) — 'card' (default, radius.lg) | 'hero' (radius.xl) | 'compact' (radius.md)
-    sheen   (boolean) — add the 1-pass sheen highlight
+    variant (string) — see table below (default 'card')
+    sheen   (boolean) — add the 1-pass sheen highlight (still honoured on top of variant)
     tag     (string) — wrapper element, default 'div'
     class   (string) — extra classes
+
+  Variants (10):
+    card      — default, radius.lg blurred glass panel
+    hero      — radius.xl blurred glass (large surfaces)
+    xl        — alias of hero (radius.xl)
+    compact   — radius.md blurred glass
+    md        — alias of compact (radius.md)
+    flat      — solid Obsidian surface, NO blur (perf-safe outside blur budget)
+    dark-solid— solid charcoal surface, NO blur, hairline border
+    bordered  — glass + stronger divider border
+    floating  — glass + elevated card-hover shadow
+    inset      — glass + inset (recessed) shadow, subtle fill
+    sheen      — glass + baked-in sheen highlight
 {%- endcomment -%}
 {%- liquid
+  assign v = variant | default: 'card'
   assign classes = 'glass-panel'
-  case variant
-    when 'hero'
+  case v
+    when 'hero', 'xl'
       assign classes = classes | append: ' glass-panel--xl'
-    when 'compact'
+    when 'compact', 'md'
       assign classes = classes | append: ' glass-panel--md'
+    when 'flat'
+      assign classes = classes | append: ' sorella-glass-panel--flat'
+    when 'dark-solid'
+      assign classes = classes | append: ' sorella-glass-panel--dark-solid'
+    when 'bordered'
+      assign classes = classes | append: ' sorella-glass-panel--bordered'
+    when 'floating'
+      assign classes = classes | append: ' sorella-glass-panel--floating'
+    when 'inset'
+      assign classes = classes | append: ' sorella-glass-panel--inset'
+    when 'sheen'
+      assign classes = classes | append: ' glass-panel--sheen'
   endcase
-  if sheen
+  if sheen and v != 'sheen'
     assign classes = classes | append: ' glass-panel--sheen'
   endif
   if class != blank

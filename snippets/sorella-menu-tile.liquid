@@ -1,13 +1,64 @@
 {%- comment -%}
-  sorella-menu-tile — mega-menu bento category tile (§9). Params:
-    link (url) · title (string) · image (image object) · subtitle (string)
+  sorella-menu-tile — mega-menu bento category tile (§9).
+  Layout modifier classes live in assets/sorella-lib-layout.css.
+
+  Params:
+    link     (url)          · title (string) · image (image object)
+    subtitle (string)       · desc  (string) — long copy for 'with-desc'
+    cta      (string)       — link label for 'cta' variant (default 'Explore')
+    variant  (string)       — see table below (default '' = image over title)
+
+  Variants (8):
+    (default)   — 1x1 image with title + optional subtitle below
+    overlay     — title/subtitle laid over the image (dark scrim)
+    text-only   — no image, link-list row (title + subtitle)
+    featured    — larger tile, headline title, elevated on hover
+    compact     — smaller media, tighter gap
+    with-desc   — image + title + descriptive paragraph
+    cta         — title/subtitle + trailing "Explore →" link cue
+    scent-family— text-only row prefixed with a gold accent dot
 {%- endcomment -%}
-<a class="sorella-menu-tile" href="{{ link | default: '#' }}">
-  <div class="sorella-menu-tile__media media media--1x1">
-    {%- if image != blank -%}
-      {{ image | image_url: width: 320 | image_tag: loading: 'lazy', alt: title | escape }}
-    {%- endif -%}
-  </div>
-  <span class="sorella-menu-tile__title t-caption-strong">{{ title }}</span>
-  {%- if subtitle != blank -%}<span class="t-caption text-mist">{{ subtitle }}</span>{%- endif -%}
+{%- liquid
+  assign v = variant | default: ''
+  assign tile_class = 'sorella-menu-tile'
+  assign show_media = true
+  case v
+    when 'overlay'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--overlay'
+    when 'text-only'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--text-only'
+      assign show_media = false
+    when 'featured'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--featured'
+    when 'compact'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--compact'
+    when 'with-desc'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--with-desc'
+    when 'cta'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--cta'
+    when 'scent-family'
+      assign tile_class = tile_class | append: ' sorella-menu-tile--scent-family'
+      assign show_media = false
+  endcase
+-%}
+<a class="{{ tile_class }}" href="{{ link | default: '#' }}">
+  {%- if show_media -%}
+    <div class="sorella-menu-tile__media media media--1x1">
+      {%- if image != blank -%}
+        {{ image | image_url: width: 320 | image_tag: loading: 'lazy', alt: title | escape }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if v == 'overlay' -%}
+    <div class="sorella-menu-tile__overlay">
+      <span class="sorella-menu-tile__title t-caption-strong">{{ title }}</span>
+      {%- if subtitle != blank -%}<span class="t-caption text-mist">{{ subtitle }}</span>{%- endif -%}
+    </div>
+  {%- else -%}
+    {%- if v == 'scent-family' -%}<span class="sorella-menu-tile__dot" aria-hidden="true"></span>{%- endif -%}
+    <span class="sorella-menu-tile__title t-caption-strong">{{ title }}</span>
+    {%- if subtitle != blank -%}<span class="t-caption text-mist">{{ subtitle }}</span>{%- endif -%}
+    {%- if v == 'with-desc' and desc != blank -%}<span class="t-body-sm text-mist">{{ desc }}</span>{%- endif -%}
+    {%- if v == 'cta' -%}<span class="sorella-menu-tile__cta t-caption-strong text-gold">{{ cta | default: 'Explore' }} {% render 'sorella-icon', name: 'arrow-right', size: 14 %}</span>{%- endif -%}
+  {%- endif -%}
 </a>

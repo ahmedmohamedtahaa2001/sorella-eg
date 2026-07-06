@@ -1,15 +1,88 @@
 {%- comment -%}
   sorella-quantity-selector (§9).
-  Params: id (string), name (string, default 'quantity'), value (number, default 1), min (number, default 1)
+  Wiring (theme.js): keeps [data-quantity] wrapper + [data-qty-step] buttons +
+  the number input. CSS: base .sorella-qty in components.css; size/shape
+  treatments in sorella-lib-pdp.css.
+
+  Params:
+    id    (string)              — input id, default 'quantity'
+    name  (string)              — input name, default 'quantity'
+    value (number)              — default 1
+    min   (number)              — default 1
+    max   (number)              — optional upper bound
+    label (string)              — visible label text (inline-label variant)
+    variant (string)            — visual style, default 'default'
+
+  Variants (variant:):
+    default        −  [input]  +   pill outline                ← current output, unchanged
+    sm             compact size
+    lg             large size
+    pill           fully-rounded compact control
+    boxed          square-cornered control
+    inline-label   leading label text + control on one row
+    stepper-only   − [value] +, input read-only (steppers only)
+    readonly       display value, no steppers, read-only input
 {%- endcomment -%}
-<div class="sorella-qty" data-quantity>
-  <button type="button" data-qty-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t }}">
-    {% render 'sorella-icon', name: 'minus', size: 16 %}
-  </button>
-  <input type="number" id="{{ id | default: 'quantity' }}" name="{{ name | default: 'quantity' }}"
-    value="{{ value | default: 1 }}" min="{{ min | default: 1 }}" inputmode="numeric"
-    aria-label="{{ 'products.product.quantity' | t }}">
-  <button type="button" data-qty-step="1" aria-label="{{ 'products.product.increase_quantity' | t }}">
-    {% render 'sorella-icon', name: 'plus', size: 16 %}
-  </button>
-</div>
+{%- liquid
+  assign v = variant | default: 'default'
+  assign q_id = id | default: 'quantity'
+  assign q_name = name | default: 'quantity'
+  assign q_val = value | default: 1
+  assign q_min = min | default: 1
+  assign q_label = label | default: 'products.product.quantity' | t
+  assign wrap_mod = ''
+  unless v == 'default'
+    assign wrap_mod = ' sorella-qty--' | append: v
+  endunless
+-%}
+
+{%- if v == 'inline-label' -%}
+  <div class="sorella-qty-field">
+    <span class="sorella-qty-field__label t-caption-strong">{{ q_label }}</span>
+    <div class="sorella-qty{{ wrap_mod }}" data-quantity>
+      <button type="button" data-qty-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t }}">
+        {% render 'sorella-icon', name: 'minus', size: 16 %}
+      </button>
+      <input type="number" id="{{ q_id }}" name="{{ q_name }}"
+        value="{{ q_val }}" min="{{ q_min }}"{% if max %} max="{{ max }}"{% endif %} inputmode="numeric"
+        aria-label="{{ q_label }}">
+      <button type="button" data-qty-step="1" aria-label="{{ 'products.product.increase_quantity' | t }}">
+        {% render 'sorella-icon', name: 'plus', size: 16 %}
+      </button>
+    </div>
+  </div>
+
+{%- elsif v == 'readonly' -%}
+  <div class="sorella-qty{{ wrap_mod }}" data-quantity>
+    <input type="number" id="{{ q_id }}" name="{{ q_name }}"
+      value="{{ q_val }}" min="{{ q_min }}"{% if max %} max="{{ max }}"{% endif %} inputmode="numeric"
+      aria-label="{{ q_label }}" readonly>
+  </div>
+
+{%- elsif v == 'stepper-only' -%}
+  <div class="sorella-qty{{ wrap_mod }}" data-quantity>
+    <button type="button" data-qty-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t }}">
+      {% render 'sorella-icon', name: 'minus', size: 16 %}
+    </button>
+    <input type="number" id="{{ q_id }}" name="{{ q_name }}"
+      value="{{ q_val }}" min="{{ q_min }}"{% if max %} max="{{ max }}"{% endif %} inputmode="numeric"
+      aria-label="{{ q_label }}" readonly>
+    <button type="button" data-qty-step="1" aria-label="{{ 'products.product.increase_quantity' | t }}">
+      {% render 'sorella-icon', name: 'plus', size: 16 %}
+    </button>
+  </div>
+
+{%- else -%}
+  {%- comment -%} default, sm, lg, pill, boxed — same markup, size/shape via variant class {%- endcomment -%}
+  <div class="sorella-qty{{ wrap_mod }}" data-quantity>
+    <button type="button" data-qty-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t }}">
+      {% render 'sorella-icon', name: 'minus', size: 16 %}
+    </button>
+    <input type="number" id="{{ q_id }}" name="{{ q_name }}"
+      value="{{ q_val }}" min="{{ q_min }}"{% if max %} max="{{ max }}"{% endif %} inputmode="numeric"
+      aria-label="{{ 'products.product.quantity' | t }}">
+    <button type="button" data-qty-step="1" aria-label="{{ 'products.product.increase_quantity' | t }}">
+      {% render 'sorella-icon', name: 'plus', size: 16 %}
+    </button>
+  </div>
+{%- endif -%}

@@ -1,18 +1,125 @@
 {%- comment -%}
-  sorella-star-rating — value out of 5, Gold stars (§9).
+  sorella-star-rating — value out of 5, monochrome (white) stars (§9).
+  CSS: assets/sorella-lib-pdp.css (.sorella-stars*). Base .sorella-stars in components.css.
+
   Params:
-    value (number, 0–5) — supports halves rounded to nearest for fill count
-    count (number) — optional review count to append
+    value   (number, 0–5)  — supports fractional values (see 'half')
+    count   (number)       — optional review count
+    variant (string)       — visual style, default 'default'
+    label   (string)       — optional custom aria-label
+
+  Variants (variant:):
+    default          5 solid/outline stars + optional (count)  ← current output, unchanged
+    half             fractional fill (renders a half star)
+    sm               small stars (12px)
+    lg               large stars (20px)
+    inline-score     numeric score only ("4.8")
+    with-count-text  stars + "4.8 · 1288" text row
+    bar              5-segment horizontal meter
+    minimal          single star + number
+    on-dark          stars tuned for dark surfaces (white fill)
+    on-light         stars tuned for light/parchment surfaces (ink fill)
 {%- endcomment -%}
 {%- liquid
-  assign rating = value | default: 5 | round
-  if rating > 5
-    assign rating = 5
+  assign v = variant | default: 'default'
+  assign raw = value | default: 5 | times: 1.0
+  if raw > 5
+    assign raw = 5
   endif
-  assign empties = 5 | minus: rating
+
+  assign star_size = 15
+  case v
+    when 'sm'
+      assign star_size = 12
+    when 'lg'
+      assign star_size = 20
+  endcase
+
+  assign aria_value = value | default: 5
+  assign aria = label | default: aria_value | append: ' out of 5 stars'
 -%}
-<span class="sorella-stars text-gold" role="img" aria-label="{{ value | default: 5 }} out of 5 stars">
-  {%- for i in (1..rating) -%}{% render 'sorella-icon', name: 'star', size: 15 %}{%- endfor -%}
-  {%- if empties > 0 -%}{%- for i in (1..empties) -%}{% render 'sorella-icon', name: 'star-outline', size: 15 %}{%- endfor -%}{%- endif -%}
-  {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
-</span>
+{%- case v -%}
+
+{%- when 'inline-score' -%}
+  <span class="sorella-stars sorella-stars--inline-score text-gold" role="img" aria-label="{{ aria }}">
+    <span class="sorella-stars__score t-caption-strong">{{ raw | round: 1 }}</span>
+    {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+  </span>
+
+{%- when 'minimal' -%}
+  <span class="sorella-stars sorella-stars--minimal text-gold" role="img" aria-label="{{ aria }}">
+    {% render 'sorella-icon', name: 'star', size: star_size %}
+    <span class="sorella-stars__score t-caption-strong">{{ raw | round: 1 }}</span>
+  </span>
+
+{%- when 'bar' -%}
+  {%- liquid
+    assign filled = raw | round
+    if filled > 5
+      assign filled = 5
+    endif
+    assign empties = 5 | minus: filled
+  -%}
+  <span class="sorella-stars sorella-stars--bar" role="img" aria-label="{{ aria }}">
+    <span class="sorella-stars__meter">
+      {%- for i in (1..filled) -%}<span class="sorella-stars__seg sorella-stars__seg--on"></span>{%- endfor -%}
+      {%- if empties > 0 -%}{%- for i in (1..empties) -%}<span class="sorella-stars__seg"></span>{%- endfor -%}{%- endif -%}
+    </span>
+    {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+  </span>
+
+{%- when 'half' -%}
+  {%- liquid
+    assign full = raw | floor
+    assign remainder = raw | minus: full
+    assign has_half = false
+    if remainder >= 0.75
+      assign full = full | plus: 1
+    elsif remainder >= 0.25
+      assign has_half = true
+    endif
+    assign empties = 5 | minus: full
+    if has_half
+      assign empties = empties | minus: 1
+    endif
+  -%}
+  <span class="sorella-stars sorella-stars--half text-gold" role="img" aria-label="{{ aria }}">
+    {%- for i in (1..full) -%}{% render 'sorella-icon', name: 'star', size: star_size %}{%- endfor -%}
+    {%- if has_half -%}<span class="sorella-stars__half">{% render 'sorella-icon', name: 'star-outline', size: star_size %}<span class="sorella-stars__half-fill">{% render 'sorella-icon', name: 'star', size: star_size %}</span></span>{%- endif -%}
+    {%- if empties > 0 -%}{%- for i in (1..empties) -%}{% render 'sorella-icon', name: 'star-outline', size: star_size %}{%- endfor -%}{%- endif -%}
+    {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+  </span>
+
+{%- when 'with-count-text' -%}
+  {%- liquid
+    assign rating = raw | round
+    if rating > 5
+      assign rating = 5
+    endif
+    assign empties = 5 | minus: rating
+  -%}
+  <span class="sorella-stars sorella-stars--with-count-text text-gold" role="img" aria-label="{{ aria }}">
+    {%- for i in (1..rating) -%}{% render 'sorella-icon', name: 'star', size: star_size %}{%- endfor -%}
+    {%- if empties > 0 -%}{%- for i in (1..empties) -%}{% render 'sorella-icon', name: 'star-outline', size: star_size %}{%- endfor -%}{%- endif -%}
+    <span class="sorella-stars__count-text t-caption text-mist">{{ raw | round: 1 }}{%- if count and count > 0 %} · {{ count }}{%- endif -%}</span>
+  </span>
+
+{%- else -%}
+  {%- comment -%} default, sm, lg, on-dark, on-light — same star markup, size/colour via variant class {%- endcomment -%}
+  {%- liquid
+    assign rating = raw | round
+    if rating > 5
+      assign rating = 5
+    endif
+    assign empties = 5 | minus: rating
+    assign modifier = ''
+    unless v == 'default'
+      assign modifier = ' sorella-stars--' | append: v
+    endunless
+  -%}
+  <span class="sorella-stars{{ modifier }} text-gold" role="img" aria-label="{{ aria }}">
+    {%- for i in (1..rating) -%}{% render 'sorella-icon', name: 'star', size: star_size %}{%- endfor -%}
+    {%- if empties > 0 -%}{%- for i in (1..empties) -%}{% render 'sorella-icon', name: 'star-outline', size: star_size %}{%- endfor -%}{%- endif -%}
+    {%- if count and count > 0 -%}<span class="t-caption text-mist sorella-stars__count">({{ count }})</span>{%- endif -%}
+  </span>
+{%- endcase -%}

@@ -1,30 +1,137 @@
 {%- comment -%}
-  sorella-variant-selector — swatch (single option) / dropdown (§9).
-  Renders one control per product option. Must live inside a form that has a
-  hidden input[name="id"] with [data-variant-id]. Updates handled in theme.js.
-  Params: product (object, required)
+  sorella-variant-selector — one control per product option (§9).
+  Must live inside a form with a hidden input[name="id"][data-variant-id].
+  Wiring (theme.js): keeps [data-variant-selector], [data-variant-data] JSON,
+  radios named option{n} with [data-option-index]. Native <select> variant
+  carries [data-option-index] on both the select and its <option>s so the
+  existing initVariantSelectors() logic keeps working. Do not remove those hooks.
+  CSS: base in components.css; variant treatments in sorella-lib-pdp.css.
+
+  Params:
+    product    (object, required)
+    variant    (string)  — control style, default 'chips'
+    best_value (string)  — option value to badge "Best value" (size-ladder)
+
+  Variants (variant:):
+    chips        pill radio chips                       ← current output, unchanged
+    swatch       compact square size pills
+    dropdown     native <select> per option
+    size-ladder  stacked radio tiles w/ price + best-value badge
+    boxed        bordered rectangular tiles
+    inline       label + chips on one row
+    toggle       2-up segmented control (oil vs EDP etc.)
+    sold-out     chips with unavailable values disabled + struck through
 {%- endcomment -%}
 {%- unless product.has_only_default_variant -%}
-  <div class="sorella-variants" data-variant-selector>
+  {%- liquid
+    assign v = variant | default: 'chips'
+    assign wrap_mod = ''
+    unless v == 'chips'
+      assign wrap_mod = ' sorella-variants--' | append: v
+    endunless
+  -%}
+  <div class="sorella-variants{{ wrap_mod }}" data-variant-selector>
     {%- for option in product.options_with_values -%}
-      <div class="sorella-variants__group">
-        <span class="sorella-variants__label t-caption-strong">{{ option.name }}</span>
-        <div class="sorella-variants__options" role="radiogroup" aria-label="{{ option.name | escape }}">
-          {%- for value in option.values -%}
-            {%- liquid
-              assign opt_id = 'opt-' | append: option.position | append: '-' | append: forloop.index
-              assign checked = false
-              if option.selected_value == value
-                assign checked = true
-              endif
-            -%}
-            <input class="visually-hidden sorella-variants__input" type="radio"
-              name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
-              data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
-            <label class="sorella-variants__chip t-caption" for="{{ opt_id }}">{{ value }}</label>
-          {%- endfor -%}
+
+      {%- if v == 'dropdown' -%}
+        <div class="sorella-variants__group">
+          <label class="sorella-variants__label t-caption-strong" for="opt-sel-{{ option.position }}">{{ option.name }}</label>
+          <div class="sorella-variants__select-wrap">
+            <select class="sorella-variants__select t-body" id="opt-sel-{{ option.position }}"
+              name="option{{ option.position }}" data-option-index="{{ option.position }}">
+              {%- for value in option.values -%}
+                <option value="{{ value | escape }}" data-option-index="{{ option.position }}"{% if option.selected_value == value %} selected{% endif %}>{{ value }}</option>
+              {%- endfor -%}
+            </select>
+            {% render 'sorella-icon', name: 'chevron-down', size: 16 %}
+          </div>
         </div>
-      </div>
+
+      {%- else -%}
+        <div class="sorella-variants__group">
+          <span class="sorella-variants__label t-caption-strong">{{ option.name }}</span>
+          <div class="sorella-variants__options" role="radiogroup" aria-label="{{ option.name | escape }}">
+            {%- for value in option.values -%}
+              {%- liquid
+                assign opt_id = 'opt-' | append: option.position | append: '-' | append: forloop.index
+                assign checked = false
+                if option.selected_value == value
+                  assign checked = true
+                endif
+
+                comment
+                  Per-value availability + price lookup (used by size-ladder / sold-out).
+                endcomment
+                assign val_available = true
+                assign val_variant = null
+                if v == 'size-ladder' or v == 'sold-out'
+                  assign opt_idx0 = option.position | minus: 1
+                  assign val_available = false
+                  for pv in product.variants
+                    assign pv_opt = pv.options[opt_idx0]
+                    if pv_opt == value
+                      if val_variant == null
+                        assign val_variant = pv
+                      endif
+                      if pv.available
+                        assign val_available = true
+                        assign val_variant = pv
+                        break
+                      endif
+                    endif
+                  endfor
+                endif
+              -%}
+
+              {%- case v -%}
+
+              {%- when 'size-ladder' -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}{% unless val_available %} disabled{% endunless %}>
+                <label class="sorella-variants__tile{% unless val_available %} is-unavailable{% endunless %}" for="{{ opt_id }}">
+                  <span class="sorella-variants__tile-name t-caption-strong">{{ value }}</span>
+                  {%- if best_value and best_value == value -%}<span class="sorella-variants__badge t-caption">Best value</span>{%- endif -%}
+                  {%- if val_variant -%}<span class="sorella-variants__tile-price t-price">{{ val_variant.price | money }}</span>{%- endif -%}
+                </label>
+
+              {%- when 'sold-out' -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}{% unless val_available %} disabled{% endunless %}>
+                <label class="sorella-variants__chip t-caption{% unless val_available %} is-sold-out{% endunless %}" for="{{ opt_id }}">{{ value }}</label>
+
+              {%- when 'swatch' -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
+                <label class="sorella-variants__swatch t-caption" for="{{ opt_id }}">{{ value }}</label>
+
+              {%- when 'boxed' -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
+                <label class="sorella-variants__boxed t-caption" for="{{ opt_id }}">{{ value }}</label>
+
+              {%- when 'toggle' -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
+                <label class="sorella-variants__toggle-seg t-caption" for="{{ opt_id }}">{{ value }}</label>
+
+              {%- else -%}
+                {%- comment -%} chips (default) + inline share the pill chip markup {%- endcomment -%}
+                <input class="visually-hidden sorella-variants__input" type="radio"
+                  name="option{{ option.position }}" id="{{ opt_id }}" value="{{ value | escape }}"
+                  data-option-index="{{ option.position }}"{% if checked %} checked{% endif %}>
+                <label class="sorella-variants__chip t-caption" for="{{ opt_id }}">{{ value }}</label>
+              {%- endcase -%}
+
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
     {%- endfor -%}
     <script type="application/json" data-variant-data>
       {{ product.variants | json }}

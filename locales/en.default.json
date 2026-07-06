@@ -12,6 +12,7 @@
       "menu": "Menu",
       "mobile_nav": "Mobile navigation",
       "pagination": "Pagination",
+      "announcement": "Announcement",
       "star_rating": "{{ rating }} out of 5 stars",
       "view_image": "View image {{ number }}"
     },
@@ -63,8 +64,14 @@
   "products": {
     "product": {
       "add_to_bag": "Add to bag",
+      "buy_now": "Buy it now",
       "sold_out": "Sold out",
       "notify_me": "Sold out — notify me",
+      "true_to_original": "True to the original",
+      "reimagined": "Masterfully reimagined",
+      "art_of_inspiration": "The Art of Inspiration",
+      "a_sorella_original": "A Sorella Original",
+      "disclaimer": "Sorella is an independent fragrance house. We are not associated or affiliated with any brand mentioned.",
       "unavailable": "Unavailable",
       "from_price": "From {{ price }}",
       "sale": "Sale",
@@ -92,7 +99,14 @@
     }
   },
   "testimonials": {
-    "verified": "Verified"
+    "verified": "Verified",
+    "verified_buyer": "Verified buyer",
+    "reviews_region": "Customer reviews",
+    "reviews_short": "reviews",
+    "write_review": "Write a review",
+    "longevity": "Longevity",
+    "projection": "Projection",
+    "review_for": "Review for"
   },
   "cart": {
     "general": {

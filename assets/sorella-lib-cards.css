@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Sorella — card / price / badge library (added variants)
+   Extends components.css (does NOT duplicate base modifiers). Monochrome only:
+   the single accent (--color-gold) resolves to pure white. Load after
+   components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Price — added variants (base .sorella-price* live in components.css)
+   -------------------------------------------------------------------------- */
+.sorella-price--inline,
+.sorella-price--unit,
+.sorella-price--installment,
+.sorella-price--range,
+.sorella-price--member { flex-wrap: wrap; }
+
+/* struck compare sits before current on inline */
+.sorella-price--inline .sorella-price__compare { margin-inline: 0 var(--space-xxs); order: -1; }
+
+/* secondary lines (unit / installment / members) sit under the price */
+.sorella-price--unit,
+.sorella-price--installment,
+.sorella-price--member { flex-direction: column; align-items: flex-start; gap: 2px; }
+.sorella-price__unit,
+.sorella-price__installment,
+.sorella-price__member { line-height: 1.2; }
+
+/* "Save {amount}" chip on the PDP price */
+.sorella-price__save {
+  padding: 2px 8px; border-radius: var(--radius-pill);
+  background: var(--color-gold-15); color: var(--color-gold);
+  border: 1px solid var(--color-gold-40);
+}
+
+/* members marker reads as a quiet uppercase tag */
+.sorella-price__member { text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* --------------------------------------------------------------------------
+   Badges — added variants (base .sorella-badge* live in components.css)
+   Shared chrome for icon + label pills.
+   -------------------------------------------------------------------------- */
+.sorella-badge--new,
+.sorella-badge--bestseller,
+.sorella-badge--limited,
+.sorella-badge--low-stock,
+.sorella-badge--gift,
+.sorella-badge--type {
+  gap: var(--space-xxs);
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  line-height: 1;
+  white-space: nowrap;
+}
+.sorella-badge--new .sorella-icon,
+.sorella-badge--bestseller .sorella-icon,
+.sorella-badge--limited .sorella-icon,
+.sorella-badge--low-stock .sorella-icon,
+.sorella-badge--gift .sorella-icon,
+.sorella-badge--type .sorella-icon { flex: none; }
+
+/* new / bestseller — solid white accent, black label (the loud pair) */
+.sorella-badge--new,
+.sorella-badge--bestseller {
+  background: var(--color-gold); color: var(--color-ink);
+}
+
+/* limited / gift / type — accent wash chip, white type, hairline accent border */
+.sorella-badge--limited,
+.sorella-badge--gift,
+.sorella-badge--type {
+  background: var(--color-gold-15); color: var(--color-gold);
+  border: 1px solid var(--color-gold-40);
+}
+
+/* low-stock — quiet outlined warning, muted type */
+.sorella-badge--low-stock {
+  background: transparent; color: var(--color-mist);
+  border: 1px solid var(--color-mist-40);
+}
+.sorella-badge--low-stock .sorella-icon { color: var(--color-mist); }
+
+/* --------------------------------------------------------------------------
+   Product card — added variants (base .sorella-card* live in components.css)
+   -------------------------------------------------------------------------- */
+
+/* shared: over-title eyebrow */
+.sorella-card__eyebrow { margin: 0; }
+
+/* horizontal — media left, body right, one list row */
+.sorella-card--horizontal {
+  flex-direction: row;
+  align-items: stretch;
+}
+.sorella-card--horizontal .sorella-card__media-wrap {
+  flex: 0 0 40%;
+  max-width: 200px;
+}
+.sorella-card--horizontal .sorella-card__media { height: 100%; }
+.sorella-card--horizontal .sorella-card__media img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.sorella-card--horizontal .sorella-card__body { flex: 1; }
+
+/* minimal — image + name + price only, airy body */
+.sorella-card--minimal .sorella-card__body {
+  gap: var(--space-xxs);
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+.sorella-card--minimal .sorella-card__title { font-size: 17px; }
+.sorella-card--minimal .sorella-card__price .sorella-price { color: var(--color-gold); }
+
+/* featured — larger hero card */
+.sorella-card--featured .sorella-card__body {
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+}
+.sorella-card--featured .sorella-card__title {
+  -webkit-line-clamp: 3;
+  font-size: 28px; line-height: 1.15;
+}
+.sorella-card--featured .sorella-card__price .sorella-price { color: var(--color-gold); }
+
+/* bundle — set framing, price ledger keeps the compare-inline pairing legible */
+.sorella-card--bundle .sorella-card__price .sorella-price { color: var(--color-gold); }
+
+/* editorial — full-bleed media with a gradient overlay carrying the text */
+.sorella-card--editorial { position: relative; }
+.sorella-card--editorial .sorella-card__media-wrap { height: 100%; }
+.sorella-card--editorial .sorella-card__media { height: 100%; }
+.sorella-card--editorial .sorella-card__media img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.sorella-card__overlay {
+  position: absolute; inset-block-end: 0; inset-inline: 0;
+  display: flex; flex-direction: column; gap: var(--space-xxs);
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  color: var(--color-parchment);
+  background: linear-gradient(
+    to top,
+    var(--color-navy) 0%,
+    color-mix(in srgb, var(--color-navy) 55%, transparent) 55%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+.sorella-card__overlay .sorella-card__title { color: var(--color-parchment); }
+.sorella-card__overlay .sorella-card__eyebrow { color: var(--color-mist); }
+.sorella-card__overlay .sorella-price { color: var(--color-gold); }
+
+/* gift — gift framing with a quiet gift-wrap note */
+.sorella-card__gift-note {
+  margin: 0;
+  display: inline-flex; align-items: center; gap: var(--space-xxs);
+}
+.sorella-card__gift-note .sorella-icon { flex: none; color: var(--color-gold); }
+.sorella-card--gift .sorella-card__price .sorella-price { color: var(--color-gold); }

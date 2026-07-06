@@ -1,10 +1,23 @@
 {%- comment -%}
-  sorella-badge — cart-count (gold) / "Sold out" pill / generic tag (§9).
+  sorella-badge — small status / label pill. Monochrome only (§9).
   Params:
-    variant (string) — 'cart' | 'sold-out' | 'sale' | 'tag'
-    label   (string) — text
-    count   (number) — for cart variant
-    hidden  (boolean)
+    variant (string) — which pill to render (default 'tag')
+    label   (string) — text override / for the tag variant
+    count   (number) — for the 'cart' variant
+    hidden  (boolean)— force-hide the pill (cart also hides at count 0)
+    icon    (string) — optional leading sorella-icon name (overrides the default)
+    type    (string) — for the 'type' variant: 'edp' | 'oil' | 'parfum'
+  Variants (10):
+    cart       — gold count chip on the bag              (existing — unchanged)
+    sold-out   — outlined muted "Sold out" pill          (existing — unchanged)
+    sale       — solid white "Sale" chip                 (existing — unchanged)
+    tag        — generic wash chip (default)             (existing — unchanged)
+    new        — "New" with sparkle
+    bestseller — "Bestseller" with star
+    limited    — "Limited edition" with diamond
+    low-stock  — "Low stock" hairline warning with droplet
+    gift       — "Gift ready" with gift icon
+    type       — concentration chip (EDP / Oil / Parfum) with droplet
 {%- endcomment -%}
 {%- liquid
   assign v = variant | default: 'tag'
@@ -14,10 +27,28 @@
     <span class="sorella-badge sorella-badge--cart" data-cart-count{% if count == 0 %} hidden{% endif %}>{{ count | default: 0 }}</span>
   {%- when 'sold-out' -%}
     {%- assign sold_out_label = 'products.product.sold_out' | t -%}
-    <span class="sorella-badge sorella-badge--sold-out t-caption-strong">{{ label | default: sold_out_label }}</span>
+    <span class="sorella-badge sorella-badge--sold-out t-caption-strong"{% if hidden %} hidden{% endif %}>{{ label | default: sold_out_label }}</span>
   {%- when 'sale' -%}
     {%- assign sale_label = 'products.product.sale' | t -%}
-    <span class="sorella-badge sorella-badge--sale t-caption-strong">{{ label | default: sale_label }}</span>
+    <span class="sorella-badge sorella-badge--sale t-caption-strong"{% if hidden %} hidden{% endif %}>{{ label | default: sale_label }}</span>
+  {%- when 'new' -%}
+    <span class="sorella-badge sorella-badge--new t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'sparkle', size: 12 %}{{ label | default: 'New' }}</span>
+  {%- when 'bestseller' -%}
+    <span class="sorella-badge sorella-badge--bestseller t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'star', size: 12 %}{{ label | default: 'Bestseller' }}</span>
+  {%- when 'limited' -%}
+    <span class="sorella-badge sorella-badge--limited t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'diamond', size: 12 %}{{ label | default: 'Limited edition' }}</span>
+  {%- when 'low-stock' -%}
+    <span class="sorella-badge sorella-badge--low-stock t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'droplet', size: 12 %}{{ label | default: 'Low stock' }}</span>
+  {%- when 'gift' -%}
+    <span class="sorella-badge sorella-badge--gift t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'gift', size: 12 %}{{ label | default: 'Gift ready' }}</span>
+  {%- when 'type' -%}
+    {%- assign type_key = type | default: 'edp' | downcase -%}
+    {%- case type_key -%}
+      {%- when 'oil' -%}{%- assign type_label = 'Oil' -%}
+      {%- when 'parfum' -%}{%- assign type_label = 'Parfum' -%}
+      {%- else -%}{%- assign type_label = 'EDP' -%}
+    {%- endcase -%}
+    <span class="sorella-badge sorella-badge--type t-caption-strong"{% if hidden %} hidden{% endif %}>{% render 'sorella-icon', name: icon | default: 'droplet', size: 12 %}{{ label | default: type_label }}</span>
   {%- else -%}
-    <span class="sorella-badge sorella-badge--tag t-caption">{{ label }}</span>
+    <span class="sorella-badge sorella-badge--tag t-caption"{% if hidden %} hidden{% endif %}>{{ label }}</span>
 {%- endcase -%}

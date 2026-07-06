@@ -1,0 +1,159 @@
+{%- comment -%}
+  sorella-review-box — the review/social-proof presentation layer.
+  Monochrome: white stars, Obsidian cards, Pearl quotes. Data-agnostic — feed it
+  from a review app (Okendo/Loox) or product metafields; this only presents.
+
+  Brand non-negotiables baked in:
+    · Raw Franco-Arabic quotes render verbatim (dir="auto") — never translated/cleaned.
+    · "Verified buyer" badge is a real trust signal, shown when verified.
+    · The histogram is HONEST (5★→1★ shown, not hidden) — a brand truth, not a dark pattern.
+    · Longevity + Projection meters answer the "buying scent unsmelled" objection.
+
+  Params:
+    variant (string) — one of 8 (default 'card'):
+      'summary'   Big rating number + stars + count (+ histogram if dist provided).
+      'card'      Full structured review card (badge, name, date, size tag, meters, quote).
+      'compact'   Stars + "4.9 · 1,288 reviews" one-liner (PDP H1 / cards). Anchor-links to #reviews.
+      'histogram' 5★→1★ distribution bars on their own.
+      'meter'     A single attribute row (Longevity or Projection), 1–5.
+      'photo'     'card' with a review image alongside.
+      'cell'      Homepage glass testimonial cell (quote-forward).
+      'badge'     Tiny stars + rating pill for chips / breadcrumbs.
+    rating   (number 0–5) · count (number) — the aggregate.
+    dist_5..dist_1 (number) — per-star counts for the histogram (optional).
+    quote (string) · author (string) · date (string) · verified (boolean)
+    size (string) — the purchased size/variant tag ("50ml EDP").
+    longevity (number 1–5) · projection (number 1–5) — attribute meters.
+    image (image) — for 'photo'.
+    meter_label (string) · meter_value (number 1–5) — for standalone 'meter'.
+    anchor (string, default '#reviews') — target for 'compact'/'summary' links.
+{%- endcomment -%}
+
+{%- liquid
+  assign v = variant | default: 'card'
+  assign r = rating | default: 5
+  assign r_display = r | round: 1
+  assign anchor_url = anchor | default: '#reviews'
+
+  comment -- histogram totals -- endcomment
+  assign d5 = dist_5 | default: 0
+  assign d4 = dist_4 | default: 0
+  assign d3 = dist_3 | default: 0
+  assign d2 = dist_2 | default: 0
+  assign d1 = dist_1 | default: 0
+  assign d_total = d5 | plus: d4 | plus: d3 | plus: d2 | plus: d1
+-%}
+
+{%- case v -%}
+
+  {%- when 'compact' -%}
+    <a class="sorella-review sorella-review--compact" href="{{ anchor_url }}">
+      {% render 'sorella-star-rating', value: r %}
+      <span class="sorella-review__inline t-caption-strong">{{ r_display }}</span>
+      {%- if count and count > 0 -%}
+        <span class="sorella-review__count t-caption text-mist">· {{ count }} {{ 'testimonials.reviews_short' | t }}</span>
+      {%- endif -%}
+    </a>
+
+  {%- when 'badge' -%}
+    <span class="sorella-review sorella-review--badge">
+      {% render 'sorella-star-rating', value: r %}
+      <span class="t-caption-strong">{{ r_display }}</span>
+    </span>
+
+  {%- when 'meter' -%}
+    {%- assign mv = meter_value | default: 3 -%}
+    {%- assign mpct = mv | times: 20 -%}
+    <div class="sorella-review__meter">
+      <span class="sorella-review__meter-label t-caption text-mist">{{ meter_label | default: 'Longevity' }}</span>
+      <span class="sorella-review__meter-track"><span class="sorella-review__meter-fill" style="width: {{ mpct }}%;"></span></span>
+    </div>
+
+  {%- when 'histogram' -%}
+    <div class="sorella-review__histogram" role="img" aria-label="{{ 'testimonials.reviews_region' | t }}: {{ count }}">
+      {%- for star in (1..5) reversed -%}
+        {%- liquid
+          case star
+            when 5; assign bar = d5
+            when 4; assign bar = d4
+            when 3; assign bar = d3
+            when 2; assign bar = d2
+            else; assign bar = d1
+          endcase
+          assign pct = 0
+          if d_total > 0
+            assign pct = bar | times: 100 | divided_by: d_total
+          endif
+        -%}
+        <div class="sorella-review__hist-row">
+          <span class="sorella-review__hist-star t-caption text-mist">{{ star }}★</span>
+          <span class="sorella-review__hist-track"><span class="sorella-review__hist-fill" style="width: {{ pct }}%;"></span></span>
+          <span class="sorella-review__hist-count t-caption text-mist">{{ bar }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+
+  {%- when 'summary' -%}
+    <div class="sorella-review__summary">
+      <div class="sorella-review__summary-score">
+        <span class="sorella-review__big t-display-md">{{ r_display }}</span>
+        {% render 'sorella-star-rating', value: r %}
+        {%- if count and count > 0 -%}
+          <a class="sorella-review__summary-count t-caption text-mist" href="{{ anchor_url }}">{{ count }} verified reviews</a>
+        {%- endif -%}
+      </div>
+      {%- if d_total > 0 -%}
+        {% render 'sorella-review-box', variant: 'histogram', dist_5: d5, dist_4: d4, dist_3: d3, dist_2: d2, dist_1: d1, count: count %}
+      {%- endif -%}
+    </div>
+
+  {%- when 'cell' -%}
+    {%- capture cell_inner -%}
+      {% render 'sorella-star-rating', value: r %}
+      <p class="sorella-review__quote t-body-lg" dir="auto">{{ quote }}</p>
+      <div class="sorella-review__meta">
+        <span class="t-caption-strong">{{ author }}</span>
+        {%- if verified -%}<span class="sorella-review__verified t-caption">{% render 'sorella-icon', name: 'verified', size: 13 %} {{ 'testimonials.verified_buyer' | t }}</span>{%- endif -%}
+      </div>
+    {%- endcapture -%}
+    {% render 'sorella-glass-panel', content: cell_inner, variant: 'card', class: 'sorella-review sorella-review--cell' %}
+
+  {%- when 'photo' -%}
+    <article class="sorella-review sorella-review--card sorella-review--photo">
+      {%- if image != blank -%}
+        <div class="sorella-review__photo media media--1x1">
+          <img src="{{ image | image_url: width: 320 }}" alt="{{ image.alt | default: author | escape }}" width="160" height="160" loading="lazy">
+        </div>
+      {%- endif -%}
+      <div class="sorella-review__card-body">
+        {% render 'sorella-review-box', variant: 'card', rating: r, quote: quote, author: author, date: date, verified: verified, size: size, longevity: longevity, projection: projection, bare: true %}
+      </div>
+    </article>
+
+  {%- else -%}
+    {%- comment -%} card (default) — full structured review {%- endcomment -%}
+    {%- assign wrap_open = '<article class="sorella-review sorella-review--card">' -%}
+    {%- assign wrap_close = '</article>' -%}
+    {%- if bare -%}{%- assign wrap_open = '' -%}{%- assign wrap_close = '' -%}{%- endif -%}
+    {{ wrap_open }}
+      <header class="sorella-review__head">
+        {% render 'sorella-star-rating', value: r %}
+        {%- if verified -%}
+          <span class="sorella-review__verified t-caption">{% render 'sorella-icon', name: 'verified', size: 14 %} {{ 'testimonials.verified_buyer' | t }}</span>
+        {%- endif -%}
+      </header>
+      <p class="sorella-review__quote t-body" dir="auto">{{ quote }}</p>
+      {%- if longevity or projection -%}
+        <div class="sorella-review__meters">
+          {%- if longevity -%}{% render 'sorella-review-box', variant: 'meter', meter_label: 'Longevity', meter_value: longevity %}{%- endif -%}
+          {%- if projection -%}{% render 'sorella-review-box', variant: 'meter', meter_label: 'Projection', meter_value: projection %}{%- endif -%}
+        </div>
+      {%- endif -%}
+      <footer class="sorella-review__foot">
+        <span class="sorella-review__author t-caption-strong">{{ author }}</span>
+        {%- if size != blank -%}<span class="sorella-review__size t-caption">{{ size }}</span>{%- endif -%}
+        {%- if date != blank -%}<span class="sorella-review__date t-caption text-mist">{{ date }}</span>{%- endif -%}
+      </footer>
+    {{ wrap_close }}
+
+{%- endcase -%}

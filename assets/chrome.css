@@ -83,6 +83,18 @@
 }
 .sorella-nav__link:hover, .sorella-nav__link[aria-current="page"] { color: var(--color-gold); opacity: 1; }
 
+/* Layout variants (schema: nav_layout) --------------------------------------
+   center-links = default (logo left, links centered, utils right).            */
+/* logo-center — logo absolutely centered, links left, utils right */
+.sorella-nav--logo-center .sorella-nav__inner { position: relative; }
+.sorella-nav--logo-center .sorella-nav__logo {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+}
+.sorella-nav--logo-center .sorella-nav__nav { justify-content: flex-start; }
+/* minimal — no center links; rely on hamburger / mega trigger */
+.sorella-nav--minimal .sorella-nav__nav { display: none; }
+.sorella-nav--minimal .sorella-nav__icon--menu { display: inline-flex; }
+
 .sorella-nav__utils { display: flex; align-items: center; gap: var(--space-sm); flex: none; }
 .sorella-nav__icon {
   position: relative; display: inline-flex; align-items: center; justify-content: center;
@@ -237,6 +249,29 @@
   .sorella-nav__nav { display: none; }
   .sorella-nav__icon--menu { display: inline-flex; }
   .sorella-nav__icon--account { display: none; }
+}
+
+/* Mobile chip-bar (schema: mobile_chipbar) — one-tap category routing */
+.sorella-chipbar { display: none; }
+@media (max-width: 833px) {
+  .sorella-chipbar {
+    display: block; position: sticky; top: var(--nav-height-scrolled); z-index: 95;
+    background: var(--color-navy-low); border-block-end: var(--border-hairline);
+  }
+  .sorella-chipbar__track {
+    display: flex; gap: var(--space-xs); overflow-x: auto;
+    padding: var(--space-xs) var(--space-md);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .sorella-chipbar__track::-webkit-scrollbar { display: none; }
+  .sorella-chipbar__chip {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    padding: 7px 14px; border-radius: var(--radius-pill);
+    border: 1px solid var(--color-mist-25); color: var(--color-parchment);
+  }
+  .sorella-chipbar__chip[aria-current="page"] {
+    background: var(--color-gold); color: var(--color-ink); border-color: var(--color-gold);
+  }
 }
 
 @media (max-width: 735px) {
