@@ -166,6 +166,11 @@ ul{margin:0;padding:0;list-style:none;}
 .pcard__body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .pcard__notes{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
 .pcard__name{font-family:var(--font-display);font-size:20px;font-weight:500;line-height:1.15;}
+.pcard__desc{font-size:12.5px;line-height:1.45;color:var(--ink-2);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pcard__family{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;
+  font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);
+  padding:4px 9px;border:1px solid var(--line-2);border-radius:var(--pill);}
 .pcard__row{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .pcard__price{font-weight:600;font-variant-numeric:tabular-nums;font-size:15px;}
 .pcard__price s{color:var(--muted);font-weight:400;margin-right:6px;}
