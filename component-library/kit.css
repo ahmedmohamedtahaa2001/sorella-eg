@@ -79,3 +79,77 @@
 /* small quantity variant */
 .qty--sm button{width:36px;height:42px;font-size:16px;}
 .qty--sm span{min-width:26px;}
+
+/* ==========================================================================
+   INTERACTIVE COMPONENTS — carousels · count-up · progress · drawers
+   Driven by kit.js. All motion respects prefers-reduced-motion.
+   ========================================================================== */
+
+/* ---- count-up stat band ---- */
+.statband{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;width:100%;}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 24px;box-shadow:var(--shadow-sm);}
+.stat__num{font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5vw,52px);line-height:1;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline;}
+.stat__num .pre,.stat__num .suf{font-size:.5em;color:var(--ink-2);letter-spacing:0;}
+.stat__num .pre{margin-right:.06em;}.stat__num .suf{margin-left:.04em;}
+.stat__label{margin-top:12px;font-size:13px;color:var(--ink-2);line-height:1.4;}
+.stat--accent{background:var(--accent);color:var(--on-accent);border-color:var(--accent);}
+.stat--accent .stat__label,.stat--accent .stat__num .pre,.stat--accent .stat__num .suf{color:rgba(255,255,255,.66);}
+
+/* ---- linear progress bars ---- */
+.pbar{--to:0%;width:100%;}
+.pbar__top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px;}
+.pbar__label{font-size:13px;font-weight:600;color:var(--ink);}
+.pbar__val{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;}
+.pbar__track{height:8px;border-radius:var(--pill);background:rgba(0,0,0,.08);overflow:hidden;}
+.pbar__fill{display:block;height:100%;width:0;border-radius:var(--pill);background:var(--accent);
+  transition:width 1.2s var(--ease);}
+.pbar.is-in .pbar__fill{width:var(--to);}
+.pbar--thick .pbar__track{height:15px;}
+.pbar--thin  .pbar__track{height:4px;}
+.pbar--striped .pbar__fill{background-image:linear-gradient(45deg,rgba(255,255,255,.16) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.16) 50%,rgba(255,255,255,.16) 75%,transparent 75%);background-size:16px 16px;}
+
+/* ---- segmented / stepped progress ---- */
+.psteps{display:flex;gap:6px;width:100%;}
+.psteps__seg{flex:1;height:8px;border-radius:var(--pill);background:rgba(0,0,0,.08);overflow:hidden;position:relative;}
+.psteps__seg::after{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);}
+.psteps.is-in .psteps__seg.on::after{transform:scaleX(1);}
+.psteps.is-in .psteps__seg:nth-child(2).on::after{transition-delay:.1s;}
+.psteps.is-in .psteps__seg:nth-child(3).on::after{transition-delay:.2s;}
+.psteps.is-in .psteps__seg:nth-child(4).on::after{transition-delay:.3s;}
+.psteps.is-in .psteps__seg:nth-child(5).on::after{transition-delay:.4s;}
+
+/* ---- circular / ring progress ---- */
+.pring{--to:0;position:relative;width:128px;height:128px;flex:none;}
+.pring svg{width:100%;height:100%;transform:rotate(-90deg);}
+.pring__bg{fill:none;stroke:rgba(0,0,0,.09);stroke-width:9;}
+.pring__fg{fill:none;stroke:var(--accent);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset 1.3s var(--ease);}
+.pring.is-in .pring__fg{stroke-dashoffset:calc(326.73 - 326.73 * var(--to));}
+.pring__center{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;}
+.pring__num{font-family:var(--font-display);font-size:30px;line-height:1;font-variant-numeric:tabular-nums;}
+.pring__lbl{margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);}
+
+/* ---- carousel: cursor + drag affordance (reuses store.css .carousel) ---- */
+.carousel__track{cursor:grab;}
+.carousel__track.is-drag{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none;}
+.carousel__track.is-drag *{pointer-events:none;}
+.carousel__arrow:disabled{opacity:.32;pointer-events:none;}
+.carousel__dots{display:flex;gap:7px;justify-content:center;margin-top:20px;}
+.carousel__dot{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.16);transition:background .25s,transform .25s;}
+.carousel__dot.on{background:var(--accent);transform:scale(1.35);}
+
+/* ---- drawer trigger buttons row ---- */
+.drawer-triggers{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* left-side drawer variant (filters / menu) — reuses .cartdrawer machinery */
+.cartdrawer--left .cartdrawer__panel{inset-inline-end:auto;inset-inline-start:0;transform:translateX(-100%);}
+.cartdrawer--left.is-open .cartdrawer__panel{transform:none;}
+
+/* body scroll-lock while any drawer is open */
+body.drawer-open{overflow:hidden;}
+
+@media(prefers-reduced-motion:reduce){
+  .pbar__fill,.psteps__seg::after,.pring__fg,.cartdrawer,.cartdrawer__panel{transition:none !important;}
+}

@@ -45,7 +45,7 @@
 <div class="kit-wrap">
   <div class="kit-top">
     <span class="brand">Sorella</span>
-    <nav><a href="#cards">Cards</a><a href="#atc">Add to cart</a><a href="#buybox">Buy box</a><a href="#reviews">Reviews</a><a href="#inspired">Inspired-by</a><a href="#tiles">Tiles</a><a href="#atoms">Atoms</a><a href="#palette">Palette</a></nav>
+    <nav><a href="#cards">Cards</a><a href="#atc">Add to cart</a><a href="#buybox">Buy box</a><a href="#reviews">Reviews</a><a href="#interactive">Interactive</a><a href="#inspired">Inspired-by</a><a href="#tiles">Tiles</a><a href="#atoms">Atoms</a><a href="#palette">Palette</a></nav>
     <a class="btn btn--primary btn--sm" href="index-light.html">View storefront →</a>
   </div>
 
@@ -399,6 +399,77 @@
     </div>
   </section>
 
+  <!-- INTERACTIVE -->
+  <section class="kit-sec" id="interactive">
+    <div class="kit-sec__h"><div><span class="eyebrow">Motion &amp; behaviour</span><h2>Interactive components</h2></div><p class="lead">Carousels, count-up numbers, progress bars and slide-in drawers — all vanilla-JS, animate on scroll, and respect reduced-motion.</p></div>
+
+    <!-- CAROUSEL -->
+    <div class="kit-item" style="width:100%;margin-bottom:44px">
+      <div class="carousel-wrap" data-carousel>
+        <div class="carousel__head" style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
+          <div><span class="eyebrow">Draggable · arrow &amp; dot nav</span><h3 class="serif" style="font-size:24px;margin-top:4px">Bestseller carousel</h3></div>
+          <div class="carousel__nav">
+            <button class="carousel__arrow" data-carousel-prev aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="carousel__arrow" data-carousel-next aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+        <div class="carousel"><div class="carousel__track">
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m1"><div class="pcard__tags"><span class="tag tag--solid">Bestseller</span></div><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Saffron · Amber · Cedar</span><h3 class="pcard__name">Bordeaux</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.9</span></span><div class="pcard__row"><span class="pcard__price">LE 850</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m2"><div class="pcard__tags"><span class="tag tag--out">New</span></div><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Jasmine · Vanilla · Musk</span><h3 class="pcard__name">Baklava</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.8</span></span><div class="pcard__row"><span class="pcard__price">LE 780</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m3"><div class="pcard__tags"><span class="tag tag--out">Low stock</span></div><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Oud · Rose · Leather</span><h3 class="pcard__name">ذهب · Dahab</h3><span class="ib">A Sorella Original</span><span class="stars">★★★★★ <span class="n">5.0</span></span><div class="pcard__row"><span class="pcard__price">LE 920</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m4"><div class="pcard__tags"><span class="tag tag--solid">Bestseller</span></div><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Fig · Coconut · Sandalwood</span><h3 class="pcard__name">Sahel</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.7</span></span><div class="pcard__row"><span class="pcard__price">LE 690</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m1"><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Amber · Incense · Oud</span><h3 class="pcard__name">Bordeaux Noir</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.9</span></span><div class="pcard__row"><span class="pcard__price">LE 990</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+          <div class="carousel__item"><article class="pcard pcard--plus"><div class="pcard__media pcard__m2"><div class="b"></div></div><div class="pcard__body"><span class="pcard__notes">Rose · Vanilla · Musk</span><h3 class="pcard__name">Baklava Rose</h3><span class="ib">True to the original</span><span class="stars">★★★★★ <span class="n">4.8</span></span><div class="pcard__row"><span class="pcard__price">LE 810</span><button class="pcard__plus" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article></div>
+        </div></div>
+        <div class="carousel__dots" data-carousel-dots></div>
+      </div>
+      <span class="kit-cap" style="margin-top:16px"><b>Carousel</b> — drag / arrows / dots · scroll-snap · <code>[data-carousel]</code></span>
+    </div>
+
+    <!-- COUNT-UP -->
+    <div class="kit-item" style="width:100%;margin-bottom:44px">
+      <div class="statband">
+        <div class="stat"><span class="stat__num"><span class="n" data-count="1288">0</span><span class="suf">+</span></span><span class="stat__label">Five-star reviews</span></div>
+        <div class="stat"><span class="stat__num"><span class="n" data-count="27">0</span></span><span class="stat__label">Signature scents</span></div>
+        <div class="stat stat--accent"><span class="stat__num"><span class="pre">LE&nbsp;</span><span class="n" data-count="85">0</span></span><span class="stat__label">Try any scent — 5ml tester</span></div>
+        <div class="stat"><span class="stat__num"><span class="n" data-count="98.4" data-decimals="1">0</span><span class="suf">%</span></span><span class="stat__label">Would buy again</span></div>
+      </div>
+      <span class="kit-cap" style="margin-top:16px"><b>Count-up stats</b> — animate 0→value on scroll, grouped &amp; decimals · <code>[data-count]</code></span>
+    </div>
+
+    <!-- PROGRESS BARS -->
+    <div class="kit-row" style="gap:40px;margin-bottom:34px;align-items:flex-start">
+      <div class="kit-item" style="flex:1;min-width:300px;gap:22px">
+        <div class="pbar" style="--to:88%"><div class="pbar__top"><span class="pbar__label">Longevity</span><span class="pbar__val">8–10 hrs</span></div><div class="pbar__track"><span class="pbar__fill"></span></div></div>
+        <div class="pbar pbar--thick pbar--striped" style="--to:72%"><div class="pbar__top"><span class="pbar__label">Projection</span><span class="pbar__val">Strong</span></div><div class="pbar__track"><span class="pbar__fill"></span></div></div>
+        <div class="pbar pbar--thin" style="--to:64%"><div class="pbar__top"><span class="pbar__label">Sillage</span><span class="pbar__val">Moderate</span></div><div class="pbar__track"><span class="pbar__fill"></span></div></div>
+        <div style="margin-top:4px"><div class="pbar__top"><span class="pbar__label">Free-gift threshold</span><span class="pbar__val">LE 250 to go</span></div><div class="psteps"><span class="psteps__seg on"></span><span class="psteps__seg on"></span><span class="psteps__seg on"></span><span class="psteps__seg on"></span><span class="psteps__seg"></span></div></div>
+        <span class="kit-cap"><b>Progress bars</b> — line · thick striped · thin · segmented · <code>.pbar</code> / <code>.psteps</code></span>
+      </div>
+      <div class="kit-item" style="min-width:280px">
+        <div class="kit-row" style="gap:28px">
+          <div class="kit-item" style="align-items:center">
+            <div class="pring" style="--to:.92"><svg viewBox="0 0 120 120"><circle class="pring__bg" cx="60" cy="60" r="52"/><circle class="pring__fg" cx="60" cy="60" r="52"/></svg><div class="pring__center"><span class="pring__num" data-count="92">0</span><span class="pring__lbl">Match</span></div></div>
+            <span class="kit-cap"><b>Ring</b> — scent match</span>
+          </div>
+          <div class="kit-item" style="align-items:center">
+            <div class="pring" style="--to:.76"><svg viewBox="0 0 120 120"><circle class="pring__bg" cx="60" cy="60" r="52"/><circle class="pring__fg" cx="60" cy="60" r="52"/></svg><div class="pring__center"><span class="pring__num"><span data-count="76">0</span>%</span><span class="pring__lbl">Restock</span></div></div>
+            <span class="kit-cap"><b>Ring</b> — inventory</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAWERS -->
+    <div class="kit-item" style="width:100%">
+      <div class="drawer-triggers">
+        <button class="btn btn--primary" data-drawer-open="cartDrawer">Open cart drawer →</button>
+        <button class="btn btn--ghost" data-drawer-open="filterDrawer">Open filter drawer (left) →</button>
+      </div>
+      <span class="kit-cap" style="margin-top:14px"><b>Slide-in drawers</b> — smooth transform + scrim, Esc / scrim / ✕ to close, body scroll-locked · <code>[data-drawer-open]</code></span>
+    </div>
+  </section>
+
   <!-- PALETTE -->
   <section class="kit-sec" id="palette">
     <div class="kit-sec__h"><div><span class="eyebrow">Foundation</span><h2>Palette</h2></div><p class="lead">11 tokens, no hue. Pure White (dark) / Pure Black (light) is the only accent.</p></div>
@@ -423,5 +494,46 @@
   </footer>
 </div>
 
+<!-- LIVE CART DRAWER (right) -->
+<aside class="cartdrawer" id="cartDrawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Shopping bag">
+  <div class="cartdrawer__scrim" data-drawer-close></div>
+  <div class="cartdrawer__panel">
+    <div class="cartdrawer__head">
+      <span class="cartdrawer__title">Your bag <span class="cartdrawer__count">2</span></span>
+      <button class="cartdrawer__close" data-drawer-close aria-label="Close bag"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="cartdrawer__body">
+      <div class="cart-gift">
+        <div class="cart-gift__row">You're <b>LE 250</b> away from a <b>free 5ml</b> 🎁</div>
+        <div class="cart-gift__track"><span class="cart-gift__fill" style="width:77%"></span></div>
+      </div>
+      <ul class="cartdrawer__list">
+        <li><div style="display:flex;gap:12px;padding:16px 0"><span style="width:52px;height:62px;border-radius:8px;background:linear-gradient(160deg,#e7e5e1,#d6d4d0);border:1px solid var(--line);flex:none"></span><div style="flex:1"><div class="serif" style="font-size:17px">Bordeaux</div><div class="muted" style="font-size:12px">50ml EDP</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="qty qty--sm"><button aria-label="Decrease">−</button><span>1</span><button aria-label="Increase">+</button></span><b style="font-size:15px">LE 850</b></div></div></div></li>
+        <li><div style="display:flex;gap:12px;padding:16px 0"><span style="width:52px;height:62px;border-radius:8px;background:linear-gradient(160deg,#ececff,#dcdcf0);border:1px solid var(--line);flex:none"></span><div style="flex:1"><div class="serif" style="font-size:17px">Baklava</div><div class="muted" style="font-size:12px">50ml EDP</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="qty qty--sm"><button aria-label="Decrease">−</button><span>1</span><button aria-label="Increase">+</button></span><b style="font-size:15px">LE 780</b></div></div></div></li>
+      </ul>
+      <div style="border-top:1px solid var(--line);padding-top:16px"><div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">You might also like</div><div style="display:flex;gap:10px;align-items:center"><span style="width:42px;height:50px;border-radius:6px;background:linear-gradient(160deg,#e7e5e1,#d6d4d0);flex:none"></span><div style="flex:1"><div style="font-size:14px;font-weight:600">5ml tester</div><div class="muted" style="font-size:12px">LE 85</div></div><button class="btn btn--sm btn--ghost">Add</button></div></div>
+    </div>
+    <div style="padding:18px 22px;border-top:1px solid var(--line);flex:none"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>Subtotal</b><b>LE 1,630</b></div><button class="btn btn--primary btn--full">Checkout</button><div class="muted" style="font-size:12px;text-align:center;margin-top:9px">Shipping &amp; taxes at checkout</div></div>
+  </div>
+</aside>
+
+<!-- LIVE FILTER DRAWER (left) -->
+<aside class="cartdrawer cartdrawer--left" id="filterDrawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Filter products">
+  <div class="cartdrawer__scrim" data-drawer-close></div>
+  <div class="cartdrawer__panel">
+    <div class="cartdrawer__head">
+      <span class="cartdrawer__title">Filter</span>
+      <button class="cartdrawer__close" data-drawer-close aria-label="Close filters"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="cartdrawer__body">
+      <div><div class="eyebrow" style="margin-bottom:12px">Scent family</div><div style="display:flex;flex-wrap:wrap;gap:8px"><span class="tag tag--out">Gourmand</span><span class="tag tag--solid">Oriental</span><span class="tag tag--out">Fresh</span><span class="tag tag--out">Floral</span><span class="tag tag--out">Woody</span><span class="tag tag--out">Musk</span></div></div>
+      <div><div class="eyebrow" style="margin-bottom:12px">Price</div><div class="pbar" style="--to:60%"><div class="pbar__track"><span class="pbar__fill"></span></div></div><div style="display:flex;justify-content:space-between;margin-top:8px" class="muted"><span style="font-size:12px">LE 85</span><span style="font-size:12px">LE 990</span></div></div>
+      <div><div class="eyebrow" style="margin-bottom:12px">Size</div><div class="sizes"><span class="size">5ml</span><span class="size on">50ml</span><span class="size">Bundle</span></div></div>
+    </div>
+    <div style="padding:18px 22px;border-top:1px solid var(--line);flex:none;display:flex;gap:10px"><button class="btn btn--ghost btn--full" data-drawer-close>Clear</button><button class="btn btn--primary btn--full" data-drawer-close>Show 48 results</button></div>
+  </div>
+</aside>
+
+<script src="kit.js"></script>
 </body>
 </html>
