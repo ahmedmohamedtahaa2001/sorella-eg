@@ -1,0 +1,60 @@
+{%- comment -%}
+  Sorella — review summary (big average + honest histogram)
+  Class-based (no inline style): .rsum-panel / .rsum-panel__score / .rsum-panel__avg /
+  .stars / .hist / .hist-row / .htrack / .hfill / .hn. Monochrome; zero hardcoded
+  numbers — every value is a param (fed from section settings or product metafields).
+
+  Params:
+    avg        (number, required) — average rating, shown big
+    count_text (string, optional) — verified-count caption
+    dist_5..dist_1 (number, optional) — per-star review counts for the histogram
+    total      (number, optional) — total reviews; defaults to the sum of dist_*
+{%- endcomment -%}
+{%- liquid
+  assign d5 = dist_5 | default: 0 | plus: 0
+  assign d4 = dist_4 | default: 0 | plus: 0
+  assign d3 = dist_3 | default: 0 | plus: 0
+  assign d2 = dist_2 | default: 0 | plus: 0
+  assign d1 = dist_1 | default: 0 | plus: 0
+  assign d_sum = d5 | plus: d4 | plus: d3 | plus: d2 | plus: d1
+  assign d_total = total | default: d_sum | plus: 0
+  if d_total == 0
+    assign d_total = d_sum
+  endif
+-%}
+<div class="rsum-panel">
+  <div class="rsum-panel__score">
+    {%- if avg != blank -%}<span class="rsum-panel__avg serif">{{ avg }}</span>{%- endif -%}
+    <span class="stars">★★★★★</span>
+    {%- if count_text != blank -%}<span class="muted">{{ count_text }}</span>{%- endif -%}
+  </div>
+  {%- if d_sum > 0 -%}
+    <div class="hist">
+      {%- for star in (1..5) reversed -%}
+        {%- liquid
+          case star
+            when 5
+              assign bar = d5
+            when 4
+              assign bar = d4
+            when 3
+              assign bar = d3
+            when 2
+              assign bar = d2
+            else
+              assign bar = d1
+          endcase
+          assign pct = 0
+          if d_total > 0
+            assign pct = bar | times: 100 | divided_by: d_total
+          endif
+        -%}
+        <div class="hist-row">
+          <span class="hist-row__k">{{ star }}★</span>
+          <span class="htrack"><span class="hfill" style="width:{{ pct }}%"></span></span>
+          <span class="hn">{{ bar }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

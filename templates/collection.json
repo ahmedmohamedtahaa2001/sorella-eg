@@ -21,7 +21,7 @@
       "type": "sorella-collection-grid",
       "settings": {
         "products_per_page": 16,
-        "card_variant": "add",
+        "card_variant": "plus",
         "show_interrupt": true,
         "interrupt_after": 4
       }

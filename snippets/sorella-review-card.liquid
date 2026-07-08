@@ -11,8 +11,8 @@
     variant  ('default' | 'product', default 'default')
     product  (object) — required for 'product'; renders the shoppable
              .review__shopcard strip (thumb · name · 50ml · {price} · ★{rating} · Shop)
-    longevity  (number 1-5, optional) — renders a .meterk bar
-    projection (number 1-5, optional) — renders a .meterk bar
+    longevity  (number 1-5, optional) — renders a .meterk bar (0/blank = hidden)
+    projection (number 1-5, optional) — renders a .meterk bar (0/blank = hidden)
 {%- endcomment -%}
 {%- liquid
   assign v = variant | default: 'default'
@@ -23,7 +23,7 @@
   if verified
     assign vb = '✓ Verified buyer'
   endif
-  if size != blank
+  if size != blank and v != 'product'
     if vb != blank
       assign vb = vb | append: ' · ' | append: size
     else
@@ -42,17 +42,21 @@
   if v == 'product'
     assign rclass = 'review review--product'
   endif
+
+  # normalise meters: treat blank / 0 as "not provided" so no empty bar renders
+  assign lng = longevity | default: 0 | plus: 0
+  assign prj = projection | default: 0 | plus: 0
 -%}
 <div class="{{ rclass }}">
   {% render 'sorella-stars', rating: r %}
   <p class="review__q" dir="auto">{{ quote }}</p>
-  {%- if longevity != blank or projection != blank -%}
+  {%- if lng > 0 or prj > 0 -%}
     <div class="meters">
-      {%- if longevity != blank -%}
-        <div class="meterk"><span>Longevity</span><span class="mtrack"><span class="mfill" style="width:{{ longevity | times: 20 }}%"></span></span></div>
+      {%- if lng > 0 -%}
+        <div class="meterk"><span>Longevity</span><span class="mtrack"><span class="mfill" style="width:{{ lng | times: 20 }}%"></span></span></div>
       {%- endif -%}
-      {%- if projection != blank -%}
-        <div class="meterk"><span>Projection</span><span class="mtrack"><span class="mfill" style="width:{{ projection | times: 20 }}%"></span></span></div>
+      {%- if prj > 0 -%}
+        <div class="meterk"><span>Projection</span><span class="mtrack"><span class="mfill" style="width:{{ prj | times: 20 }}%"></span></span></div>
       {%- endif -%}
     </div>
   {%- endif -%}

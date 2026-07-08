@@ -7,7 +7,7 @@
 {%- liquid
   assign s = section.settings
   assign per_page = s.products_per_page | default: 12
-  assign card_variant = s.card_variant | default: 'add'
+  assign card_variant = s.card_variant | default: 'plus'
   assign interrupt_after = s.interrupt_after
 -%}
 <section class="sec sec--tight colgrid" id="{{ section.id }}">
@@ -55,7 +55,7 @@
       "type": "select",
       "id": "card_variant",
       "label": "Card style",
-      "default": "add",
+      "default": "plus",
       "options": [
         { "value": "add", "label": "Add to bag (always visible)" },
         { "value": "cta", "label": "Add + Buy now" },

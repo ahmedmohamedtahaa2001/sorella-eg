@@ -28,6 +28,7 @@
 
     {%- comment -%} Light storefront design system (ported from the approved prototype) {%- endcomment -%}
     {{ 'sorella-store.css' | asset_url | stylesheet_tag }}
+    {{ 'sorella-interactive.css' | asset_url | stylesheet_tag }}
     {%- if request.page_type == 'product' -%}
       {{ 'sorella-pdp.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
@@ -49,6 +50,20 @@
     {%- if settings.cart_drawer_enabled -%}
       {% section 'sorella-cart-drawer' %}
     {%- endif -%}
+
+    {%- comment -%} Quick-buy modal — JS fetches /products/{handle}?section_id=sorella-quick-buy into the body {%- endcomment -%}
+    <div id="quick-buy" class="quickbuy" data-panel aria-hidden="true" role="dialog" aria-modal="true" aria-label="Quick view"
+      data-quick-buy-loading="{{ 'products.product.quick_buy_loading' | t | escape }}"
+      data-quick-buy-error="{{ 'products.product.quick_buy_error' | t | escape }}"
+      data-quick-buy-link="{{ 'products.product.quick_buy_view_full' | t | escape }}">
+      <div class="quickbuy__scrim" data-close></div>
+      <div class="quickbuy__panel">
+        <button class="quickbuy__close" data-close aria-label="{{ 'general.accessibility.close' | t | default: 'Close' }}">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="quickbuy__body" data-quick-buy-body></div>
+      </div>
+    </div>
 
     <script>window.Sorella = window.Sorella || {}; window.Sorella.moneyFormat = {{ shop.money_format | json }};</script>
     <script src="{{ 'sorella.js' | asset_url }}" defer></script>

@@ -1,90 +1,389 @@
 {
   "sections": {
-    "hero": { "type": "sorella-hero", "settings": {} },
+    "hero": {
+      "type": "sorella-hero",
+      "settings": {}
+    },
     "marquee": {
       "type": "sorella-trust-marquee",
       "blocks": {
-        "p1": { "type": "phrase", "settings": { "text": "Made fresh in Egypt" } },
-        "p2": { "type": "phrase", "settings": { "text": "True to the original" } },
-        "p3": { "type": "phrase", "settings": { "text": "Free 5ml over LE 1,100" } },
-        "p4": { "type": "phrase", "settings": { "text": "Try it first — LE 85" } },
-        "p5": { "type": "phrase", "settings": { "text": "Stays on all evening" } }
+        "p1": {
+          "type": "phrase",
+          "settings": {
+            "text": "Made fresh in Egypt"
+          }
+        },
+        "p2": {
+          "type": "phrase",
+          "settings": {
+            "text": "True to the original"
+          }
+        },
+        "p3": {
+          "type": "phrase",
+          "settings": {
+            "text": "Free 5ml over LE 1,100"
+          }
+        },
+        "p4": {
+          "type": "phrase",
+          "settings": {
+            "text": "Try it first — LE 85"
+          }
+        },
+        "p5": {
+          "type": "phrase",
+          "settings": {
+            "text": "Stays on all evening"
+          }
+        }
       },
-      "block_order": ["p1", "p2", "p3", "p4", "p5"]
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5"
+      ]
     },
-    "carousel": { "type": "sorella-bestseller-carousel", "settings": {} },
-    "brand_story": { "type": "sorella-brand-story", "settings": {} },
+    "carousel": {
+      "type": "sorella-bestseller-carousel",
+      "settings": {
+        "collection": "the-most-loved",
+        "eyebrow": "The most loved",
+        "heading": "Bestsellers",
+        "link_label": "Shop all products",
+        "link_url": "/collections/all"
+      }
+    },
+    "brand_story": {
+      "type": "sorella-brand-story",
+      "settings": {}
+    },
     "worlds": {
       "type": "sorella-scent-worlds",
       "blocks": {
-        "w1": { "type": "world", "settings": { "kicker": "Gourmand", "title": "Dessert Table", "scheme": "1" } },
-        "w2": { "type": "world", "settings": { "kicker": "Solar · Beachy", "title": "Sahel Summer", "scheme": "2" } },
-        "w3": { "type": "world", "settings": { "kicker": "Oriental · Evening", "title": "Golden Hour", "scheme": "3" } },
-        "w4": { "type": "world", "settings": { "kicker": "Musks · Oils", "title": "Second Skin", "scheme": "4" } }
+        "w1": {
+          "type": "world",
+          "settings": {
+            "kicker": "The signature",
+            "title": "For Her",
+            "scheme": "1",
+            "url": "/collections/for-her",
+            "image_url": "https://images.unsplash.com/photo-1543422655-ac1c6ca993ed?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w2": {
+          "type": "world",
+          "settings": {
+            "kicker": "His wardrobe",
+            "title": "For Him",
+            "scheme": "3",
+            "url": "/collections/for-him",
+            "image_url": "https://plus.unsplash.com/premium_photo-1676748933022-e1183e997436?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w3": {
+          "type": "world",
+          "settings": {
+            "kicker": "Shared skin",
+            "title": "Unisex",
+            "scheme": "4",
+            "url": "/collections/unisex",
+            "image_url": "https://plus.unsplash.com/premium_photo-1726873234228-a511f8a05f1d?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w4": {
+          "type": "world",
+          "settings": {
+            "kicker": "Salt & sun",
+            "title": "Summer",
+            "scheme": "2",
+            "url": "/collections/summer-collection",
+            "image_url": "https://images.unsplash.com/photo-1631573579721-add81ddbe115?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w5": {
+          "type": "world",
+          "settings": {
+            "kicker": "Warm & deep",
+            "title": "Musks",
+            "scheme": "3",
+            "url": "/collections/musks",
+            "image_url": "https://images.unsplash.com/photo-1638295916768-459f6cf440bc?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w6": {
+          "type": "world",
+          "settings": {
+            "kicker": "Concentrated",
+            "title": "Perfume Oils",
+            "scheme": "1",
+            "url": "/collections/perfume-oil",
+            "image_url": "https://images.unsplash.com/photo-1608571423539-e951b9b3871e?auto=format&fit=crop&w=800&q=80"
+          }
+        },
+        "w7": {
+          "type": "world",
+          "settings": {
+            "kicker": "Try before you commit",
+            "title": "Testers · 5ml",
+            "scheme": "2",
+            "url": "/collections/5-ml-testers",
+            "image_url": "https://images.unsplash.com/photo-1571206508927-2ef3026ada5d?auto=format&fit=crop&w=800&q=80"
+          }
+        }
       },
-      "block_order": ["w1", "w2", "w3", "w4"],
-      "settings": {}
+      "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "w7"
+      ],
+      "settings": {
+        "eyebrow": "Shop by collection",
+        "heading": "Find your category.",
+        "link_label": "Shop all",
+        "link_url": "/collections/all"
+      }
     },
     "bundles": {
       "type": "sorella-bundles",
-      "blocks": {
-        "b1": { "type": "bundle", "settings": {} },
-        "b2": { "type": "bundle", "settings": {} },
-        "b3": { "type": "bundle", "settings": {} }
-      },
-      "block_order": ["b1", "b2", "b3"],
-      "settings": {}
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "collection": "bundles"
+      }
     },
     "spotlight": {
       "type": "sorella-spotlight",
       "blocks": {
-        "s1": { "type": "size", "settings": { "label": "5ml · LE 85", "selected": false } },
-        "s2": { "type": "size", "settings": { "label": "50ml · LE 850", "selected": true } },
-        "s3": { "type": "size", "settings": { "label": "Bundle · LE 2,200", "selected": false } }
+        "s1": {
+          "type": "size",
+          "settings": {
+            "label": "5ml · LE 85",
+            "selected": false
+          }
+        },
+        "s2": {
+          "type": "size",
+          "settings": {
+            "label": "50ml · LE 850",
+            "selected": true
+          }
+        },
+        "s3": {
+          "type": "size",
+          "settings": {
+            "label": "Bundle · LE 2,200",
+            "selected": false
+          }
+        }
       },
-      "block_order": ["s1", "s2", "s3"],
-      "settings": {}
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "product": "bordeaux"
+      }
     },
     "reviews": {
       "type": "sorella-reviews",
       "blocks": {
-        "r1": { "type": "review", "settings": { "quote": "Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.", "author": "Farida M.", "size": "50ml" } },
-        "r2": { "type": "review", "settings": { "quote": "El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.", "author": "Nour A.", "size": "Bundle" } },
-        "r3": { "type": "review", "settings": { "quote": "Ordered the 5ml tester first, fell in love, came back for the 50ml. Wsel fe 3 ayam.", "author": "Mariam S.", "size": "5ml → 50ml" } }
+        "r1": {
+          "type": "review",
+          "settings": {
+            "quote": "Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.",
+            "author": "Farida M.",
+            "size": "50ml"
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "quote": "El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.",
+            "author": "Nour A.",
+            "size": "Bundle"
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "quote": "Ordered the 5ml tester first, fell in love, came back for the 50ml. Wsel fe 3 ayam.",
+            "author": "Mariam S.",
+            "size": "5ml → 50ml"
+          }
+        }
       },
-      "block_order": ["r1", "r2", "r3"]
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ]
     },
     "quiz": {
       "type": "sorella-quiz-teaser",
       "blocks": {
-        "c1": { "type": "chip", "settings": { "emoji": "🌊", "label": "Fresh & clean" } },
-        "c2": { "type": "chip", "settings": { "emoji": "🌸", "label": "Soft florals" } },
-        "c3": { "type": "chip", "settings": { "emoji": "🍯", "label": "Warm gourmand" } },
-        "c4": { "type": "chip", "settings": { "emoji": "🌲", "label": "Woody & deep" } }
+        "c1": {
+          "type": "chip",
+          "settings": {
+            "glyph": "baklava",
+            "family": "Gourmand",
+            "label": "Dessert Table",
+            "moment": "Basbousa, warm from the tray",
+            "url": "/collections/the-most-loved"
+          }
+        },
+        "c2": {
+          "type": "chip",
+          "settings": {
+            "glyph": "sun",
+            "family": "Solar · Beachy",
+            "label": "Sahel Summer",
+            "moment": "Salt and sun still on your skin",
+            "url": "/collections/summer-collection"
+          }
+        },
+        "c3": {
+          "type": "chip",
+          "settings": {
+            "glyph": "moon",
+            "family": "Oriental · Evening",
+            "label": "Golden Hour",
+            "moment": "Oud on the balcony, tea poured late",
+            "url": "/collections/for-her"
+          }
+        },
+        "c4": {
+          "type": "chip",
+          "settings": {
+            "glyph": "drop",
+            "family": "Musks · Oils",
+            "label": "Second Skin",
+            "moment": "One dab at the wrist before you go",
+            "url": "/collections/musks"
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3", "c4"]
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ]
     },
     "trust": {
       "type": "sorella-trust-bar",
       "blocks": {
-        "t1": { "type": "item", "settings": { "icon": "shipping", "label": "Fast shipping", "subtext": "Ships in 2–4 days" } },
-        "t2": { "type": "item", "settings": { "icon": "returns", "label": "Easy exchange", "subtext": "7-day unopened exchange" } },
-        "t3": { "type": "item", "settings": { "icon": "egypt", "label": "Made in Egypt", "subtext": "Blended fresh, poured to order" } },
-        "t4": { "type": "item", "settings": { "icon": "longevity", "label": "Lasts all day", "subtext": "Oil-rich, into the evening" } }
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "shipping",
+            "label": "Poured to order",
+            "subtext": "Blended fresh and out in 2–4 days"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "egypt",
+            "label": "Made fresh in Egypt",
+            "subtext": "Blended by hand, the عطّار way"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "longevity",
+            "label": "Lasts for days",
+            "subtext": "Oil-rich — hours on skin, days on clothes"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "returns",
+            "label": "7-day exchange",
+            "subtext": "Unopened, no questions — sister's honour"
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3", "t4"]
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "settings": {
+        "variant": "ink",
+        "eyebrow": "The house rules",
+        "heading": "Nothing ships unless both sisters would <em>wear</em> it.",
+        "signature": "From our bond to your senses",
+        "anchor_id": "trust"
+      }
     },
     "faq": {
       "type": "sorella-faq",
       "blocks": {
-        "q1": { "type": "qa", "settings": { "question": "How long does the scent last?", "answer": "<p>Our oil-rich blends are built to last — most customers report all-day wear on skin and days on clothing.</p>", "open": true } },
-        "q2": { "type": "qa", "settings": { "question": "Can I try a scent before buying the full size?", "answer": "<p>Yes — every full-size fragrance has a 5ml tester for LE 85. Try it first, commit only when you love it.</p>" } },
-        "q3": { "type": "qa", "settings": { "question": "How fast is shipping?", "answer": "<p>Orders ship from Egypt in 2–4 days, blended fresh and poured to order.</p>" } },
-        "q4": { "type": "qa", "settings": { "question": "What is your returns / exchange policy?", "answer": "<p>Because fragrance is personal, we can't accept opened returns — which is why we offer the 5ml tester first. Unopened items can be exchanged within 7 days.</p>" } }
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "How long does the scent last?",
+            "answer": "<p>Our oil-rich blends are built to last — most customers report all-day wear on skin and days on clothing.</p>",
+            "open": true
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I try a scent before buying the full size?",
+            "answer": "<p>Yes — every full-size fragrance has a 5ml tester for LE 85. Try it first, commit only when you love it.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "How fast is shipping?",
+            "answer": "<p>Orders ship from Egypt in 2–4 days, blended fresh and poured to order.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "What is your returns / exchange policy?",
+            "answer": "<p>Because fragrance is personal, we can't accept opened returns — which is why we offer the 5ml tester first. Unopened items can be exchanged within 7 days.</p>"
+          }
+        }
       },
-      "block_order": ["q1", "q2", "q3", "q4"]
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ]
     },
-    "newsletter": { "type": "sorella-newsletter", "settings": {} }
+    "newsletter": {
+      "type": "sorella-newsletter",
+      "settings": {}
+    }
   },
-  "order": ["hero", "marquee", "carousel", "brand_story", "worlds", "bundles", "spotlight", "reviews", "quiz", "trust", "faq", "newsletter"]
+  "order": [
+    "hero",
+    "marquee",
+    "worlds",
+    "bundles",
+    "carousel",
+    "spotlight",
+    "brand_story",
+    "reviews",
+    "quiz",
+    "trust",
+    "faq",
+    "newsletter"
+  ]
 }

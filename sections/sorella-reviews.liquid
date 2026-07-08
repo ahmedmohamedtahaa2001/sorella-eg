@@ -1,39 +1,245 @@
+{%- comment -%}
+  Sorella — Reviews (audit §1.5 · the third sister)
+  Two-column split: LEFT is an auto-rotating single-card testimonial carousel
+  (shoppable review--product cards, smooth crossfade, 4s infinite loop, pauses on
+  hover/focus, respects reduced motion). RIGHT is a catchy line + the honest
+  score panel (big average + histogram). Reviews are blocks; every value editable.
+{%- endcomment -%}
 {%- liquid
   assign s = section.settings
+  assign interval = s.autoplay_seconds | default: 4 | times: 1000
 -%}
-<section class="sec sec--center">
+<section class="sec"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
   <div class="wrap">
-    <div class="sec__head">
-      {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
-      {%- if s.heading != blank -%}<h2>{{ s.heading }}</h2>{%- endif -%}
-      {%- if s.avg != blank -%}
-        <div class="rsum"><b>{{ s.avg }}</b><span class="stars">★★★★★</span>{% if s.count_text != blank %}<span class="muted">· {{ s.count_text }}</span>{% endif %}</div>
-      {%- endif -%}
-    </div>
-    <div class="reviews">
-      {%- for block in section.blocks -%}
-        {% render 'sorella-review-card',
-          quote: block.settings.quote,
-          author: block.settings.author,
-          verified: block.settings.verified,
-          rating: block.settings.rating,
-          size: block.settings.size,
-          variant: 'default',
-          shopify_attributes: block.shopify_attributes %}
-      {%- endfor -%}
+    <div class="reviewsplit">
+
+      {%- comment -%} LEFT — rotating testimonial carousel {%- endcomment -%}
+      <div class="reviewsplit__carousel">
+        <div class="revrot" data-review-rotator data-interval="{{ interval }}">
+          <div class="revrot__viewport" data-rev-viewport>
+            <div class="revrot__track" data-rev-track>
+              {%- for block in section.blocks -%}
+                <div class="revrot__slide" data-rev-slide {{ block.shopify_attributes }}>
+                  {% render 'sorella-review-card',
+                    quote: block.settings.quote,
+                    author: block.settings.author,
+                    verified: block.settings.verified,
+                    rating: block.settings.rating,
+                    size: block.settings.size,
+                    date: block.settings.date,
+                    product: block.settings.product,
+                    variant: 'product' %}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+          {%- if section.blocks.size > 1 -%}
+            <div class="revrot__bar" data-rev-rail tabindex="0" role="scrollbar" aria-orientation="vertical" aria-label="Scroll reviews" aria-valuemin="1" aria-valuemax="{{ section.blocks.size }}" aria-valuenow="1">
+              <span class="revrot__thumb" data-rev-thumb></span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} RIGHT — catchy line + honest score {%- endcomment -%}
+      <div class="reviewsplit__aside">
+        {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="reviewsplit__h serif">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subtext != blank -%}<p class="reviewsplit__lead">{{ s.subtext }}</p>{%- endif -%}
+        {%- if s.avg != blank -%}
+          {% render 'sorella-review-summary',
+            avg: s.avg,
+            count_text: s.count_text,
+            dist_5: s.dist_5,
+            dist_4: s.dist_4,
+            dist_3: s.dist_3,
+            dist_2: s.dist_2,
+            dist_1: s.dist_1,
+            total: s.total %}
+        {%- endif -%}
+      </div>
+
     </div>
   </div>
 </section>
+
+{% javascript %}
+(function () {
+  var GAP = 16;      // matches .revrot__track gap
+  var PEEK = 0.25;   // fraction of the neighbour cards shown above/below
+
+  function initRotator(root) {
+    if (root.dataset.revReady) return;
+    var viewport = root.querySelector('[data-rev-viewport]');
+    var track = root.querySelector('[data-rev-track]');
+    if (!viewport || !track) return;
+    var reals = Array.prototype.slice.call(track.querySelectorAll('[data-rev-slide]'));
+    var N = reals.length;
+    var rail = root.querySelector('[data-rev-rail]');
+    var thumb = root.querySelector('[data-rev-thumb]');
+
+    if (N < 2) {
+      if (reals[0]) reals[0].classList.add('is-active');
+      root.dataset.revReady = '1';
+      return;
+    }
+    root.dataset.revReady = '1';
+
+    // Seamless loop: clone last before the first, and first after the last,
+    // so the current card always has a real neighbour to peek above and below.
+    var cloneLast = reals[N - 1].cloneNode(true);
+    var cloneFirst = reals[0].cloneNode(true);
+    [cloneLast, cloneFirst].forEach(function (c) {
+      c.setAttribute('aria-hidden', 'true');
+      c.removeAttribute('data-rev-slide');
+    });
+    track.insertBefore(cloneLast, reals[0]);
+    track.appendChild(cloneFirst);
+    var slides = Array.prototype.slice.call(track.children); // [cloneLast, ...reals, cloneFirst]
+    track.style.gap = GAP + 'px';
+
+    var a = 0, timer = null, cardH = 0;
+    var interval = parseInt(root.getAttribute('data-interval'), 10) || 4000;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var EASE = 'cubic-bezier(.16, 1, .3, 1)';
+    var STEP_MS = 600;                                   // one-step advance
+    var BACK_MS = Math.min(1600, 380 * (N - 1) + 500);   // smooth scroll back to the start
+
+    function offsetForDom(idx) {
+      var top = idx * (cardH + GAP);
+      return -(top - (PEEK * cardH + GAP));
+    }
+    function markActive(domIdx) {
+      slides.forEach(function (s) { s.classList.remove('is-active'); });
+      if (slides[domIdx]) slides[domIdx].classList.add('is-active');
+    }
+    // val may be 0..N (N = the trailing clone, used mid-loop); thumb slides one
+    // segment per step and wraps off the bottom as the clone takes over.
+    function positionThumb(val, animate, dur) {
+      if (!rail || !thumb) return;
+      var railH = rail.clientHeight;
+      thumb.style.transition = animate ? ('top ' + dur + 'ms ' + EASE) : 'none';
+      thumb.style.top = (val * (railH / N)) + 'px';
+      if (!animate) { void thumb.offsetHeight; thumb.style.transition = ''; }
+      rail.setAttribute('aria-valuenow', String((((val % N) + N) % N) + 1));
+    }
+    function positionTrack(domIdx, animate, dur) {
+      track.style.transition = animate ? ('transform ' + dur + 'ms ' + EASE) : 'none';
+      track.style.transform = 'translateY(' + offsetForDom(domIdx) + 'px)';
+      if (!animate) { void track.offsetHeight; track.style.transition = ''; }
+    }
+    function render(val, animate, dur) {   // val in 0..N-1 (a real review)
+      dur = dur || STEP_MS;
+      positionTrack(val + 1, animate, dur);
+      positionThumb(val, animate, dur);
+      markActive(val + 1);
+    }
+    function jumpTo(i, animate) {      // i in 0..N-1 (a real review)
+      a = i;
+      render(a, animate, STEP_MS);
+    }
+    function measure() {
+      slides.forEach(function (s) { s.style.height = 'auto'; });
+      cardH = 0;
+      reals.forEach(function (s) { cardH = Math.max(cardH, s.offsetHeight); });
+      slides.forEach(function (s) { s.style.height = cardH + 'px'; });
+      viewport.style.height = (cardH * (1 + 2 * PEEK) + GAP * 2) + 'px';
+      if (thumb) thumb.style.height = (100 / N) + '%';
+      render(a, false);
+    }
+    function advance() {
+      if (a >= N - 1) {
+        a = 0;
+        render(a, true, BACK_MS);   // reached the end → smoothly scroll back up to the start
+      } else {
+        a = a + 1;
+        render(a, true, STEP_MS);
+      }
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { if (reduce) return; stop(); timer = setInterval(advance, interval); }
+
+    // Scrollbar: click / drag the rail to scrub, arrow keys to step.
+    if (rail) {
+      var dragging = false;
+      function segFromEvent(e) {
+        var r = rail.getBoundingClientRect();
+        var f = (e.clientY - r.top) / r.height;
+        return Math.max(0, Math.min(N - 1, Math.floor(f * N)));
+      }
+      rail.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        try { rail.setPointerCapture(e.pointerId); } catch (_) {}
+        stop();
+        jumpTo(segFromEvent(e), true);
+        e.preventDefault();
+      });
+      rail.addEventListener('pointermove', function (e) {
+        if (dragging) jumpTo(segFromEvent(e), true);
+      });
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        try { rail.releasePointerCapture(e.pointerId); } catch (_) {}
+        start();
+      }
+      rail.addEventListener('pointerup', endDrag);
+      rail.addEventListener('pointercancel', endDrag);
+      rail.addEventListener('keydown', function (e) {
+        var t = null;
+        if (e.key === 'ArrowDown') t = (a + 1) % N;
+        else if (e.key === 'ArrowUp') t = (a - 1 + N) % N;
+        else if (e.key === 'Home') t = 0;
+        else if (e.key === 'End') t = N - 1;
+        else return;
+        e.preventDefault();
+        stop();
+        jumpTo(t, true);
+        start();
+      });
+    }
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    window.addEventListener('resize', measure);
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measure); }
+    window.addEventListener('load', measure);
+
+    measure();
+    start();
+  }
+  function initAll(ctx) {
+    (ctx || document).querySelectorAll('[data-review-rotator]').forEach(initRotator);
+  }
+  if (document.readyState !== 'loading') { initAll(); }
+  else { document.addEventListener('DOMContentLoaded', function () { initAll(); }); }
+  document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
+})();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "Reviews",
   "tag": "section",
   "settings": [
+    { "type": "header", "content": "Aside (right)" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From our sisters" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved, in her own words." },
+    { "type": "inline_richtext", "id": "heading", "label": "Headline", "info": "Italicise one word for the accent.", "default": "Our customers tell it <em>better</em> than we do." },
+    { "type": "text", "id": "subtext", "label": "Sub-line", "default": "Raw and unedited — Franco-Arabic, exactly the way she'd text it to a friend." },
     { "type": "text", "id": "avg", "label": "Average rating", "default": "4.8" },
-    { "type": "text", "id": "count_text", "label": "Count label", "default": "1,288 verified reviews" }
+    { "type": "text", "id": "count_text", "label": "Count label", "default": "1,288 verified reviews" },
+    { "type": "header", "content": "Rating histogram" },
+    { "type": "number", "id": "total", "label": "Total reviews (blank = sum of the counts below)" },
+    { "type": "number", "id": "dist_5", "label": "5★ count", "default": 1108 },
+    { "type": "number", "id": "dist_4", "label": "4★ count", "default": 116 },
+    { "type": "number", "id": "dist_3", "label": "3★ count", "default": 38 },
+    { "type": "number", "id": "dist_2", "label": "2★ count", "default": 14 },
+    { "type": "number", "id": "dist_1", "label": "1★ count", "default": 12 },
+    { "type": "header", "content": "Carousel (left)" },
+    { "type": "range", "id": "autoplay_seconds", "label": "Auto-advance", "min": 2, "max": 8, "step": 1, "unit": "s", "default": 4 },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "reviews" }
   ],
   "blocks": [
     {
@@ -44,7 +250,9 @@
         { "type": "text", "id": "author", "label": "Author", "default": "Farida M." },
         { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true },
         { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
-        { "type": "text", "id": "size", "label": "Size / meta", "default": "50ml" }
+        { "type": "text", "id": "date", "label": "Date", "default": "Mar 2026" },
+        { "type": "product", "id": "product", "label": "Linked product (shoppable card)" },
+        { "type": "text", "id": "size", "label": "Size (shown on the shop card)", "default": "50ml" }
       ]
     }
   ],
@@ -52,9 +260,9 @@
     {
       "name": "Reviews",
       "blocks": [
-        { "type": "review", "settings": { "quote": "Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.", "author": "Farida M.", "size": "50ml" } },
-        { "type": "review", "settings": { "quote": "El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.", "author": "Nour A.", "size": "Bundle" } },
-        { "type": "review", "settings": { "quote": "Ordered the 5ml tester first, fell in love, came back for the 50ml. Wsel fe 3 ayam.", "author": "Mariam S.", "size": "5ml → 50ml" } }
+        { "type": "review", "settings": { "quote": "Bordeaux zay el original bezabt — btesbat awiii, compliments into the evening.", "author": "Farida M.", "date": "Mar 2026", "size": "50ml" } },
+        { "type": "review", "settings": { "quote": "El reeha btefdal 3 ayam 3al hodoom — I get asked what I'm wearing every single time.", "author": "Nour A.", "date": "Feb 2026", "size": "Bundle" } },
+        { "type": "review", "settings": { "quote": "Ordered the 5ml tester first, fell in love, came back for the 50ml. Wsel fe 3 ayam.", "author": "Mariam S.", "date": "Jan 2026", "size": "5ml → 50ml" } }
       ]
     }
   ]

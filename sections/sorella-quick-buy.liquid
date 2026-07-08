@@ -1,0 +1,276 @@
+{%- comment -%}
+  sorella-quick-buy — INNER content for the site-wide quick-buy modal.
+
+  Rendered on demand via the Shopify Section Rendering API:
+    GET /products/{handle}?section_id=sorella-quick-buy
+  so the `product` object here is the requested product. The theme's sorella.js
+  fetches this and injects the returned HTML into #quick-buy [data-quick-buy-body].
+
+  Outputs ONLY the modal body content (no header/scrim/close — those live on the
+  site-wide #quick-buy panel). Styled by assets/sorella-interactive.css §6 using
+  the .quickbuy__* atoms; reuses theme atoms .btn / .sizes / .size / .stars /
+  .pdp-price / .notes and the render snippets (inspired-by, stars, price-anchor).
+
+  Hooks used (theme contract): [data-sizes] > [data-size] size ladder (radios
+  named "id" post the selected variant); /cart/add product form; [data-no-quickbuy]
+  on nested links so they navigate instead of re-triggering the modal.
+
+  ZERO hardcoded copy — every string is a schema setting or metafield with a
+  voice-correct default.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+
+  # scent notes eyebrow
+  assign notes = product.metafields.sorella.notes.value
+  if notes == blank
+    assign notes = product.tags | slice: 0, 3 | join: ' · '
+  endif
+
+  # rating
+  assign rating = product.metafields.sorella.rating
+  assign review_count = product.metafields.sorella.review_count
+
+  # short brief: merchant metafield wins, else truncated description
+  assign brief = product.metafields.custom.brief.value
+  if brief == blank
+    assign brief = product.metafields.sorella.brief.value
+  endif
+  if brief == blank
+    assign brief = product.description | strip_html | truncatewords: s.brief_length
+  else
+    assign brief = brief | strip_html
+  endif
+
+  assign default_variant = product.selected_or_first_available_variant
+
+  # tester / gift nudge: metafield flag OR price threshold
+  assign show_nudge = false
+  if s.tester_nudge_text != blank
+    if product.metafields.sorella.tester_eligible.value
+      assign show_nudge = true
+    elsif s.tester_nudge_threshold > 0
+      assign price_major = default_variant.price | divided_by: 100.0
+      if price_major >= s.tester_nudge_threshold
+        assign show_nudge = true
+      endif
+    endif
+  endif
+
+  assign rec_limit = s.recommendation_count
+-%}
+<div class="quickbuy__grid">
+  <div class="quickbuy__media">
+    {%- if product.featured_image != blank -%}
+      <img src="{{ product.featured_image | image_url: width: 720 }}"
+        srcset="{{ product.featured_image | image_url: width: 480 }} 480w, {{ product.featured_image | image_url: width: 720 }} 720w, {{ product.featured_image | image_url: width: 960 }} 960w"
+        sizes="(max-width:720px) 100vw, 440px"
+        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+        width="440" height="550" loading="eager">
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'quickbuy__placeholder' }}
+    {%- endif -%}
+  </div>
+
+  <div class="quickbuy__info">
+    {%- if s.show_notes and notes != blank -%}
+      <span class="quickbuy__eyebrow">{{ notes }}</span>
+    {%- endif -%}
+
+    <h2 class="quickbuy__title">{{ product.title }}</h2>
+
+    {% render 'sorella-inspired-by', product: product %}
+
+    {%- if s.show_stars and rating != blank -%}
+      {% render 'sorella-stars', rating: rating, count: review_count %}
+    {%- endif -%}
+
+    {% render 'sorella-price-anchor', product: product, variant: default_variant, id: section.id %}
+
+    {%- if brief != blank -%}
+      <p class="quickbuy__brief">{{ brief }}</p>
+    {%- endif -%}
+
+    <form class="quickbuy__form" action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+      <input type="hidden" name="form_type" value="product">
+      <input type="hidden" name="utf8" value="✓">
+
+      {%- if product.variants.size > 1 -%}
+        <fieldset class="sizes" data-sizes>
+          <legend class="visually-hidden">{{ s.size_label }}</legend>
+          {%- for variant in product.variants -%}
+            {%- assign is_current = false -%}
+            {%- if variant.id == default_variant.id -%}{%- assign is_current = true -%}{%- endif -%}
+            <label class="size{% if is_current %} on{% endif %}{% unless variant.available %} size--soldout{% endunless %}" data-size>
+              <input class="visually-hidden" type="radio" name="id" value="{{ variant.id }}"
+                {% if is_current %}checked{% endif %}{% unless variant.available %} disabled{% endunless %}>
+              <span>{{ variant.title }}</span>
+            </label>
+          {%- endfor -%}
+        </fieldset>
+      {%- else -%}
+        <input type="hidden" name="id" value="{{ default_variant.id }}">
+      {%- endif -%}
+
+      {%- if show_nudge -%}
+        <p class="quickbuy__nudge">{{ s.tester_nudge_text }}</p>
+      {%- endif -%}
+
+      {%- if product.available -%}
+        <button type="submit" name="add" class="btn btn--primary btn--full">{{ s.add_to_bag_text }}</button>
+      {%- else -%}
+        <button type="button" class="btn btn--ghost btn--full" disabled>{{ s.sold_out_text }}</button>
+      {%- endif -%}
+    </form>
+
+    <a class="quickbuy__link" href="{{ product.url }}" data-no-quickbuy>{{ s.view_details_text }}</a>
+  </div>
+</div>
+
+{%- if s.show_recommendations -%}
+  {%- liquid
+    # resolve one pairing source: recommendations → collection → metafield list
+    assign pair_products = null
+    if recommendations.performed and recommendations.products_count > 0
+      assign pair_products = recommendations.products
+    elsif s.recommendation_collection != blank and s.recommendation_collection.products.size > 0
+      assign pair_products = s.recommendation_collection.products
+    elsif product.metafields.sorella.pairs_with.value != blank
+      assign pair_products = product.metafields.sorella.pairs_with.value
+    endif
+  -%}
+  {%- if pair_products != blank -%}
+    <div class="quickbuy__pair">
+      <p class="quickbuy__pair-title">{{ s.recommendation_heading }}</p>
+      <div class="quickbuy__pair-row">
+        {%- for p in pair_products limit: rec_limit -%}
+          {%- unless p.id == product.id -%}
+            <a class="quickbuy__pair-item" href="{{ p.url }}" data-no-quickbuy>
+              {%- if p.featured_image != blank -%}
+                <img src="{{ p.featured_image | image_url: width: 280 }}"
+                  alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                  width="140" height="175" loading="lazy">
+              {%- else -%}
+                {{ 'product-2' | placeholder_svg_tag: 'quickbuy__pair-placeholder' }}
+              {%- endif -%}
+              <span class="quickbuy__pair-name">{{ p.title }}</span>
+              <span class="quickbuy__pair-price">{{ p.price | money }}</span>
+            </a>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product — quick buy",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brief"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_notes",
+      "label": "Show scent notes line",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "Show star rating",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "brief_length",
+      "label": "Brief length (words)",
+      "info": "Used when the product has no custom.brief metafield — truncates the description.",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "default": 26
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Size ladder label (screen readers)",
+      "default": "Choose your size"
+    },
+    {
+      "type": "text",
+      "id": "add_to_bag_text",
+      "label": "Add to bag button",
+      "default": "Add to bag"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold-out button",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "view_details_text",
+      "label": "View full details link",
+      "default": "View full details"
+    },
+    {
+      "type": "header",
+      "content": "Tester / gift nudge"
+    },
+    {
+      "type": "text",
+      "id": "tester_nudge_text",
+      "label": "Nudge line",
+      "info": "Shows when the product is flagged sorella.tester_eligible, or its price is at/above the threshold below. Leave blank to hide.",
+      "default": "New to this one? Start with a tester — same scent, smaller bottle, smaller leap."
+    },
+    {
+      "type": "number",
+      "id": "tester_nudge_threshold",
+      "label": "Price threshold for the nudge",
+      "info": "In your store currency's main unit (e.g. 900). 0 = only show when the product is flagged.",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Pair it with"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show the pairing row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "recommendation_heading",
+      "label": "Pairing heading",
+      "default": "Pair it with"
+    },
+    {
+      "type": "range",
+      "id": "recommendation_count",
+      "label": "Products shown",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "collection",
+      "id": "recommendation_collection",
+      "label": "Fallback collection",
+      "info": "Used when Shopify returns no recommendations and no sorella.pairs_with metafield is set."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product — quick buy"
+    }
+  ]
+}
+{% endschema %}

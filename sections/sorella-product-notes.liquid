@@ -7,14 +7,17 @@
   assign top = product.metafields.sorella.notes_top.value | default: 'Saffron, bitter almond'
   assign heart = product.metafields.sorella.notes_heart.value | default: 'Egyptian jasmine, cedar'
   assign base = product.metafields.sorella.notes_base.value | default: 'Amberwood, fir resin, oud'
+  assign imp_top = product.metafields.sorella.impression_top.value
+  assign imp_heart = product.metafields.sorella.impression_heart.value
+  assign imp_base = product.metafields.sorella.impression_base.value
 -%}
 <div class="pdp">
   <section class="pdp-sec">
     <h2 class="pdp-sec__h">{{ section.settings.heading | default: 'Composed in three acts' }}</h2>
     <div class="pyramid">
-      <div class="pyr pyr--top"><span class="pyr__act">Act I · Opening</span><span class="pyr__tier">Top notes</span><p class="pyr__notes">{{ top }}</p></div>
-      <div class="pyr pyr--heart"><span class="pyr__act">Act II · The heart</span><span class="pyr__tier">Heart notes</span><p class="pyr__notes">{{ heart }}</p></div>
-      <div class="pyr pyr--base"><span class="pyr__act">Act III · Dry-down</span><span class="pyr__tier">Base notes</span><p class="pyr__notes">{{ base }}</p></div>
+      <div class="pyr pyr--top"><span class="pyr__act">Act I · Opening</span><span class="pyr__tier">Top notes</span><p class="pyr__notes">{{ top }}</p>{%- if imp_top != blank -%}<p class="pyr__impression">{{ imp_top }}</p>{%- endif -%}</div>
+      <div class="pyr pyr--heart"><span class="pyr__act">Act II · The heart</span><span class="pyr__tier">Heart notes</span><p class="pyr__notes">{{ heart }}</p>{%- if imp_heart != blank -%}<p class="pyr__impression">{{ imp_heart }}</p>{%- endif -%}</div>
+      <div class="pyr pyr--base"><span class="pyr__act">Act III · Dry-down</span><span class="pyr__tier">Base notes</span><p class="pyr__notes">{{ base }}</p>{%- if imp_base != blank -%}<p class="pyr__impression">{{ imp_base }}</p>{%- endif -%}</div>
     </div>
   </section>
 </div>

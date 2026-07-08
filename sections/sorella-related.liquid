@@ -1,16 +1,22 @@
 {%- comment -%}
-  Sorella — "Complete the ritual" related grid (.related). Uses Shopify product
-  recommendations; falls back to a chosen collection when none are returned.
+  Sorella — "Complete the ritual" related grid (.related). Prefers the curated
+  sorella.pairs_with metafield (bundle- & collection-based recommendations),
+  then Shopify product recommendations, then a chosen fallback collection.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
   assign limit = s.product_count | default: 4
+  assign curated = product.metafields.sorella.pairs_with.value
 -%}
 <div class="pdp">
   <section class="pdp-sec">
     <h2 class="pdp-sec__h">{{ s.heading | default: 'Complete the ritual' }}</h2>
     <div class="related">
-      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      {%- if curated != blank and curated.size > 0 -%}
+        {%- for p in curated limit: limit -%}
+          {%- unless p.id == product.id -%}{% render 'sorella-product-card', product: p, variant: 'add' %}{%- endunless -%}
+        {%- endfor -%}
+      {%- elsif recommendations.performed and recommendations.products_count > 0 -%}
         {%- for p in recommendations.products limit: limit -%}
           {% render 'sorella-product-card', product: p, variant: 'add' %}
         {%- endfor -%}

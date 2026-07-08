@@ -5,20 +5,31 @@
 -%}
 <header class="header">
   <div class="wrap header__row">
+    <a class="brand" href="{{ routes.root_url }}">{{ brand }}</a>
+
     <nav class="mainnav" aria-label="Primary">
       {%- if menu != blank and menu.links.size > 0 -%}
         {%- for link in menu.links -%}
-          <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- if link.links.size > 0 -%}
+            <div class="navitem navitem--has-children">
+              <a class="navitem__top" href="{{ link.url }}" aria-haspopup="true">{{ link.title }}<svg class="navitem__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
+              <div class="navdrop">
+                {%- for child in link.links -%}
+                  <a href="{{ child.url }}">{{ child.title }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <a class="navitem__top" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endif -%}
         {%- endfor -%}
       {%- else -%}
-        <a href="{{ routes.all_products_collection_url }}">For Her</a>
-        <a href="{{ routes.all_products_collection_url }}">For Him</a>
-        <a href="{{ routes.all_products_collection_url }}">Bestsellers</a>
-        <a href="{{ routes.all_products_collection_url }}">Oils</a>
+        <a class="navitem__top" href="{{ routes.all_products_collection_url }}">For Her</a>
+        <a class="navitem__top" href="{{ routes.all_products_collection_url }}">For Him</a>
+        <a class="navitem__top" href="{{ routes.all_products_collection_url }}">Bestsellers</a>
+        <a class="navitem__top" href="{{ routes.all_products_collection_url }}">Oils</a>
       {%- endif -%}
     </nav>
-
-    <a class="brand" href="{{ routes.root_url }}">{{ brand }}</a>
 
     <div class="utils">
       <button class="iconbtn header__burger" type="button" data-menu-toggle="{{ panel_id }}" aria-label="Menu" aria-controls="{{ panel_id }}">
@@ -48,6 +59,11 @@
       {%- if menu != blank and menu.links.size > 0 -%}
         {%- for link in menu.links -%}
           <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- if link.links.size > 0 -%}
+            {%- for child in link.links -%}
+              <a class="mnav__child" href="{{ child.url }}">{{ child.title }}</a>
+            {%- endfor -%}
+          {%- endif -%}
         {%- endfor -%}
       {%- else -%}
         <a href="{{ routes.all_products_collection_url }}">For Her</a>
@@ -62,6 +78,18 @@
 <style>
   #shopify-section-{{ section.id }} .header__burger{ display:none; }
   @media(max-width:900px){ #shopify-section-{{ section.id }} .header__burger{ display:inline-flex; } }
+  /* nav dropdown */
+  #shopify-section-{{ section.id }} .navitem{ position:relative; display:inline-flex; align-items:center; }
+  #shopify-section-{{ section.id }} .navitem__top{ display:inline-flex; align-items:center; gap:4px; }
+  #shopify-section-{{ section.id }} .navitem__caret{ transition:transform .2s ease; }
+  #shopify-section-{{ section.id }} .navitem--has-children:hover .navitem__caret,
+  #shopify-section-{{ section.id }} .navitem--has-children:focus-within .navitem__caret{ transform:rotate(180deg); }
+  #shopify-section-{{ section.id }} .navdrop{ position:absolute; top:100%; inset-inline-start:0; min-width:190px; background:var(--page); border:1px solid var(--line); border-radius:12px; padding:8px; box-shadow:0 18px 40px rgba(0,0,0,.12); display:flex; flex-direction:column; gap:2px; opacity:0; visibility:hidden; transform:translateY(6px); transition:opacity .2s ease, transform .2s ease, visibility .2s ease; z-index:60; }
+  #shopify-section-{{ section.id }} .navitem--has-children:hover .navdrop,
+  #shopify-section-{{ section.id }} .navitem--has-children:focus-within .navdrop{ opacity:1; visibility:visible; transform:translateY(4px); }
+  #shopify-section-{{ section.id }} .navdrop a{ padding:9px 12px; border-radius:8px; white-space:nowrap; font-size:14px; }
+  #shopify-section-{{ section.id }} .navdrop a:hover{ background:var(--line); }
+  .mnav__panel nav a.mnav__child{ font-family:var(--font-body,inherit); font-size:15px; padding:9px 0 9px 16px; opacity:.75; border-bottom:1px solid var(--line); }
   .mnav{ position:fixed; inset:0; z-index:80; visibility:hidden; opacity:0; transition:opacity .3s ease, visibility .3s ease; }
   .mnav.is-open{ visibility:visible; opacity:1; }
   .mnav__scrim{ position:absolute; inset:0; background:rgba(0,0,0,.42); }

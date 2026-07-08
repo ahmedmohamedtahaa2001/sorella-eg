@@ -19,7 +19,7 @@
         rating (metafields.sorella.rating / review_count).
 {%- endcomment -%}
 {%- liquid
-  assign v = variant | default: 'add'
+  assign v = variant | default: 'plus'
 
   assign pclass = 'pcard'
   unless v == 'default'
@@ -43,6 +43,12 @@
     assign notes = product.tags | slice: 0, 3 | join: ' · '
   endif
 
+  # short tagline / description used by the default quick-add card body
+  assign desc = product.metafields.sorella.tagline.value
+  if desc == blank
+    assign desc = product.description | strip_html | truncatewords: 22
+  endif
+
   assign rating = product.metafields.sorella.rating
   assign review_count = product.metafields.sorella.review_count
 
@@ -54,26 +60,43 @@
     assign on_sale = true
   endif
 
-  comment -- sold-out state: explicit variant OR out of stock -- endcomment
+  # sold-out state: explicit variant OR out of stock
   assign is_soldout = false
   if v == 'soldout' or avail == false
     assign is_soldout = true
   endif
 
-  comment -- which variants render the .pcard__actions block -- endcomment
+  # which variants render the .pcard__actions block
   assign has_actions = false
   if v == 'add' or v == 'cta' or v == 'swatch' or v == 'wish' or v == 'soldout'
     assign has_actions = true
   endif
+
+  # "New" badge — product tagged 'new' or a sorella.badge metafield override
+  assign custom_badge = product.metafields.sorella.badge
+  assign is_new = false
+  if product.tags contains 'new' or product.tags contains 'New' or product.tags contains 'NEW'
+    assign is_new = true
+  endif
+
+  # wishlist heart on the portrait cards
+  assign show_wish = false
+  unless v == 'row' or v == 'compact' or v == 'overlay'
+    assign show_wish = true
+  endunless
 -%}
-<article class="{{ pclass }}">
+<article class="{{ pclass }}"{% if product != blank %} data-quick-buy="{{ product.handle }}"{% endif %}>
   <div class="pcard__media pcard__m{{ mgrad }}">
     {%- if badge != blank -%}
       <div class="pcard__tags"><span class="tag tag--solid">{{ badge }}</span></div>
+    {%- elsif custom_badge != blank -%}
+      <div class="pcard__tags"><span class="tag tag--out">{{ custom_badge }}</span></div>
     {%- elsif is_soldout -%}
       <div class="pcard__tags"><span class="tag tag--muted">Sold out</span></div>
     {%- elsif on_sale -%}
       <div class="pcard__tags"><span class="tag tag--solid">Sale</span></div>
+    {%- elsif is_new -%}
+      <div class="pcard__tags"><span class="tag tag--out">New</span></div>
     {%- endif -%}
 
     <a href="{{ product.url }}" class="pcard__mediaLink" aria-label="{{ product.title | escape }}">
@@ -84,21 +107,35 @@
       {%- endif -%}
     </a>
 
-    {%- if v == 'wish' -%}
-      <button type="button" class="pcard__wish" aria-label="Save {{ product.title | escape }} to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button>
+    {%- if show_wish -%}
+      <button type="button" data-no-quickbuy data-wish class="pcard__wish" aria-label="Save {{ product.title | escape }} to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button>
     {%- endif -%}
 
     {%- if v == 'default' and is_soldout == false -%}
       <div class="pcard__add">
         <form action="{{ routes.cart_add_url }}" method="post">
           <input type="hidden" name="id" value="{{ vid }}">
-          <button type="submit" name="add" class="btn btn--primary btn--sm btn--full">Add to bag · {{ product.price | money }}</button>
+          <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--sm btn--full">Add to bag · {{ product.price | money }}</button>
         </form>
       </div>
     {%- endif -%}
   </div>
 
   <div class="pcard__body">
+    {%- if v == 'plus' -%}
+      {%- comment -%} default quick-add card: name → description → family → price + "+" {%- endcomment -%}
+      <h3 class="pcard__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+      {%- if desc != blank -%}<p class="pcard__desc">{{ desc }}</p>{%- endif -%}
+      <div class="pcard__row">
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+        {%- if is_soldout == false -%}
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ vid }}">
+            <button type="submit" name="add" data-no-quickbuy class="pcard__plus" aria-label="Add {{ product.title | escape }} to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </form>
+        {%- endif -%}
+      </div>
+    {%- else -%}
     {%- unless v == 'compact' -%}
       {%- if notes != blank -%}<span class="pcard__notes">{{ notes }}</span>{%- endif -%}
     {%- endunless -%}
@@ -113,28 +150,15 @@
       <div class="pcard__sizes"><button type="button">5ml</button><button type="button" class="on">50ml</button><button type="button">Bundle</button></div>
     {%- endif -%}
 
-    {%- comment -%} standalone rating (plus variant sits it above the price row) {%- endcomment -%}
-    {%- if v == 'plus' -%}
-      {% render 'sorella-stars', rating: rating, count: review_count %}
-    {%- endif -%}
-
     <div class="pcard__row">
-      {%- if v == 'plus' -%}
-        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
-        {%- if is_soldout == false -%}
-          <form action="{{ routes.cart_add_url }}" method="post">
-            <input type="hidden" name="id" value="{{ vid }}">
-            <button type="submit" name="add" class="pcard__plus" aria-label="Add {{ product.title | escape }} to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-          </form>
-        {%- endif -%}
-      {%- elsif v == 'row' -%}
+      {%- if v == 'row' -%}
         <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
         {%- if is_soldout -%}
           <a href="{{ product.url }}" class="btn btn--ghost btn--sm">View</a>
         {%- else -%}
           <form action="{{ routes.cart_add_url }}" method="post">
             <input type="hidden" name="id" value="{{ vid }}">
-            <button type="submit" name="add" class="btn btn--primary btn--sm">Add to bag</button>
+            <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--sm">Add to bag</button>
           </form>
         {%- endif -%}
       {%- elsif v == 'compact' or v == 'swatch' -%}
@@ -152,10 +176,11 @@
       {%- else -%}
         <form action="{{ routes.cart_add_url }}" method="post" class="pcard__actions">
           <input type="hidden" name="id" value="{{ vid }}">
-          <button type="submit" name="add" class="btn btn--primary btn--full">Add to bag</button>
-          {%- if v == 'cta' -%}<button type="submit" name="checkout" class="btn btn--ghost btn--full">Buy it now</button>{%- endif -%}
+          <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--full">Add to bag</button>
+          {%- if v == 'cta' -%}<button type="submit" name="checkout" data-no-quickbuy class="btn btn--ghost btn--full">Buy it now</button>{%- endif -%}
         </form>
       {%- endif -%}
+    {%- endif -%}
     {%- endif -%}
   </div>
 </article>

@@ -1,30 +1,79 @@
 {%- comment -%}
-  Sorella — Brand story (audit §2.4)
-  Two-line brand statement + link to the full story, optional image.
+  Sorella — Brand story (audit §2.4 · Pillar 1, the sisterhood)
+  The bond made visible in the purchase path: eyebrow → serif statement with one
+  italic heart-word → short kitchen-table body → canon credential row → signed
+  tagline → link to the full story. The right column is a 2×2 story collage —
+  four editable image slots, each with an optional URL fallback.
   Layout: text-only / image-left / image-right.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
   assign layout = s.layout | default: 'image-right'
+
+  assign gal_count = 0
+  if layout != 'text-only'
+    for i in (1..4)
+      assign pick = 'gallery_' | append: i
+      assign srck = 'gallery_' | append: i | append: '_src'
+      if section.settings[pick] != blank or section.settings[srck] != blank
+        assign gal_count = gal_count | plus: 1
+      endif
+    endfor
+  endif
   assign has_img = false
-  if s.image != blank and layout != 'text-only'
+  if gal_count > 0
     assign has_img = true
   endif
+
+  assign has_creds = false
+  if s.cred_1 != blank or s.cred_2 != blank or s.cred_3 != blank
+    assign has_creds = true
+  endif
+
+  assign alt_fallback = s.heading | strip_html | escape
 -%}
 <section class="sec"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
   <div class="wrap">
     <div class="brandstory brandstory--{{ layout }}{% if has_img %} brandstory--has-img{% endif %}">
       {%- if has_img -%}
-        <div class="brandstory__media">
-          {%- assign bw = 1000 -%}
-          {%- assign bh = bw | divided_by: s.image.aspect_ratio | round -%}
-          <img src="{{ s.image | image_url: width: bw }}" alt="{{ s.image.alt | default: s.heading | escape }}" width="{{ bw }}" height="{{ bh }}" loading="lazy">
+        <div class="brandstory__media brandstory__gallery">
+          {%- for i in (1..4) -%}
+            {%- assign pick = 'gallery_' | append: i -%}
+            {%- assign srck = 'gallery_' | append: i | append: '_src' -%}
+            {%- assign gimg = section.settings[pick] -%}
+            {%- assign gsrc = section.settings[srck] -%}
+            {%- if gimg != blank -%}
+              {%- assign gw = 800 -%}
+              {%- assign gh = gw | divided_by: gimg.aspect_ratio | round -%}
+              <img src="{{ gimg | image_url: width: gw }}" alt="{{ gimg.alt | default: alt_fallback }}" width="{{ gw }}" height="{{ gh }}" loading="lazy">
+            {%- elsif gsrc != blank -%}
+              <img src="{{ gsrc }}" alt="{{ alt_fallback }}" width="800" height="800" loading="lazy">
+            {%- endif -%}
+          {%- endfor -%}
         </div>
       {%- endif -%}
       <div class="brandstory__copy">
         {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
         {%- if s.heading != blank -%}<h2 class="brandstory__h serif">{{ s.heading }}</h2>{%- endif -%}
         {%- if s.body != blank -%}<div class="brandstory__body rte">{{ s.body }}</div>{%- endif -%}
+
+        {%- if has_creds -%}
+          <ul class="brandstory__creds">
+            {%- if s.cred_1 != blank -%}<li>{{ s.cred_1 }}</li>{%- endif -%}
+            {%- if s.cred_2 != blank -%}<li>{{ s.cred_2 }}</li>{%- endif -%}
+            {%- if s.cred_3 != blank -%}<li>{{ s.cred_3 }}</li>{%- endif -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if s.signature != blank -%}
+          <figure class="brandstory__sign">
+            <blockquote class="serif">{{ s.signature }}</blockquote>
+            {%- if s.signature_by != blank -%}
+              <figcaption class="eyebrow">{{ s.signature_by }}</figcaption>
+            {%- endif -%}
+          </figure>
+        {%- endif -%}
+
         {%- if s.link_label != blank -%}
           <a class="link-arrow brandstory__link" href="{{ s.link_url | default: '#' }}">{{ s.link_label }} →</a>
         {%- endif -%}
@@ -38,18 +87,36 @@
   "name": "Brand story",
   "tag": "section",
   "settings": [
+    { "type": "header", "content": "Content" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Two sisters, one signature" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Made fresh in Egypt, poured to order — the scent she remembers you by." },
-    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Sorella began as a bond between sisters and a shared obsession with fragrance. Every scent is blended in small batches and true to the original — built to last from morning into the evening.</p>" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "info": "Italicise one word to make it the heart of the line.", "default": "Made fresh in Egypt, poured to order — the scent she <em>remembers</em> you by." },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Sorella started at a kitchen table in Egypt — two sisters arguing over whether the vanilla needed more salt. Every scent is still a two-person decision, blended fresh in small batches to last from morning tea into the evening.</p>" },
+    { "type": "header", "content": "Credentials" },
+    { "type": "text", "id": "cred_1", "label": "Credential 1", "default": "Made fresh in Egypt" },
+    { "type": "text", "id": "cred_2", "label": "Credential 2", "default": "Poured to order" },
+    { "type": "text", "id": "cred_3", "label": "Credential 3", "default": "A two-person decision" },
+    { "type": "header", "content": "Signature" },
+    { "type": "text", "id": "signature", "label": "Signature line", "default": "From our bond to your senses." },
+    { "type": "text", "id": "signature_by", "label": "Signed", "default": "— The sisters behind Sorella" },
+    { "type": "header", "content": "Link" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Read our story" },
     { "type": "url", "id": "link_url", "label": "Link URL" },
-    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "header", "content": "Story gallery (2×2)", "info": "Upload an image per slot. If a slot is empty, its fallback URL is used." },
+    { "type": "image_picker", "id": "gallery_1", "label": "Image 1 (top-left)" },
+    { "type": "text", "id": "gallery_1_src", "label": "Image 1 — fallback URL", "default": "https://images.unsplash.com/photo-1528739146320-61d4c9f46eb0?w=800&q=80&auto=format&fit=crop" },
+    { "type": "image_picker", "id": "gallery_2", "label": "Image 2 (top-right)" },
+    { "type": "text", "id": "gallery_2_src", "label": "Image 2 — fallback URL", "default": "https://plus.unsplash.com/premium_photo-1699997297297-6a7e0af2e8c6?w=800&q=80&auto=format&fit=crop" },
+    { "type": "image_picker", "id": "gallery_3", "label": "Image 3 (bottom-left)" },
+    { "type": "text", "id": "gallery_3_src", "label": "Image 3 — fallback URL", "default": "https://images.unsplash.com/photo-1635796342460-368cf1927238?w=800&q=80&auto=format&fit=crop" },
+    { "type": "image_picker", "id": "gallery_4", "label": "Image 4 (bottom-right)" },
+    { "type": "text", "id": "gallery_4_src", "label": "Image 4 — fallback URL", "default": "https://images.unsplash.com/photo-1595979904086-471704dc0e81?w=800&q=80&auto=format&fit=crop" },
+    { "type": "header", "content": "Layout" },
     {
       "type": "select", "id": "layout", "label": "Layout", "default": "image-right",
       "options": [
         { "value": "text-only", "label": "Text only" },
-        { "value": "image-left", "label": "Image left" },
-        { "value": "image-right", "label": "Image right" }
+        { "value": "image-left", "label": "Gallery left" },
+        { "value": "image-right", "label": "Gallery right" }
       ]
     },
     { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "story" }

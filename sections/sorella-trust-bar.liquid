@@ -1,18 +1,49 @@
 {%- comment -%}
-  Sorella — 4-icon trust bar (audit §2.9 / §8)
-  Distinct from the running .trustbar marquee — uses .trustbar4.
+  Sorella — "The Sisters' Guarantee" trust band (audit §2.9 / §8 · Honest Craft pillar).
+  Full-bleed inked certificate: eyebrow + serif thesis in the sisters' voice ·
+  four promises as an engraved ledger (icon ring + serif label + sub) · signature line.
+  Distinct from the running .trustbar marquee. All content + spacing schema-driven.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
-  assign lay = s.item_layout | default: 'row'
+  assign variant = s.variant | default: 'ink'
 -%}
-<section class="sec sec--tight"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
+{%- style -%}
+  #shopify-section-{{ section.id }}.sec{
+    padding-top: {{ s.padding_top }}px;
+    padding-bottom: {{ s.padding_bottom }}px;
+    margin-top: {{ s.margin_top }}px;
+    margin-bottom: {{ s.margin_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .trustpromise__head,
+  #shopify-section-{{ section.id }} .trustbar4{ max-width: {{ s.section_max_width }}px; }
+  @media (max-width: 749px){
+    #shopify-section-{{ section.id }}.sec{
+      padding-top: {{ s.mobile_padding_top }}px;
+      padding-bottom: {{ s.mobile_padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<section class="sec sec--tight trustpromise trustpromise--{{ variant }}"{% if s.anchor_id != blank %} id="{{ s.anchor_id }}"{% endif %}>
   <div class="wrap">
-    <div class="trustbar4 trustbar4--{{ lay }}">
+
+    {%- if s.eyebrow != blank or s.heading != blank -%}
+      <div class="trustpromise__head">
+        {%- if s.eyebrow != blank -%}<span class="eyebrow trustpromise__eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="trustpromise__thesis serif">{{ s.heading }}</h2>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="trustbar4">
       {%- for block in section.blocks -%}
-        {% render 'sorella-trust-item', icon: block.settings.icon, label: block.settings.label, subtext: block.settings.subtext, layout: lay %}
+        {% render 'sorella-trust-item', icon: block.settings.icon, label: block.settings.label, subtext: block.settings.subtext, layout: 'stacked' %}
       {%- endfor -%}
     </div>
+
+    {%- if s.signature != blank -%}
+      <p class="trustpromise__sign">{{ s.signature }}</p>
+    {%- endif -%}
+
   </div>
 </section>
 
@@ -20,20 +51,34 @@
 {
   "name": "Trust bar (4 icons)",
   "tag": "section",
+  "class": "shopify-section",
   "settings": [
+    { "type": "header", "content": "Content" },
     {
-      "type": "select", "id": "item_layout", "label": "Item layout", "default": "stacked",
+      "type": "select", "id": "variant", "label": "Style", "default": "ink",
       "options": [
-        { "value": "row", "label": "Icon beside text" },
-        { "value": "stacked", "label": "Icon above, centered" }
+        { "value": "ink", "label": "Inked certificate (black band)" },
+        { "value": "paper", "label": "Paper (light)" }
       ]
     },
-    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "trust" }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The house rules" },
+    { "type": "inline_richtext", "id": "heading", "label": "Thesis", "info": "Italicise your accent word with <em>…</em>.", "default": "Nothing ships unless both sisters would <em>wear</em> it." },
+    { "type": "text", "id": "signature", "label": "Signature line", "default": "From our bond to your senses" },
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "default": "trust" },
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "section_max_width", "label": "Max width", "min": 900, "max": 1440, "step": 20, "unit": "px", "default": 1140 },
+    { "type": "range", "id": "padding_top", "label": "Padding top (desktop)", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (desktop)", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "margin_top", "label": "Margin top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 },
+    { "type": "header", "content": "Mobile Spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Padding top (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Padding bottom (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 }
   ],
   "blocks": [
     {
       "type": "item",
-      "name": "Trust item",
+      "name": "Promise",
       "settings": [
         {
           "type": "select", "id": "icon", "label": "Icon", "default": "shipping",
@@ -42,6 +87,9 @@
             { "value": "returns", "label": "Returns / exchange" },
             { "value": "egypt", "label": "Made in Egypt" },
             { "value": "longevity", "label": "Longevity" },
+            { "value": "drop", "label": "Oil drop" },
+            { "value": "bond", "label": "Bond (two sisters)" },
+            { "value": "shield", "label": "Shield / guarantee" },
             { "value": "tester", "label": "Tester" },
             { "value": "leaf", "label": "Leaf / natural" },
             { "value": "star", "label": "Star" }
@@ -52,14 +100,15 @@
       ]
     }
   ],
+  "max_blocks": 4,
   "presets": [
     {
       "name": "Trust bar (4 icons)",
       "blocks": [
-        { "type": "item", "settings": { "icon": "shipping", "label": "Fast shipping", "subtext": "Ships in 2–4 days" } },
-        { "type": "item", "settings": { "icon": "returns", "label": "Easy exchange", "subtext": "7-day unopened exchange" } },
-        { "type": "item", "settings": { "icon": "egypt", "label": "Made in Egypt", "subtext": "Blended fresh, poured to order" } },
-        { "type": "item", "settings": { "icon": "longevity", "label": "Lasts all day", "subtext": "Oil-rich, into the evening" } }
+        { "type": "item", "settings": { "icon": "shipping", "label": "Poured to order", "subtext": "Blended fresh and out in 2–4 days" } },
+        { "type": "item", "settings": { "icon": "egypt", "label": "Made fresh in Egypt", "subtext": "Blended by hand, the عطّار way" } },
+        { "type": "item", "settings": { "icon": "longevity", "label": "Lasts for days", "subtext": "Oil-rich — hours on skin, days on clothes" } },
+        { "type": "item", "settings": { "icon": "returns", "label": "7-day exchange", "subtext": "Unopened, no questions — sister's honour" } }
       ]
     }
   ]

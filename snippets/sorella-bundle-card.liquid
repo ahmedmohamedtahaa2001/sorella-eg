@@ -28,7 +28,7 @@
     assign save_pct = p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price
   endif
 
-  comment -- layering line: explicit param → metafield → first 3 tags -- endcomment
+  # layering line: explicit param → metafield → first 3 tags
   assign line = items
   if line == blank
     assign line = p.metafields.sorella.bundle_items.value

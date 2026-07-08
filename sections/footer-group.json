@@ -4,7 +4,15 @@
   "sections": {
     "footer": {
       "type": "sorella-footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "Sorella",
+        "col_1_heading": "Shop",
+        "col_1_menu": "footer-shop",
+        "col_2_heading": "Explore",
+        "col_2_menu": "footer-explore",
+        "col_3_heading": "Help",
+        "col_3_menu": "footer-help"
+      }
     }
   },
   "order": ["footer"]

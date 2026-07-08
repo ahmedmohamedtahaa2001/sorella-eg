@@ -40,6 +40,7 @@
           {%- endfor -%}
         {%- endif -%}
       </div>
+      <div class="carousel__dots" data-carousel-dots></div>
     </div>
   </div>
 </section>
@@ -54,7 +55,7 @@
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "product_count", "label": "Products shown", "min": 3, "max": 16, "step": 1, "default": 8 },
     {
-      "type": "select", "id": "card_variant", "label": "Card style", "default": "add",
+      "type": "select", "id": "card_variant", "label": "Card style", "default": "plus",
       "options": [
         { "value": "add", "label": "Add to bag (always visible)" },
         { "value": "cta", "label": "Add + Buy now" },

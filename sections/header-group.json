@@ -8,7 +8,9 @@
     },
     "header": {
       "type": "sorella-header",
-      "settings": {}
+      "settings": {
+        "menu": "main-menu"
+      }
     }
   },
   "order": ["announcement", "header"]

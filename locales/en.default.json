@@ -87,7 +87,10 @@
       "view_details": "View details",
       "quick_add": "Quick add",
       "choose_options": "Choose options",
-      "related": "You may also love"
+      "related": "You may also love",
+      "quick_buy_loading": "Loading…",
+      "quick_buy_error": "Couldn’t load this quick view.",
+      "quick_buy_view_full": "View full details"
     },
     "facets": {
       "filter": "Filter",

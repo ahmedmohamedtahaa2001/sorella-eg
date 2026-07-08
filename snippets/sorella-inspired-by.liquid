@@ -13,11 +13,15 @@
         'original'   → .ibp--solid "A Sorella Original"
         'inspired'   → .ibp  "Inspired by {name}"
         'line'       → .ib   "True to the original"    (under product name)
+        'stamp'      → .ib-stamp   engraved seal, text = {text}
+        'disclaimer' → .ib-disc    legal hedge, text = {text}
     name (string, optional) — the reference name for 'inspired'
+    text (string, optional) — copy for 'stamp' / 'disclaimer' (voice-correct defaults if blank)
 {%- endcomment -%}
 {%- liquid
   assign v = variant
   assign nm = name
+  assign txt = text
 
   if v == blank
     assign io = product.metafields.sorella.is_original.value
@@ -49,4 +53,10 @@
     <span class="ibp ibp--solid"><span class="g">✓</span> A Sorella Original</span>
   {%- when 'inspired' -%}
     <span class="ibp"><span class="g">✦</span> Inspired by {{ nm | escape }}</span>
+  {%- when 'stamp' -%}
+    {%- assign stamp_txt = txt | default: 'True to the original' -%}
+    <span class="ib-stamp"><i>{{ stamp_txt | escape }}</i></span>
+  {%- when 'disclaimer' -%}
+    {%- assign disc_txt = txt | default: 'Sorella is an independent fragrance house. We are not associated or affiliated with any brand mentioned.' -%}
+    <p class="ib-disc">{{ disc_txt | escape }}</p>
 {%- endcase -%}

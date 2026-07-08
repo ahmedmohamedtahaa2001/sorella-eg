@@ -5,7 +5,8 @@
     kicker (string, optional) — small eyebrow above the title, e.g. "Gourmand"
     url    (string, default '#') — link target
     scheme (number 1-4, default 1) → .world--{scheme} gradient
-    image  (image/string, optional) — background image; else keeps the gradient
+    image  (image, optional) — Shopify background image; else keeps the gradient
+    image_url (string, optional) — external background image URL (takes precedence over image)
     cta    (string, default 'Shop →') — the shop link label
   Emits the .world tile markup.
 {%- endcomment -%}
@@ -14,11 +15,13 @@
   assign href = url | default: '#'
   assign label = cta | default: 'Shop →'
   assign bg = ''
-  if image != blank
+  if image_url != blank
+    assign bg = image_url
+  elsif image != blank
     assign bg = image | image_url: width: 800
   endif
 -%}
-<a class="world world--{{ sc }}" href="{{ href }}"{% if bg != blank %} style="background-image:url('{{ bg }}');background-size:cover;background-position:center;"{% endif %}>
+<a class="world world--{{ sc }}{% if bg != blank %} world--photo{% endif %}" href="{{ href }}"{% if bg != blank %} style="--world-img:url('{{ bg }}');"{% endif %}>
   {%- if kicker != blank -%}<span class="world__k">{{ kicker }}</span>{%- endif -%}
   <h3>{{ title }}</h3>
   <span class="shop">{{ label }}</span>

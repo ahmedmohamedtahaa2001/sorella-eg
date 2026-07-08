@@ -7,7 +7,7 @@
 {%- liquid
   assign s = section.settings
 
-  comment -- current applied sort; fall back to Best selling -- endcomment
+  # current applied sort; fall back to Best selling
   assign current_sort = collection.sort_by
   if current_sort == blank
     assign current_sort = collection.default_sort_by
@@ -16,7 +16,7 @@
     assign current_sort = 'best-selling'
   endif
 
-  comment -- count active filter values (for the clear row) -- endcomment
+  # count active filter values (for the clear row)
   assign active_count = 0
   for f in collection.filters
     for v in f.active_values
