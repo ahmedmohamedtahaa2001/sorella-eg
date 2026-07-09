@@ -1,14 +1,66 @@
 {%- liquid
-  assign lead = section.settings.text_bold
-  assign body = section.settings.text
-  assign link = section.settings.link
+  assign s = section.settings
+
+  comment
+    Free-gift progress bar. Threshold is the SAME theme setting the cart drawer uses
+    (settings.free_gift_threshold, in LE) so the announcement and cart never disagree.
+  endcomment
+  assign threshold = settings.free_gift_threshold | default: 1100
+  assign threshold_cents = threshold | times: 100
+  assign current = cart.total_price
+  assign remaining_cents = threshold_cents | minus: current
+  if remaining_cents < 0
+    assign remaining_cents = 0
+  endif
+
+  assign unlocked = false
+  if current >= threshold_cents and threshold_cents > 0
+    assign unlocked = true
+  endif
+
+  assign pct = 0
+  if threshold_cents > 0
+    assign pct = current | times: 100 | divided_by: threshold_cents
+  endif
+  if pct > 100
+    assign pct = 100
+  endif
+
+  assign reward_url = s.reward_link | default: routes.cart_url
 -%}
-{%- if lead != blank or body != blank -%}
-  {%- capture inner -%}{%- if lead != blank -%}<b>{{ lead }}</b> {% endif %}{{ body }}{%- endcapture -%}
-  {%- if link != blank -%}
-    <a class="announce" href="{{ link }}">{{ inner }}</a>
-  {%- else -%}
-    <div class="announce">{{ inner }}</div>
+
+{%- if s.enable_progress and threshold_cents > 0 -%}
+  {%- capture amount_html -%}<b>{{ remaining_cents | money }}</b>{%- endcapture -%}
+  {%- assign away_html = s.away_text | replace: '[amount]', amount_html -%}
+  <a class="announce announce--gift{% if unlocked %} is-unlocked{% endif %}"
+     href="{{ reward_url }}"
+     data-gift-bar
+     data-threshold="{{ threshold_cents }}"
+     data-money-format="{{ shop.money_format | escape }}"
+     data-away="{{ s.away_text | escape }}"
+     data-unlocked="{{ s.unlocked_text | escape }}"
+     aria-label="{% if unlocked %}{{ s.unlocked_text | escape }}{% else %}{{ s.away_text | replace: '[amount]', remaining_cents | money | strip_html | escape }}{% endif %}">
+    <span class="announce__msg" data-gift-msg>
+      {%- if unlocked -%}{{ s.unlocked_text }} 🎁{%- else -%}{{ away_html }}{%- endif -%}
+    </span>
+    <span class="announce__track" data-gift-track role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct }}">
+      <span class="announce__fill" data-gift-fill style="width:{{ pct }}%"></span>
+    </span>
+  </a>
+
+{%- else -%}
+  {%- liquid
+    assign lead = s.text_bold
+    assign body = s.text
+    assign link = s.link
+  -%}
+  {%- if lead != blank or body != blank -%}
+    {%- capture inner -%}{%- if lead != blank -%}<b>{{ lead }}</b> {% endif %}{{ body }}{%- endcapture -%}
+    {%- if link != blank -%}
+      <a class="announce" href="{{ link }}">{{ inner }}</a>
+    {%- else -%}
+      <div class="announce">{{ inner }}</div>
+    {%- endif -%}
   {%- endif -%}
 {%- endif -%}
 
@@ -19,6 +71,29 @@
   "class": "announce-section",
   "enabled_on": { "groups": ["header"] },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_progress",
+      "label": "Show free-gift progress bar",
+      "info": "Uses the free-gift threshold from Theme settings → Cart. Turn off to show a plain message instead.",
+      "default": true
+    },
+    { "type": "header", "content": "Free-gift progress" },
+    {
+      "type": "text",
+      "id": "away_text",
+      "label": "Countdown message",
+      "info": "Use [amount] where the remaining total should appear.",
+      "default": "You're [amount] away from a free 5ml perfume"
+    },
+    {
+      "type": "text",
+      "id": "unlocked_text",
+      "label": "Unlocked message",
+      "default": "Your free 5ml is unlocked — pick it in your cart"
+    },
+    { "type": "url", "id": "reward_link", "label": "Bar link", "info": "Defaults to the cart." },
+    { "type": "header", "content": "Static message (when progress is off)" },
     {
       "type": "text",
       "id": "text_bold",

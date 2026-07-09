@@ -329,6 +329,19 @@
     },
     "faq": {
       "type": "sorella-faq",
+      "settings": {
+        "eyebrow": "Before you buy",
+        "heading": "Everything you'd ask a <em>sister</em>.",
+        "subheading": "Shipping, longevity, and how to try a scent before you commit.",
+        "body": "<p>We keep an honest shop — real delivery times, no dark patterns, and a 5ml tester so nobody buys a bottle on faith alone. If your question isn't here, we're a message away.</p>",
+        "support_heading": "Still wondering?",
+        "support_text": "Message us on Instagram — we answer like a sister, usually the same day.",
+        "support_button_label": "Ask @sorella.fragrances",
+        "support_button_url": "https://instagram.com/sorella.fragrances",
+        "tester_note": "New to Sorella? Try any scent first for LE 85.",
+        "tester_url": "/collections/5-ml-testers",
+        "anchor_id": "faq"
+      },
       "blocks": {
         "q1": {
           "type": "qa",

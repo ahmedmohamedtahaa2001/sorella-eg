@@ -19,6 +19,14 @@
   --shadow-sm:0 4px 18px rgba(0,0,0,.07);
   --ease:cubic-bezier(.16,1,.3,1);
   --wrap:1240px;
+  /* Chrome — one black grade shared by the navbar + footer */
+  --chrome-bg:#000000;                 /* nav + footer ground        */
+  --chrome-pearl:#E8E8E8;              /* headings / body            */
+  --chrome-silver:#8C8C8C;             /* secondary / muted          */
+  --chrome-white:#FFFFFF;              /* the single accent          */
+  --chrome-line:rgba(255,255,255,.10); /* hairlines / dividers       */
+  --chrome-line-2:rgba(255,255,255,.20);/* interactive borders       */
+  --chrome-wash:rgba(255,255,255,.08); /* hover fills                */
 }
 *,*::before,*::after{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -68,20 +76,39 @@ ul{margin:0;padding:0;list-style:none;}
 .ib::before{content:"◆";font-size:8px;color:var(--accent);}
 
 /* ---------------- announcement + header ---------------- */
-.announce{background:var(--accent);color:var(--on-accent);text-align:center;font-size:12.5px;letter-spacing:.02em;
-  padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.announce b{font-weight:600;}
-.header{position:sticky;top:0;z-index:60;background:rgba(244,243,241,.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);}
+/* Announcement — inverted to light: a clean strip above the black nav */
+.announce{background:var(--surface);color:var(--ink);text-align:center;font-size:12.5px;letter-spacing:.02em;
+  padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s;}
+.announce b{font-weight:600;color:var(--black);}
+a.announce:hover{background:var(--surface-2);}
+/* Announcement as a free-gift progress bar */
+.announce--gift{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;}
+.announce--gift .announce__msg{font-size:12.5px;letter-spacing:.02em;}
+.announce--gift .announce__msg b{font-weight:700;color:var(--black);}
+.announce__track{position:relative;width:clamp(96px,18vw,168px);height:5px;border-radius:var(--pill);background:rgba(0,0,0,.12);overflow:hidden;flex:0 0 auto;}
+.announce__fill{position:absolute;inset:0 auto 0 0;height:100%;width:0;border-radius:var(--pill);background:var(--accent);transition:width .55s var(--ease);}
+@media(prefers-reduced-motion:reduce){.announce__fill{transition:none;}}
+
+/* Header — black chrome to match the footer's monochrome close */
+/* Sticky lives on the SECTION wrapper — the inner .header sits in a 71px box,
+   so sticking it there releases instantly. The wrapper is a child of <body>. */
+.header-section{position:sticky;top:0;z-index:60;}
+.header{--h-pearl:var(--chrome-pearl);--h-white:var(--chrome-white);--h-wash:var(--chrome-wash);
+  background:var(--chrome-bg);border-bottom:1px solid var(--chrome-line);color:var(--h-pearl);}
 .header__row{display:flex;align-items:center;justify-content:space-between;gap:24px;height:70px;}
 .brand{flex:0 0 auto;font-family:var(--font-display);font-size:24px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;}
+.header .brand{color:var(--h-white);}
 .mainnav{display:flex;align-items:center;gap:28px;}
-.mainnav .navitem__top,.mainnav>a{display:inline-flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.72;transition:opacity .2s;}
-.mainnav .navitem__top:hover,.mainnav>a:hover{opacity:1;}
+.mainnav .navitem__top,.mainnav>a{display:inline-flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--h-pearl);opacity:.72;transition:opacity .2s,color .2s;}
+.mainnav .navitem__top:hover,.mainnav>a:hover{opacity:1;color:var(--h-white);}
 .utils{display:flex;align-items:center;gap:6px;}
-.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;position:relative;transition:background .2s;}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;position:relative;transition:background .2s,color .2s;}
 .iconbtn:hover{background:var(--wash);}
+.header .iconbtn{color:var(--h-pearl);}
+.header .iconbtn:hover{background:var(--h-wash);color:var(--h-white);}
 .cartdot{position:absolute;top:8px;right:7px;min-width:17px;height:17px;padding:0 4px;border-radius:var(--pill);
   background:var(--accent);color:var(--on-accent);font-size:10px;font-weight:700;display:grid;place-items:center;}
+.header .cartdot{background:var(--h-white);color:#000;}
 @media(max-width:900px){.mainnav{display:none;}}
 
 /* ---------------- hero ---------------- */
@@ -368,19 +395,51 @@ ul{margin:0;padding:0;list-style:none;}
 .news__form input:focus{outline:2px solid #fff;outline-offset:1px;}
 
 /* ---------------- footer ---------------- */
-.footer{border-top:1px solid var(--line);margin-top:8px;}
-.footer__grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;padding-block:56px 32px;}
-.footer__brand .serif{font-size:24px;letter-spacing:.18em;text-transform:uppercase;display:block;}
-.footer__brand p{color:var(--ink-2);font-size:14px;margin-top:10px;max-width:34ch;}
-.footer h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;}
-.footer li{margin-bottom:9px;}
-.footer a{color:var(--ink-2);font-size:14px;transition:color .2s;}
-.footer a:hover{color:var(--ink);}
-.footer__socials{display:flex;gap:8px;margin-top:14px;}
-.footer__socials a{width:40px;height:40px;border:1px solid var(--line-2);border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--ink);transition:.2s;}
-.footer__socials a:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent);}
-.footer__bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;}
-@media(max-width:720px){.footer__grid{grid-template-columns:1fr 1fr;}.footer__brand{grid-column:1/-1;}}
+/* ── Footer — black monochrome close ─────────────────────────────
+   The light page ends here; the footer is the deep, quiet sign-off.
+   Hierarchy comes from value (black→pearl→white), never hue.        */
+.footer{
+  --f-bg:var(--chrome-bg);        /* shared chrome ground             */
+  --f-line:var(--chrome-line);    /* hairline divider                 */
+  --f-line-2:var(--chrome-line-2);
+  --f-pearl:var(--chrome-pearl);  /* headings / body                  */
+  --f-silver:var(--chrome-silver);/* secondary / muted                */
+  --f-white:var(--chrome-white);  /* the single accent                */
+  background:var(--f-bg);color:var(--f-pearl);
+  margin-top:80px;position:relative;overflow:hidden;
+}
+.footer .wrap{position:relative;z-index:1;}
+.footer__grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:48px;padding-block:72px 40px;}
+
+/* Brand block — the wordmark is the heart, so it is italicised */
+.footer__brand{max-width:42ch;}
+.footer__eyebrow{display:block;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--f-silver);margin-bottom:16px;}
+.footer__wordmark{display:block;font-style:italic;font-weight:400;font-size:clamp(30px,3.4vw,44px);line-height:1;letter-spacing:-.01em;color:var(--f-white);}
+.footer__brand p{color:var(--f-silver);font-size:14px;line-height:1.65;margin-top:16px;}
+
+.footer__socials{display:flex;gap:10px;margin-top:24px;}
+.footer__socials a{width:42px;height:42px;border:1px solid var(--f-line-2);border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--f-pearl);
+  transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease);}
+.footer__socials a:hover{background:var(--f-white);color:#000;border-color:var(--f-white);transform:translateY(-2px);}
+
+/* Nav columns */
+.footer__col h4{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--f-silver);margin-bottom:18px;}
+.footer__col li{margin-bottom:12px;}
+.footer__col a{display:inline-flex;align-items:center;font-size:14px;color:var(--f-pearl);opacity:.78;transition:color .2s,opacity .2s;}
+.footer__col a:hover{color:var(--f-white);opacity:1;}
+.footer__col a::before{content:"";width:0;height:1px;margin-right:0;background:var(--f-white);transition:width .3s var(--ease),margin-right .3s var(--ease);}
+.footer__col a:hover::before{width:14px;margin-right:10px;}
+
+/* Bottom bar */
+.footer__bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:26px;border-top:1px solid var(--f-line);color:var(--f-silver);font-size:12px;letter-spacing:.01em;}
+
+/* Signature — the one bold move: the sisterly name rising off the edge */
+.footer__signature{overflow:hidden;height:clamp(3.5rem,12vw,10rem);display:flex;align-items:flex-start;justify-content:center;pointer-events:none;}
+.footer__mark{font-style:italic;font-weight:400;font-size:clamp(4rem,17vw,13rem);line-height:.82;white-space:nowrap;letter-spacing:.01em;color:#1c1c1c;user-select:none;}
+
+@media(max-width:900px){.footer__grid{grid-template-columns:1fr 1fr;}.footer__brand{grid-column:1/-1;}}
+@media(max-width:560px){.footer__grid{grid-template-columns:1fr;gap:36px;}.footer__bottom{flex-direction:column;align-items:flex-start;gap:8px;}}
+@media(prefers-reduced-motion:reduce){.footer *{transition:none !important;}}
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 
@@ -659,31 +718,36 @@ ul{margin:0;padding:0;list-style:none;}
   display:grid;place-items:center;transition:background .2s,color .2s,border-color .2s;}
 .carousel__arrow:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent);}
 .carousel__arrow svg{width:20px;height:20px;}
-/* Reusable peek carousel — any [data-carousel]. initCarousel() sets --cards
-   from the item count: < 10 → 3 full cards visible, ≥ 10 → 4 — each with a
-   quarter-card peek on the left and right (visible = --cards + 0.5). */
-.carousel{position:relative;margin-inline:-4px;--cards:4;}
-.carousel__track{
-  --gap:18px;
-  --col:calc((100% - (var(--cards) - 0.5) * var(--gap)) / (var(--cards) + 0.5));
-  --edge:calc(var(--col) / 4 + var(--gap));
-  display:grid;grid-auto-flow:column;grid-auto-columns:var(--col);gap:var(--gap);
-  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 0;
-  scroll-padding-inline:var(--edge);
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.carousel__track::-webkit-scrollbar{display:none;}
-.carousel__item{scroll-snap-align:start;min-width:0;display:flex;transition:opacity .5s var(--ease);will-change:opacity;}
+/* Reusable graduated carousel — any [data-carousel]. initCarousel() runs a
+   distance-based tier state machine with EVEN-GAP cumulative layout: every
+   card is a fixed full width (--cardw, set by JS) and is positioned by its own
+   transform so that consecutive cards sit a CONSTANT gap (--gap) apart at their
+   actual scaled widths — the visual spacing is identical between every pair
+   regardless of tier. Each card's scale + colour saturation (+ a hair of blur)
+   come from a per-breakpoint decay table indexed by distance from the focused
+   card. Off-window cards fade out; no card is ever cropped. Transform, filter
+   and opacity animate together on one gentle ease-in-out (850ms). */
+.carousel{position:relative;--cards:4;--gap:14px;--cardw:280px;
+  --carousel-dur:850ms;--carousel-ease:cubic-bezier(.4,0,.2,1);}
+/* Static clip window: hides off-window cards horizontally while padding-block
+   keeps vertical card shadows + hover-lift. */
+.carousel__viewport{overflow:hidden;padding-block:26px;}
+.carousel__track{display:flex;gap:0;align-items:center;will-change:transform;}
+/* Fixed-width cards; scale/translate/saturate/opacity are applied inline by
+   initCarousel(). transform-origin:left keeps each card's left edge fixed under
+   scaling so the cumulative even-gap math stays exact. */
+.carousel__item{flex:0 0 var(--cardw);width:var(--cardw);min-width:0;display:flex;
+  transform-origin:left center;transform:scale(1);filter:saturate(100%);
+  transition:transform var(--carousel-dur) var(--carousel-ease),
+             filter var(--carousel-dur) var(--carousel-ease),
+             opacity var(--carousel-dur) var(--carousel-ease);
+  will-change:transform,filter,opacity;}
 .carousel__item>*{width:100%;}
-/* Active-card effect (mirrors the reviews rotator): fully-visible cards stay lit +
-   full scale; partially-clipped edge cards fade + shrink. IntersectionObserver
-   toggles .is-carousel-active on the wrapper; the inner card takes the scale so the
-   observed box never moves (no feedback loop). */
-.carousel.is-io .carousel__item:not(.is-carousel-active){opacity:.45;}
-.carousel.is-io .carousel__item:not(.is-carousel-active)>*{transform:scale(.95);}
-@media(prefers-reduced-motion:reduce){.carousel__item{transition:none;}}
-/* narrower viewports show fewer cards, peeks preserved */
-@media(max-width:1000px){.carousel__track{--cards:2;}}
-@media(max-width:720px){.carousel__track{--cards:1;}.carousel__nav{display:none;}}
+/* Hard snap when the breakpoint changes / on resize (JS adds .is-snapping). */
+.carousel.is-snapping .carousel__track,
+.carousel.is-snapping .carousel__item{transition:none;}
+@media(prefers-reduced-motion:reduce){
+  .carousel__track,.carousel__item{transition:none;}}
 
 /* horizontal scrollbar (replaces the pagination dots) */
 .carousel__dots.is-scrollbar{display:block;position:relative;height:4px;width:min(100%,320px);
@@ -698,19 +762,46 @@ ul{margin:0;padding:0;list-style:none;}
 .carousel__controls .carousel__arrow{flex:none;}
 
 /* ---------------- FAQ (sorella-faq) — native details/summary, no JS ---------------- */
-.faq{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:start;}
-@media(max-width:820px){.faq{grid-template-columns:1fr;gap:28px;}}
-.faq__head{display:flex;flex-direction:column;gap:12px;position:sticky;top:96px;}
-@media(max-width:820px){.faq__head{position:static;}}
-.faq__h{font-size:clamp(26px,3.2vw,40px);line-height:1.1;letter-spacing:-.02em;}
-.faq__sub{font-size:15px;max-width:32ch;}
-.faq__acc{max-width:none;width:100%;border-top:1px solid var(--line-2);}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:start;}
+@media(max-width:820px){.faq{grid-template-columns:1fr;gap:36px;}}
+/* Left column stays pinned while the accordion on the right grows/shrinks */
+.faq__head{display:flex;flex-direction:column;gap:clamp(26px,3vw,38px);position:sticky;top:96px;}
+@media(max-width:820px){.faq__head{position:static;gap:24px;}}
+.faq__intro{display:flex;flex-direction:column;gap:18px;}
+.faq__h{font-size:clamp(36px,5vw,64px);line-height:1.0;letter-spacing:-.03em;max-width:12ch;}
+.faq__h em{font-style:italic;}
+.faq__sub{font-size:19px;line-height:1.5;max-width:30ch;color:var(--ink);font-weight:400;}
+.faq__body{font-size:15px;line-height:1.75;color:var(--ink-2);max-width:40ch;}
+.faq__body p{margin:0;}
+/* Editorial contact block — hairline-ruled, no box (sits right below the intro, no gap) */
+.faq__contact{padding-top:clamp(24px,3vw,32px);border-top:1px solid var(--ink);
+  display:flex;flex-direction:column;gap:12px;}
+.faq__contact-label{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.faq__contact-link{display:inline-flex;align-items:center;gap:12px;width:fit-content;font-weight:400;
+  font-size:clamp(24px,2.8vw,34px);line-height:1.05;letter-spacing:-.02em;color:var(--ink);}
+.faq__contact-link svg{flex:none;transition:transform .35s var(--ease);}
+.faq__contact-link:hover svg{transform:translateX(6px);}
+.faq__contact-note{font-size:15px;line-height:1.55;color:var(--ink-2);max-width:36ch;}
+.faq__tester{margin-top:4px;font-size:13px;line-height:1.5;color:var(--muted);}
+.faq__tester a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;transition:opacity .2s;}
+.faq__tester a:hover{opacity:.65;}
+.faq__acc{max-width:none;width:100%;align-self:start;border-top:1px solid var(--line-2);}
 .faq__acc details{border-bottom:1px solid var(--line-2);}
-.faq__acc summary{list-style:none;cursor:pointer;padding:20px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:600;font-size:16px;color:var(--ink);}
+.faq__acc summary{list-style:none;cursor:pointer;padding:26px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:600;font-size:17px;color:var(--ink);}
 .faq__acc summary::-webkit-details-marker{display:none;}
-.faq__acc summary::after{content:"+";font-size:22px;font-weight:400;color:var(--ink-2);transition:transform .2s;}
-.faq__acc details[open] summary::after{content:"–";}
-.faq__acc .acc__body{padding-bottom:22px;color:var(--ink-2);line-height:1.7;max-width:60ch;font-size:15px;}
+.faq__acc summary::after{content:"+";font-size:24px;font-weight:300;line-height:1;color:var(--ink-2);transition:transform .42s var(--ease),color .3s;}
+.faq__acc details[open] summary::after{transform:rotate(45deg);color:var(--ink);}
+.faq__acc .acc__body{padding-bottom:24px;color:var(--ink-2);line-height:1.7;max-width:60ch;font-size:15px;}
+/* Smooth open/close via the animatable ::details-content pseudo-element.
+   Progressive enhancement: browsers without support just toggle instantly. */
+.faq__acc{interpolate-size:allow-keywords;}
+.faq__acc details::details-content{block-size:0;overflow:hidden;opacity:0;
+  transition:block-size .42s var(--ease),opacity .34s var(--ease),content-visibility .42s allow-discrete;}
+.faq__acc details[open]::details-content{block-size:auto;opacity:1;}
+@media (prefers-reduced-motion: reduce){
+  .faq__acc summary::after{transition:none;}
+  .faq__acc details::details-content{transition:none;}
+}
 
 /* ---------------- press / logo strip (sorella-press-strip) ---------------- */
 .press{display:flex;flex-direction:column;align-items:center;gap:20px;}
