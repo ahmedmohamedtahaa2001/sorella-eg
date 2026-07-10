@@ -7,16 +7,20 @@
 {%- liquid
   assign s = section.settings
   assign per_page = s.products_per_page | default: 12
-  assign card_variant = s.card_variant | default: 'plus'
+  assign card_variant = s.card_variant | default: 'shelf'
   assign interrupt_after = s.interrupt_after
 -%}
 <section class="sec sec--tight colgrid" id="{{ section.id }}">
   <div class="wrap">
     {%- paginate collection.products by per_page -%}
       {%- if collection.products.size > 0 -%}
-        <div class="pgrid">
+        <div class="pgrid pgrid--shelf">
           {%- for product in collection.products -%}
-            {% render 'sorella-product-card', product: product, variant: card_variant %}
+            {%- if s.show_feature and forloop.first and paginate.current_page == 1 and collection.products.size > 4 -%}
+              {% render 'sorella-product-card', product: product, variant: 'feature', flag: s.feature_flag %}
+            {%- else -%}
+              {% render 'sorella-product-card', product: product, variant: card_variant %}
+            {%- endif -%}
 
             {%- if s.show_interrupt and interrupt_after > 0 and forloop.index == interrupt_after and forloop.last == false -%}
               <a class="pcard pcard--promo colpromo" href="{{ s.interrupt_url | default: '#' }}">
@@ -55,8 +59,9 @@
       "type": "select",
       "id": "card_variant",
       "label": "Card style",
-      "default": "plus",
+      "default": "shelf",
       "options": [
+        { "value": "shelf", "label": "Shelf — world, hook, value chips (recommended)" },
         { "value": "add", "label": "Add to bag (always visible)" },
         { "value": "cta", "label": "Add + Buy now" },
         { "value": "plus", "label": "Quick + add" },
@@ -64,6 +69,9 @@
         { "value": "default", "label": "Reveal on hover" }
       ]
     },
+    { "type": "header", "content": "Feature card" },
+    { "type": "checkbox", "id": "show_feature", "label": "Lead with a large feature card", "default": true, "info": "The first product on page 1 renders as a wide landscape hero (needs 5+ products)." },
+    { "type": "text", "id": "feature_flag", "label": "Feature flag label", "default": "Bestseller" },
     { "type": "header", "content": "Discovery interrupt card" },
     { "type": "checkbox", "id": "show_interrupt", "label": "Show quiz / discovery card", "default": true },
     { "type": "range", "id": "interrupt_after", "label": "Insert after N products", "min": 2, "max": 12, "step": 1, "default": 4 },

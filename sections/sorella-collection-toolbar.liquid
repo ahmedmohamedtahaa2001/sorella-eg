@@ -42,7 +42,7 @@
 
   <form method="get" class="coltoolbar__form">
     <div class="wrap coltoolbar__bar">
-      <span class="coltoolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</span>
+      <span class="coltoolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}fragrance{% else %}fragrances{% endif %}</span>
 
       {%- if s.show_filters and collection.filters.size > 0 -%}
         <div class="coltoolbar__filters">

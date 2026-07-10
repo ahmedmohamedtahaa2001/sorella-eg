@@ -1,60 +1,93 @@
 {%- comment -%}
-  Sorella — collection header. Title, description (rte), product count,
-  optional banner image. Uses the real `collection` object.
+  Sorella — collection masthead. Typographic header for the reusable
+  collection template (bundles / oils / for-her / testers / scent worlds).
+  Per-collection flavour comes from `collection.metafields.sorella.*`
+  (eyebrow, shelf_note, arabic) with schema fallbacks — zero hardcoded.
+  Signature: an Arabic-script watermark of the collection (§2.7) behind the
+  title, and a typeset "ladder" rule (§2.5) — testers → free-gift threshold.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
+  assign m = collection.metafields.sorella
+
+  assign eyebrow = m.eyebrow.value | default: s.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'The collection'
+  endif
+
+  assign note = m.shelf_note.value | default: s.shelf_note
+
+  assign arabic = m.arabic.value | default: s.arabic_watermark
+
+  assign usps = m.usps.value
 
   assign banner = s.banner_image
   if banner == blank and s.use_collection_image
     assign banner = collection.image
   endif
 
-  assign eyebrow = s.eyebrow
-  if eyebrow == blank
-    assign eyebrow = 'Collection'
-  endif
-
+  assign count = collection.all_products_count
   assign count_noun = 'fragrances'
-  if collection.all_products_count == 1
+  if count == 1
     assign count_noun = 'fragrance'
   endif
 -%}
-<section class="sec sec--tight colhead{% if banner != blank %} colhead--banner{% endif %}">
+<section class="colhead{% if banner != blank %} colhead--split{% endif %}" data-reveal>
   <div class="wrap">
-    {%- if banner != blank -%}
-      <div class="colhead__banner">
-        <img
-          src="{{ banner | image_url: width: 2000 }}"
-          srcset="{{ banner | image_url: width: 800 }} 800w, {{ banner | image_url: width: 1400 }} 1400w, {{ banner | image_url: width: 2000 }} 2000w"
-          sizes="(max-width:1240px) 100vw, 1240px"
-          alt="{{ banner.alt | default: collection.title | escape }}"
-          width="{{ banner.width | default: 2000 }}"
-          height="{{ banner.height | default: 900 }}"
-          loading="lazy">
-        <div class="colhead__over">
-          {%- if s.show_eyebrow -%}<span class="eyebrow colhead__eyebrow">{{ eyebrow }}</span>{%- endif -%}
-          <h1 class="serif colhead__title">{{ collection.title | default: 'All fragrances' }}</h1>
-          {%- if s.show_count -%}
-            <span class="colhead__count">{{ collection.all_products_count }} {{ count_noun }}</span>
-          {%- endif -%}
-        </div>
-      </div>
-      {%- if s.show_description and collection.description != blank -%}
-        <div class="rte colhead__desc colhead__desc--under">{{ collection.description }}</div>
+    <div class="colhead__inner">
+      {%- if arabic != blank -%}
+        <span class="colhead__wm" aria-hidden="true">{{ arabic }}</span>
       {%- endif -%}
-    {%- else -%}
-      <div class="colhead__plain">
-        {%- if s.show_eyebrow -%}<span class="eyebrow">{{ eyebrow }}</span>{%- endif -%}
-        <h1 class="serif colhead__title">{{ collection.title | default: 'All fragrances' }}</h1>
-        {%- if s.show_description and collection.description != blank -%}
-          <div class="rte colhead__desc">{{ collection.description }}</div>
+
+      <div class="colhead__type">
+        {%- if s.show_eyebrow and eyebrow != blank -%}
+          <span class="eyebrow colhead__eyebrow">{{ eyebrow }}</span>
         {%- endif -%}
-        {%- if s.show_count -%}
-          <span class="colhead__count">{{ collection.all_products_count }} {{ count_noun }}</span>
+
+        <h1 class="serif colhead__title">{{ collection.title | default: 'All fragrances' }}</h1>
+
+        {%- if note != blank -%}
+          <div class="colhead__note">{{ note }}</div>
+        {%- elsif s.show_description and collection.description != blank -%}
+          <div class="rte colhead__note colhead__note--rte">{{ collection.description }}</div>
+        {%- endif -%}
+
+        {%- if usps != blank and usps.size > 0 -%}
+          <ul class="colhead__usps">
+            {%- for usp in usps -%}
+              <li class="colhead__usp">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                {{ usp }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if s.show_ladder -%}
+          <div class="colhead__ladder">
+            {%- if s.show_count -%}
+              <span class="colhead__rung"><b>{{ count }}</b> {{ count_noun }}</span>
+            {%- endif -%}
+            {%- if s.ladder != blank -%}
+              <span class="colhead__rung colhead__rung--soft">{{ s.ladder }}</span>
+            {%- endif -%}
+          </div>
         {%- endif -%}
       </div>
-    {%- endif -%}
+
+      {%- if banner != blank -%}
+        <div class="colhead__plate">
+          <img
+            src="{{ banner | image_url: width: 1100 }}"
+            srcset="{{ banner | image_url: width: 600 }} 600w, {{ banner | image_url: width: 900 }} 900w, {{ banner | image_url: width: 1100 }} 1100w"
+            sizes="(max-width:860px) 100vw, 420px"
+            alt="{{ banner.alt | default: collection.title | escape }}"
+            width="{{ banner.width | default: 1100 }}"
+            height="{{ banner.height | default: 1375 }}"
+            loading="lazy">
+        </div>
+      {%- endif -%}
+    </div>
   </div>
 </section>
 
@@ -63,12 +96,34 @@
   "name": "Collection header",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The collection" },
+    { "type": "paragraph", "content": "Per-collection eyebrow, shelf note and Arabic watermark can be set on each collection via metafields (sorella.eyebrow, sorella.shelf_note, sorella.arabic). The values below are the fallback used when a collection has none." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (fallback)", "default": "The collection" },
     { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": true },
-    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    {
+      "type": "inline_richtext",
+      "id": "shelf_note",
+      "label": "Shelf note (fallback)",
+      "info": "One sisterly line. Italicise the heart word.",
+      "default": "Scents that smell like home — composed in <em>three acts</em>, made fresh in Egypt to last for days."
+    },
+    { "type": "checkbox", "id": "show_description", "label": "Fall back to collection description", "default": true },
+    {
+      "type": "text",
+      "id": "arabic_watermark",
+      "label": "Arabic watermark (fallback)",
+      "info": "Large faint Arabic word behind the title, e.g. بسبوسه or ذهب. Leave blank for a clean masthead."
+    },
+    { "type": "header", "content": "Ladder rule" },
+    { "type": "checkbox", "id": "show_ladder", "label": "Show ladder rule", "default": true },
     { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
-    { "type": "header", "content": "Banner" },
-    { "type": "image_picker", "id": "banner_image", "label": "Banner image", "info": "Overrides the collection image." },
+    {
+      "type": "text",
+      "id": "ladder",
+      "label": "Ladder line",
+      "default": "Testers from LE 85 · Free 5ml over LE 1,100"
+    },
+    { "type": "header", "content": "Optional image plate" },
+    { "type": "image_picker", "id": "banner_image", "label": "Image", "info": "Sits beside the type as a portrait plate. Overrides the collection image." },
     { "type": "checkbox", "id": "use_collection_image", "label": "Fall back to collection image", "default": true }
   ],
   "presets": [{ "name": "Collection header" }]

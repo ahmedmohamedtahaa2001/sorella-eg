@@ -1,0 +1,481 @@
+{%- comment -%}
+  Sorella — Shoppable Showcase
+  ONE reusable bento section for THREE contexts: homepage collection showcase,
+  bundle spotlight, and standalone collection/category pages.
+
+  Composition model:
+    • source = "blocks"     → each block is a bento cell (featured / product / bundle / story)
+    • source = "collection" → auto-fills product cells from a collection; story block injected
+  Cards render via snippets/ssw-card.liquid (DRY across both paths; keeps RTL/a11y in one place).
+
+  Palette: no hardcoded colours in markup — every colour is a schema setting; glass fills are
+  derived with Shopify's `color_modify` so they follow the merchant's chosen palette. Accent
+  defaults to the theme's monochrome ink and can be set to any colour in the customizer.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign mode = s.source | default: 'blocks'
+  assign galpha = s.glass_opacity | divided_by: 100.0
+
+  # shared, merchant-editable copy passed to every card (zero hardcoded strings)
+  assign atc_label = s.atc_label
+  assign view_label = s.view_label
+  assign sold_label = s.label_soldout
+  assign size_label = s.size_label
+  assign save_label = s.save_label
+  assign tester_label = s.tester_label
+  assign l_best = s.label_bestseller
+  assign l_new = s.label_new
+  assign l_sale = s.label_sale
+
+  assign story_block = section.blocks | where: 'type', 'story' | first
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .ssw{
+    --ss-accent: {{ s.accent_color }};
+    --ss-accent-text: {{ s.accent_text_color }};
+    --ss-on-accent: {{ s.accent_on_color }};
+    --ss-text: {{ s.text_color }};
+    --ss-muted: {{ s.text_color | color_modify: 'alpha', 0.58 }};
+    --ss-ground: {{ s.bg_color }};
+    --ss-glass: {{ s.glass_color | color_modify: 'alpha', galpha }};
+    --ss-glass-solid: {{ s.glass_color }};
+    --ss-line: {{ s.text_color | color_modify: 'alpha', 0.12 }};
+    --ss-line-2: {{ s.text_color | color_modify: 'alpha', 0.24 }};
+    --ss-wash: {{ s.accent_color | color_modify: 'alpha', 0.16 }};
+    --ss-scrim: {{ s.text_color | color_modify: 'alpha', 0.55 }};
+    --ss-blur: {{ s.glass_blur }}px;
+    --ss-gap: {{ s.item_gap }}px;
+    --ss-maxw: {{ s.section_max_width }}px;
+    --ss-pt: {{ s.padding_top }}px;
+    --ss-pb: {{ s.padding_bottom }}px;
+    --ss-px: {{ s.padding_horizontal }}px;
+    --ss-radius: {{ s.corner_radius }}px;
+  }
+  @media (max-width: 749px){
+    #shopify-section-{{ section.id }} .ssw{ --ss-pt: {{ s.mobile_padding_top }}px; --ss-pb: {{ s.mobile_padding_bottom }}px; --ss-px: {{ s.mobile_padding_horizontal }}px; }
+  }
+
+  /* ---- shell ---- */
+  #shopify-section-{{ section.id }} .ssw{ background: var(--ss-ground); color: var(--ss-text); padding: var(--ss-pt) var(--ss-px) var(--ss-pb); }
+  #shopify-section-{{ section.id }} .ssw__wrap{ max-width: var(--ss-maxw); margin-inline: auto; }
+  #shopify-section-{{ section.id }} .ssw__head{ display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px); }
+  #shopify-section-{{ section.id }} .ssw__heading{ font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 52px); line-height: 1.02; letter-spacing: -.02em; max-width: 20ch; }
+  #shopify-section-{{ section.id }} .ssw__heading em, #shopify-section-{{ section.id }} .ssw__heading i{ font-style: italic; color: var(--ss-accent-text); }
+  #shopify-section-{{ section.id }} .ssw__sub{ margin-top: 12px; color: var(--ss-muted); font-size: clamp(14px, 1.4vw, 17px); line-height: 1.55; max-width: 46ch; }
+  #shopify-section-{{ section.id }} .ssw__viewall{ display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ss-accent-text); border-bottom: 1px solid currentColor; padding-bottom: 3px; white-space: nowrap; transition: gap .25s var(--ease, ease); }
+  #shopify-section-{{ section.id }} .ssw__viewall:hover{ gap: 13px; }
+
+  /* ---- bento grid ---- */
+  #shopify-section-{{ section.id }} .ssw__bento{ display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; grid-auto-flow: dense; gap: var(--ss-gap); }
+  #shopify-section-{{ section.id }} .ssw-card--feature{ grid-column: span 2; grid-row: span 2; }
+  #shopify-section-{{ section.id }} .ssw__story{ grid-column: span 2; }
+
+  /* ---- card (glass) ---- */
+  #shopify-section-{{ section.id }} .ssw-card{ position: relative; display: flex; flex-direction: column; height: 100%; background: var(--ss-glass); -webkit-backdrop-filter: blur(var(--ss-blur)); backdrop-filter: blur(var(--ss-blur)); border: 1px solid var(--ss-line); border-radius: var(--ss-radius); overflow: hidden; transition: transform .4s var(--ease, cubic-bezier(.16,1,.3,1)), box-shadow .4s; }
+  #shopify-section-{{ section.id }} .ssw-card:hover{ transform: translateY(-5px); box-shadow: 0 18px 50px var(--ss-scrim); }
+  #shopify-section-{{ section.id }} .ssw-card__media{ position: relative; aspect-ratio: 4/5; overflow: hidden; }
+  #shopify-section-{{ section.id }} .ssw-card--feature .ssw-card__media{ flex: 1 1 auto; aspect-ratio: auto; }
+  #shopify-section-{{ section.id }} .ssw-card__link{ display: block; height: 100%; }
+  #shopify-section-{{ section.id }} .ssw-card__img{ width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease, ease), opacity .4s; }
+  #shopify-section-{{ section.id }} .ssw-card:hover .ssw-card__img{ transform: scale(1.04); }
+  #shopify-section-{{ section.id }} .ssw-card__img--empty{ background: linear-gradient(150deg, var(--ss-wash), var(--ss-glass)); }
+  #shopify-section-{{ section.id }} .ssw-card__img--hover{ position: absolute; inset: 0; opacity: 0; }
+  #shopify-section-{{ section.id }} .ssw-card:hover .ssw-card__img--hover{ opacity: 1; }
+
+  #shopify-section-{{ section.id }} .ssw-card__badge{ position: absolute; inset-block-start: 12px; inset-inline-start: 12px; z-index: 2; padding: 6px 11px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--ss-accent); color: var(--ss-on-accent); }
+  #shopify-section-{{ section.id }} .ssw-card__badge--out{ background: var(--ss-text); color: var(--ss-ground); }
+  #shopify-section-{{ section.id }} .ssw-card__badge--new{ background: var(--ss-glass-solid); color: var(--ss-text); border: 1px solid var(--ss-line-2); }
+  #shopify-section-{{ section.id }} .ssw-card__hook{ position: absolute; inset-block-end: 12px; inset-inline-start: 12px; inset-inline-end: 12px; z-index: 2; padding: 8px 13px; border-radius: 999px; background: color-mix(in srgb, var(--ss-glass-solid) 82%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid var(--ss-line); font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--ss-text); }
+
+  #shopify-section-{{ section.id }} .ssw-card__stack{ position: absolute; inset-block-end: 12px; inset-inline-end: 12px; z-index: 2; display: flex; }
+  #shopify-section-{{ section.id }} .ssw-card__chip{ width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 2px solid var(--ss-glass-solid); margin-inline-start: -12px; box-shadow: 0 2px 8px var(--ss-scrim); }
+  #shopify-section-{{ section.id }} .ssw-card__chip:first-child{ margin-inline-start: 0; }
+  #shopify-section-{{ section.id }} .ssw-card__chip img{ width: 100%; height: 100%; object-fit: cover; }
+
+  #shopify-section-{{ section.id }} .ssw-card__body{ display: flex; flex-direction: column; gap: 8px; padding: 16px 16px 18px; }
+  #shopify-section-{{ section.id }} .ssw-card--feature .ssw-card__body{ gap: 10px; padding: clamp(18px, 2vw, 26px); }
+  #shopify-section-{{ section.id }} .ssw-card__rating{ display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ss-muted); }
+  #shopify-section-{{ section.id }} .ssw-card__stars{ color: var(--ss-accent); letter-spacing: 1px; font-size: 12px; }
+  #shopify-section-{{ section.id }} .ssw-card__rcount{ color: var(--ss-muted); }
+  #shopify-section-{{ section.id }} .ssw-card__name{ font-family: var(--font-display); font-weight: 400; font-size: 19px; line-height: 1.14; }
+  #shopify-section-{{ section.id }} .ssw-card--feature .ssw-card__name{ font-size: clamp(24px, 2.4vw, 34px); }
+  #shopify-section-{{ section.id }} .ssw-card__name a{ color: inherit; }
+  #shopify-section-{{ section.id }} .ssw-card__pricerow{ display: flex; align-items: baseline; gap: 10px; margin-top: 2px; }
+  #shopify-section-{{ section.id }} .ssw-card__price{ font-weight: 600; font-variant-numeric: tabular-nums; }
+  #shopify-section-{{ section.id }} .ssw-card__price s{ color: var(--ss-muted); font-weight: 400; margin-inline-end: 6px; }
+  #shopify-section-{{ section.id }} .ssw-card__save{ font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ss-on-accent); background: var(--ss-accent); padding: 3px 8px; border-radius: 999px; }
+
+  #shopify-section-{{ section.id }} .ssw-card__form{ display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  #shopify-section-{{ section.id }} .ssw-card__size{ position: relative; display: block; }
+  #shopify-section-{{ section.id }} .ssw-card__size select{ width: 100%; appearance: none; -webkit-appearance: none; min-height: 42px; padding-inline: 14px 36px; border: 1px solid var(--ss-line-2); border-radius: 10px; background: var(--ss-glass-solid); color: var(--ss-text); font: inherit; font-size: 13px; cursor: pointer; }
+  #shopify-section-{{ section.id }} .ssw-card__chev{ position: absolute; inset-inline-end: 12px; inset-block-start: 50%; transform: translateY(-50%); width: 15px; height: 15px; pointer-events: none; color: var(--ss-muted); }
+  #shopify-section-{{ section.id }} .ssw-btn{ display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 18px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .02em; cursor: pointer; transition: transform .2s, filter .2s, background .2s; }
+  #shopify-section-{{ section.id }} .ssw-btn--add{ background: var(--ss-accent); color: var(--ss-on-accent); border: 1px solid var(--ss-accent); }
+  #shopify-section-{{ section.id }} .ssw-btn--add:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+  #shopify-section-{{ section.id }} .ssw-btn--add.is-added{ background: var(--ss-text); border-color: var(--ss-text); color: var(--ss-ground); }
+  #shopify-section-{{ section.id }} .ssw-btn--ghost{ background: transparent; color: var(--ss-text); border: 1px solid var(--ss-line-2); }
+  #shopify-section-{{ section.id }} .ssw-btn--ghost:hover{ border-color: var(--ss-accent); }
+  #shopify-section-{{ section.id }} .ssw-btn--out{ background: transparent; color: var(--ss-muted); border: 1px dashed var(--ss-line-2); cursor: not-allowed; }
+  #shopify-section-{{ section.id }} .ssw-card__tester{ display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--ss-accent-text); }
+  #shopify-section-{{ section.id }} .ssw-card__tester svg{ width: 15px; height: 15px; }
+  #shopify-section-{{ section.id }} .ssw-card__tester:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---- story card ---- */
+  #shopify-section-{{ section.id }} .ssw__story{ display: flex; align-items: center; justify-content: center; text-align: center; padding: clamp(28px, 4vw, 48px); border-radius: var(--ss-radius); background: linear-gradient(150deg, var(--ss-wash), var(--ss-glass)); -webkit-backdrop-filter: blur(var(--ss-blur)); backdrop-filter: blur(var(--ss-blur)); border: 1px solid var(--ss-line); }
+  #shopify-section-{{ section.id }} .ssw__story-lines{ position: relative; }
+  #shopify-section-{{ section.id }} .ssw__story-line{ font-family: var(--font-display); font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -.01em; opacity: 0; position: absolute; inset-inline: 0; inset-block-start: 0; transition: opacity .6s var(--ease, ease); }
+  #shopify-section-{{ section.id }} .ssw__story-line.is-on{ opacity: 1; position: relative; }
+  #shopify-section-{{ section.id }} .ssw__story-line em, #shopify-section-{{ section.id }} .ssw__story-line i{ font-style: italic; color: var(--ss-accent-text); }
+  #shopify-section-{{ section.id }} .ssw__story-link{ display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ss-accent-text); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+
+  /* ---- responsive bento collapse ---- */
+  @media (max-width: 1023px){
+    #shopify-section-{{ section.id }} .ssw__bento{ grid-template-columns: repeat(2, 1fr); }
+    #shopify-section-{{ section.id }} .ssw-card--feature{ grid-column: span 2; grid-row: span 2; }
+    #shopify-section-{{ section.id }} .ssw__story{ grid-column: span 2; }
+  }
+  @media (max-width: 639px){
+    #shopify-section-{{ section.id }} .ssw-card--feature{ grid-column: 1 / -1; grid-row: auto; }
+    #shopify-section-{{ section.id }} .ssw-card--feature .ssw-card__media{ aspect-ratio: 4/5; }
+    #shopify-section-{{ section.id }} .ssw__story{ grid-column: 1 / -1; }
+  }
+  @media (max-width: 419px){
+    #shopify-section-{{ section.id }} .ssw__bento{ grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #shopify-section-{{ section.id }} .ssw-card, #shopify-section-{{ section.id }} .ssw-card__img, #shopify-section-{{ section.id }} .ssw__story-line{ transition: none; }
+  }
+{%- endstyle -%}
+
+<section class="ssw ssw--{{ s.color_scheme }}" data-ssw-root>
+  <div class="ssw__wrap">
+    {%- if s.heading != blank or s.view_all_url != blank -%}
+      <header class="ssw__head">
+        <div>
+          {%- if s.heading != blank -%}<h2 class="ssw__heading">{{ s.heading }}</h2>{%- endif -%}
+          {%- if s.subheading != blank -%}<div class="ssw__sub">{{ s.subheading }}</div>{%- endif -%}
+        </div>
+        {%- if s.view_all_url != blank and s.view_all_label != blank -%}
+          <a class="ssw__viewall" href="{{ s.view_all_url }}">{{ s.view_all_label }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="ssw__bento">
+      {%- if mode == 'collection' and s.collection != blank -%}
+        {%- for product in s.collection.products limit: s.max_items -%}
+          {%- liquid
+            assign csize = 'std'
+            if s.feature_first and forloop.first
+              assign csize = 'feature'
+            endif
+            assign chook = product.metafields.sorella.tagline.value
+            assign ctester = product.metafields.sorella.tester_url.value
+            assign chover = product.images[1]
+            assign cbundle = false
+            if product.type == 'Bundle' or product.tags contains 'bundle'
+              assign cbundle = true
+            endif
+          -%}
+          {%- render 'ssw-card',
+            product: product, size: csize, is_bundle: cbundle,
+            hook: chook, badge: 'auto', hover_image: chover,
+            tester_url: ctester, tester_label: tester_label,
+            show_rating: s.show_rating, show_atc: s.enable_atc, size_selector: s.enable_size_selector,
+            atc_label: atc_label, view_label: view_label, sold_label: sold_label, size_label: size_label,
+            save_label: save_label, label_bestseller: l_best, label_new: l_new, label_soldout: sold_label, label_sale: l_sale
+          -%}
+
+          {%- if s.show_story and story_block != blank and forloop.index == s.story_position and forloop.last == false -%}
+            <div class="ssw__story" {{ story_block.shopify_attributes }}>
+              <div class="ssw__story-inner">
+                <div class="ssw__story-lines" data-ssw-story>
+                  {%- if story_block.settings.line_1 != blank -%}<p class="ssw__story-line is-on">{{ story_block.settings.line_1 }}</p>{%- endif -%}
+                  {%- if story_block.settings.line_2 != blank -%}<p class="ssw__story-line">{{ story_block.settings.line_2 }}</p>{%- endif -%}
+                  {%- if story_block.settings.line_3 != blank -%}<p class="ssw__story-line">{{ story_block.settings.line_3 }}</p>{%- endif -%}
+                </div>
+                {%- if story_block.settings.link_url != blank and story_block.settings.link_label != blank -%}
+                  <a class="ssw__story-link" href="{{ story_block.settings.link_url }}">{{ story_block.settings.link_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'featured', 'product' -%}
+              {%- liquid
+                assign p = block.settings.product
+                assign bsize = 'std'
+                if block.type == 'featured'
+                  assign bsize = 'feature'
+                endif
+                assign bhook = block.settings.hook
+                if bhook == blank
+                  assign bhook = p.metafields.sorella.tagline.value
+                endif
+                assign bhover = block.settings.hover_image
+                if bhover == blank
+                  assign bhover = p.images[1]
+                endif
+              -%}
+              {%- if p != blank -%}
+                {%- render 'ssw-card',
+                  product: p, size: bsize, is_bundle: false,
+                  hook: bhook, badge: block.settings.badge, hover_image: bhover,
+                  tester_url: block.settings.tester_url, tester_label: tester_label,
+                  show_rating: s.show_rating, show_atc: s.enable_atc, size_selector: s.enable_size_selector,
+                  atc_label: atc_label, view_label: view_label, sold_label: sold_label, size_label: size_label,
+                  save_label: save_label, label_bestseller: l_best, label_new: l_new, label_soldout: sold_label, label_sale: l_sale,
+                  block_attrs: block.shopify_attributes
+                -%}
+              {%- endif -%}
+
+            {%- when 'bundle' -%}
+              {%- if block.settings.product != blank -%}
+                {%- render 'ssw-card',
+                  product: block.settings.product, size: 'std', is_bundle: true,
+                  comp1: block.settings.comp_1, comp2: block.settings.comp_2, comp3: block.settings.comp_3,
+                  hook: block.settings.hook, badge: block.settings.badge, hover_image: block.settings.hover_image,
+                  tester_url: block.settings.tester_url, tester_label: tester_label,
+                  show_rating: s.show_rating, show_atc: s.enable_atc, size_selector: s.enable_size_selector,
+                  atc_label: atc_label, view_label: view_label, sold_label: sold_label, size_label: size_label,
+                  save_label: save_label, label_bestseller: l_best, label_new: l_new, label_soldout: sold_label, label_sale: l_sale,
+                  block_attrs: block.shopify_attributes
+                -%}
+              {%- endif -%}
+
+            {%- when 'story' -%}
+              <div class="ssw__story" {{ block.shopify_attributes }}>
+                <div class="ssw__story-inner">
+                  <div class="ssw__story-lines" data-ssw-story>
+                    {%- if block.settings.line_1 != blank -%}<p class="ssw__story-line is-on">{{ block.settings.line_1 }}</p>{%- endif -%}
+                    {%- if block.settings.line_2 != blank -%}<p class="ssw__story-line">{{ block.settings.line_2 }}</p>{%- endif -%}
+                    {%- if block.settings.line_3 != blank -%}<p class="ssw__story-line">{{ block.settings.line_3 }}</p>{%- endif -%}
+                  </div>
+                  {%- if block.settings.link_url != blank and block.settings.link_label != blank -%}
+                    <a class="ssw__story-link" href="{{ block.settings.link_url }}">{{ block.settings.link_label }}</a>
+                  {%- endif -%}
+                </div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.querySelector('#shopify-section-{{ section.id }} [data-ssw-root]') || document.getElementById('shopify-section-{{ section.id }}');
+    if (!root || root.dataset.sswInit) return;
+    root.dataset.sswInit = '1';
+
+    // variant <select> → price sync (single source of truth = the select's own value)
+    root.querySelectorAll('[data-ssw-select]').forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        var opt = sel.options[sel.selectedIndex];
+        var price = opt && opt.getAttribute('data-price');
+        var priceEl = sel.closest('[data-ssw-card]').querySelector('[data-ssw-price]');
+        if (price && priceEl) priceEl.textContent = price;
+      });
+    });
+
+    // progressive-enhancement AJAX add-to-cart (form still works without JS)
+    root.querySelectorAll('[data-ssw-form]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        if (!window.fetch) return; // graceful: native POST
+        e.preventDefault();
+        var btn = form.querySelector('[data-ssw-add]');
+        var original = btn ? btn.textContent : '';
+        if (btn) btn.disabled = true;
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        }).then(function (r) { return r.json(); }).then(function () {
+          if (btn) { btn.classList.add('is-added'); btn.textContent = {{ s.added_label | json }}; }
+          document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+          document.dispatchEvent(new CustomEvent('ssw:added', { bubbles: true }));
+          return fetch('{{ routes.cart_url }}.js', { headers: { 'Accept': 'application/json' } });
+        }).then(function (r) { return r ? r.json() : null; }).then(function (cart) {
+          if (cart) document.querySelectorAll('[data-cart-count]').forEach(function (el) { el.textContent = cart.item_count; });
+        }).catch(function () {
+          form.submit(); // fall back to native add on any error
+        }).finally(function () {
+          if (btn) setTimeout(function () { btn.disabled = false; btn.classList.remove('is-added'); btn.textContent = original; }, 2200);
+        });
+      });
+    });
+
+    // story card line rotation (respects reduced motion)
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.querySelectorAll('[data-ssw-story]').forEach(function (wrap) {
+        var lines = wrap.querySelectorAll('.ssw__story-line');
+        if (lines.length < 2) return;
+        var i = 0;
+        setInterval(function () {
+          lines[i].classList.remove('is-on');
+          i = (i + 1) % lines.length;
+          lines[i].classList.add('is-on');
+        }, 4200);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shoppable showcase",
+  "tag": "section",
+  "class": "shoppable-showcase-section",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "info": "Italicise one word for the gold accent.", "default": "Sisterhood, <em>bottled</em>" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading", "default": "<p>Egyptian scents with world-class staying power — at prices that don’t gatekeep.</p>" },
+    { "type": "text", "id": "view_all_label", "label": "View-all label", "default": "View all" },
+    { "type": "url", "id": "view_all_url", "label": "View-all link" },
+
+    { "type": "header", "content": "Source" },
+    {
+      "type": "select", "id": "source", "label": "Fill from", "default": "blocks",
+      "options": [
+        { "value": "blocks", "label": "Curated cells (blocks below)" },
+        { "value": "collection", "label": "A collection (auto-fill)" }
+      ]
+    },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Used when ‘Fill from’ is a collection." },
+    { "type": "range", "id": "max_items", "label": "Max products", "min": 4, "max": 24, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "feature_first", "label": "Make the first product the large feature card", "default": true },
+
+    { "type": "header", "content": "Story card" },
+    { "type": "checkbox", "id": "show_story", "label": "Show the story card", "default": true },
+    { "type": "range", "id": "story_position", "label": "Insert after N products (collection mode)", "min": 2, "max": 12, "step": 1, "default": 5 },
+
+    { "type": "header", "content": "Shopping" },
+    { "type": "checkbox", "id": "enable_atc", "label": "Add to cart on the card", "default": true, "info": "Off = cards link through to the product page." },
+    { "type": "checkbox", "id": "enable_size_selector", "label": "Show size selector on multi-size cards", "default": true },
+    { "type": "checkbox", "id": "show_rating", "label": "Show star rating (hidden at 0 reviews)", "default": true },
+    { "type": "text", "id": "atc_label", "label": "Add-to-cart label", "default": "Add to bag" },
+    { "type": "text", "id": "added_label", "label": "Added confirmation label", "default": "Added ✓" },
+    { "type": "text", "id": "view_label", "label": "Click-through label", "default": "View" },
+    { "type": "text", "id": "size_label", "label": "Size selector label", "default": "Choose size" },
+    { "type": "text", "id": "tester_label", "label": "Tester CTA label", "default": "Try it first — LE 85" },
+
+    { "type": "header", "content": "Badges" },
+    { "type": "text", "id": "label_bestseller", "label": "Bestseller badge", "default": "Bestseller" },
+    { "type": "text", "id": "label_new", "label": "New badge", "default": "New" },
+    { "type": "text", "id": "label_soldout", "label": "Sold-out badge", "default": "Sold out" },
+    { "type": "text", "id": "label_sale", "label": "Sale badge", "default": "Sale" },
+    { "type": "text", "id": "save_label", "label": "Savings badge ([pct] = percent)", "default": "Save [pct]%" },
+
+    { "type": "header", "content": "Appearance" },
+    {
+      "type": "select", "id": "color_scheme", "label": "Mood", "default": "light",
+      "options": [ { "value": "light", "label": "Light (parchment glass)" }, { "value": "dark", "label": "Dark (ink glass)" } ]
+    },
+    { "type": "color", "id": "bg_color", "label": "Background (ground)", "default": "#F2EEE7" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171310" },
+    { "type": "color", "id": "glass_color", "label": "Glass base", "default": "#FFFFFF" },
+    { "type": "range", "id": "glass_opacity", "label": "Glass opacity", "min": 4, "max": 95, "step": 1, "unit": "%", "default": 62 },
+    { "type": "range", "id": "glass_blur", "label": "Glass blur", "min": 0, "max": 30, "step": 1, "unit": "px", "default": 14 },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#171310" },
+    { "type": "color", "id": "accent_text_color", "label": "Accent — text on light (contrast-safe)", "default": "#171310" },
+    { "type": "color", "id": "accent_on_color", "label": "Text on accent buttons", "default": "#FFFFFF" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 32, "step": 1, "unit": "px", "default": 20 },
+
+    { "type": "header", "content": "Layout & Spacing" },
+    { "type": "range", "id": "section_max_width", "label": "Max width", "min": 800, "max": 1920, "step": 40, "unit": "px", "default": 1280 },
+    { "type": "range", "id": "item_gap", "label": "Gap between cells", "min": 8, "max": 48, "step": 2, "unit": "px", "default": 18 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_horizontal", "label": "Padding sides", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 32 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Padding top (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 44 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Padding bottom (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 44 },
+    { "type": "range", "id": "mobile_padding_horizontal", "label": "Padding sides (mobile)", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 16 }
+  ],
+  "blocks": [
+    {
+      "type": "featured", "name": "Featured product (2×2)", "limit": 2,
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "hook", "label": "Why-it-works hook", "info": "Small glass pill, e.g. ‘Made fresh in Egypt · lasts for days’." },
+        { "type": "image_picker", "id": "hover_image", "label": "Hover-swap image" },
+        {
+          "type": "select", "id": "badge", "label": "Badge", "default": "auto",
+          "options": [
+            { "value": "auto", "label": "Automatic" }, { "value": "bestseller", "label": "Bestseller" },
+            { "value": "new", "label": "New" }, { "value": "soldout", "label": "Sold out" }, { "value": "none", "label": "None" }
+          ]
+        },
+        { "type": "url", "id": "tester_url", "label": "Tester link (LE 85)", "info": "Shows the ‘Try it first’ CTA on full-size EDPs." }
+      ]
+    },
+    {
+      "type": "product", "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "hook", "label": "Why-it-works hook" },
+        { "type": "image_picker", "id": "hover_image", "label": "Hover-swap image" },
+        {
+          "type": "select", "id": "badge", "label": "Badge", "default": "auto",
+          "options": [
+            { "value": "auto", "label": "Automatic" }, { "value": "bestseller", "label": "Bestseller" },
+            { "value": "new", "label": "New" }, { "value": "soldout", "label": "Sold out" }, { "value": "none", "label": "None" }
+          ]
+        },
+        { "type": "url", "id": "tester_url", "label": "Tester link (LE 85)" }
+      ]
+    },
+    {
+      "type": "bundle", "name": "Bundle (wardrobe)",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Bundle product" },
+        { "type": "paragraph", "content": "Component thumbnails (the ‘wardrobe’ scents inside)." },
+        { "type": "product", "id": "comp_1", "label": "Component 1" },
+        { "type": "product", "id": "comp_2", "label": "Component 2" },
+        { "type": "product", "id": "comp_3", "label": "Component 3" },
+        { "type": "text", "id": "hook", "label": "Why-it-works hook", "default": "Wear them solo, or layer them together" },
+        { "type": "image_picker", "id": "hover_image", "label": "Hover-swap image" },
+        {
+          "type": "select", "id": "badge", "label": "Badge", "default": "auto",
+          "options": [
+            { "value": "auto", "label": "Automatic" }, { "value": "bestseller", "label": "Bestseller" },
+            { "value": "new", "label": "New" }, { "value": "none", "label": "None" }
+          ]
+        },
+        { "type": "url", "id": "tester_url", "label": "Tester link (LE 85)" }
+      ]
+    },
+    {
+      "type": "story", "name": "Story panel", "limit": 3,
+      "settings": [
+        { "type": "paragraph", "content": "A brand line, not a product. Multiple lines cross-fade. Italicise a word for the gold accent." },
+        { "type": "inline_richtext", "id": "line_1", "label": "Line 1", "default": "From our <em>bond</em> to your senses" },
+        { "type": "inline_richtext", "id": "line_2", "label": "Line 2", "default": "Composed in <em>three acts</em>" },
+        { "type": "inline_richtext", "id": "line_3", "label": "Line 3", "default": "Made fresh in Egypt, the <em>عطّار</em> way" },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "Our story" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shoppable showcase",
+      "blocks": [
+        { "type": "featured" }, { "type": "product" }, { "type": "product" },
+        { "type": "bundle" }, { "type": "story" }, { "type": "product" },
+        { "type": "product" }, { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

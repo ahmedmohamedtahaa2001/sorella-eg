@@ -1,0 +1,164 @@
+{%- comment -%}
+  Sorella — Shoppable Showcase card (used by sections/shoppable-showcase.liquid)
+  Factored into a snippet so the SAME card renders from both the manual-blocks
+  path and the collection-fill path (DRY + one place for RTL / a11y / merch logic).
+
+  Params:
+    product        (object, required)
+    size           'feature' | 'std'            — bento footprint
+    is_bundle      (bool)                        — wardrobe framing + component thumbs
+    comp1 comp2 comp3 (product objects, optional)— bundle component thumbnails
+    hook           (string, optional)           — glass "why it works" pill
+    badge          'auto'|'bestseller'|'new'|'soldout'|'none'
+    label_bestseller label_new label_soldout label_sale (strings) — badge copy
+    show_rating    (bool)
+    show_atc       (bool)                        — on-card add to cart vs click-through
+    size_selector  (bool)                        — variant <select> when >1 variant
+    atc_label view_label sold_label (strings)
+    tester_url     (string, optional)            — full-size EDP → matching tester
+    tester_label   (string)
+    hover_image    (image, optional)             — hover-swap secondary image
+    block_attrs    (string)                      — {{ block.shopify_attributes }}
+  ── Merchandising logic (badges, compare-at, save %) lives in this block ↓ ──
+{%- endcomment -%}
+{%- liquid
+  assign size = size | default: 'std'
+  assign vid = product.selected_or_first_available_variant.id
+  assign avail = product.available
+  assign multi = false
+  if product.variants.size > 1
+    assign multi = true
+  endif
+
+  # compare-at anchoring + SAVE %
+  assign on_sale = false
+  assign save_pct = 0
+  if product.compare_at_price != blank and product.compare_at_price > product.price
+    assign on_sale = true
+    assign diff = product.compare_at_price | minus: product.price | times: 100.0
+    assign save_pct = diff | divided_by: product.compare_at_price | round
+  endif
+
+  # rating — hide gracefully at 0 reviews
+  assign rating = product.metafields.sorella.rating.value
+  assign rcount = product.metafields.sorella.review_count.value
+  assign has_rating = false
+  if show_rating and rcount != blank and rcount > 0
+    assign has_rating = true
+  endif
+
+  # badge resolution (merchant override → auto)
+  assign badge_text = ''
+  assign badge_kind = ''
+  if badge == 'bestseller'
+    assign badge_text = label_bestseller
+    assign badge_kind = 'best'
+  elsif badge == 'new'
+    assign badge_text = label_new
+    assign badge_kind = 'new'
+  elsif badge == 'soldout' or avail == false
+    assign badge_text = label_soldout
+    assign badge_kind = 'out'
+  elsif badge == 'auto'
+    if avail == false
+      assign badge_text = label_soldout
+      assign badge_kind = 'out'
+    elsif on_sale
+      assign badge_text = label_sale
+      assign badge_kind = 'sale'
+    elsif product.tags contains 'new' or product.tags contains 'New'
+      assign badge_text = label_new
+      assign badge_kind = 'new'
+    endif
+  endif
+
+  assign img = product.featured_image
+  assign iw = 720
+  if size == 'feature'
+    assign iw = 1200
+  endif
+-%}
+<article class="ssw-card ssw-card--{{ size }}{% if is_bundle %} ssw-card--bundle{% endif %}{% unless avail %} is-soldout{% endunless %}" {{ block_attrs }} data-ssw-card>
+  <div class="ssw-card__media">
+    <a class="ssw-card__link" href="{{ product.url }}">
+      {%- if img -%}
+        <img class="ssw-card__img" src="{{ img | image_url: width: iw }}" alt="{{ img.alt | default: product.title | escape }}" width="{{ iw }}" height="{{ iw | divided_by: img.aspect_ratio | round }}" loading="lazy">
+      {%- else -%}
+        <span class="ssw-card__img ssw-card__img--empty" aria-hidden="true"></span>
+      {%- endif -%}
+      {%- if hover_image != blank -%}
+        <img class="ssw-card__img ssw-card__img--hover" src="{{ hover_image | image_url: width: iw }}" alt="" width="{{ iw }}" height="{{ iw | divided_by: hover_image.aspect_ratio | round }}" loading="lazy" aria-hidden="true">
+      {%- endif -%}
+      <span class="ssw-card__linktext visually-hidden">{{ product.title | escape }}</span>
+    </a>
+
+    {%- if badge_text != blank -%}
+      <span class="ssw-card__badge ssw-card__badge--{{ badge_kind }}">{{ badge_text }}</span>
+    {%- endif -%}
+
+    {%- if hook != blank -%}
+      <span class="ssw-card__hook">{{ hook }}</span>
+    {%- endif -%}
+
+    {%- if is_bundle and comp1 != blank -%}
+      <div class="ssw-card__stack" aria-hidden="true">
+        {%- if comp1.featured_image != blank -%}<span class="ssw-card__chip"><img src="{{ comp1.featured_image | image_url: width: 120 }}" alt="" width="60" height="60" loading="lazy"></span>{%- endif -%}
+        {%- if comp2 != blank and comp2.featured_image != blank -%}<span class="ssw-card__chip"><img src="{{ comp2.featured_image | image_url: width: 120 }}" alt="" width="60" height="60" loading="lazy"></span>{%- endif -%}
+        {%- if comp3 != blank and comp3.featured_image != blank -%}<span class="ssw-card__chip"><img src="{{ comp3.featured_image | image_url: width: 120 }}" alt="" width="60" height="60" loading="lazy"></span>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="ssw-card__body">
+    {%- if has_rating -%}
+      <span class="ssw-card__rating" aria-label="Rated {{ rating }} out of 5, {{ rcount }} reviews">
+        <span class="ssw-card__stars" aria-hidden="true">★★★★★</span>
+        <b>{{ rating }}</b> <span class="ssw-card__rcount">({{ rcount }})</span>
+      </span>
+    {%- endif -%}
+
+    <h3 class="ssw-card__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+
+    <div class="ssw-card__pricerow">
+      <span class="ssw-card__price">
+        {%- if on_sale -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+        <span data-ssw-price>{{ product.price | money }}</span>
+      </span>
+      {%- if on_sale and save_pct > 0 -%}
+        <span class="ssw-card__save">{{ save_label | replace: '[pct]', save_pct }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if show_atc and avail -%}
+      <form class="ssw-card__form" action="{{ routes.cart_add_url }}" method="post" data-ssw-form>
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
+        {%- if multi and size_selector -%}
+          <label class="ssw-card__size">
+            <span class="visually-hidden">{{ size_label }}</span>
+            <select name="id" data-ssw-select aria-label="{{ size_label }}">
+              {%- for variant in product.variants -%}
+                <option value="{{ variant.id }}" data-price="{{ variant.price | money }}"{% unless variant.available %} disabled{% endunless %}{% if variant.id == vid %} selected{% endif %}>{{ variant.title }} · {{ variant.price | money }}</option>
+              {%- endfor -%}
+            </select>
+            <svg class="ssw-card__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </label>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ vid }}">
+        {%- endif -%}
+        <button class="ssw-btn ssw-btn--add" type="submit" data-ssw-add>{{ atc_label }}</button>
+      </form>
+    {%- elsif avail == false -%}
+      <button class="ssw-btn ssw-btn--out" type="button" disabled>{{ sold_label }}</button>
+    {%- else -%}
+      <a class="ssw-btn ssw-btn--ghost" href="{{ product.url }}">{{ view_label }}</a>
+    {%- endif -%}
+
+    {%- if tester_url != blank -%}
+      <a class="ssw-card__tester" href="{{ tester_url }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9 3h6M10 3v5l-4 9a2 2 0 0 0 2 3h8a2 2 0 0 0 2-3l-4-9V3"/></svg>
+        {{ tester_label }}
+      </a>
+    {%- endif -%}
+  </div>
+</article>

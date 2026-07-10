@@ -2,11 +2,13 @@
   Sorella — product card (.pcard) — real Shopify product data
   Params:
     product (object, required)
-    variant (string, default 'add') — one of:
+    variant (string, default 'plus') — one of:
         'default'  Add-to-bag reveals on hover (.pcard__add)
         'add'      single visible Add to bag (.pcard__actions)
         'cta'      Add to bag + Buy it now
         'plus'     round "+" quick-add on the price row (.pcard__plus)
+        'shelf'    rich collection card — world pill, hook, value chips, rating, anchor, Add to bag
+        'feature'  landscape hero card (spans 2×2) — world pill, hook, three-act facts, anchor, Add to bag
         'soldout'  desaturated, "Notify me" (.pcard--soldout)
         'compact'  dense grid tile
         'row'      horizontal list / cart upsell
@@ -14,9 +16,9 @@
         'swatch'   size pills (.pcard__sizes) + Add to bag
         'wish'     wishlist heart (.pcard__wish) + Add to bag
     badge   (string, optional) — overrides the corner tag
-  Data: featured_image, title, price/compare_at_price, url, availability,
-        notes (metafields.sorella.notes → else first 3 tags), inspired-by,
-        rating (metafields.sorella.rating / review_count).
+    flag    (string, optional) — feature card corner flag (e.g. "Bestseller")
+  Selling-value data (shelf/feature): metafields.sorella.world, .longevity,
+    .tagline, .notes, .rating, .review_count; compare-at anchor; LE 85 tester nudge.
 {%- endcomment -%}
 {%- liquid
   assign v = variant | default: 'plus'
@@ -33,6 +35,9 @@
 
   assign img = product.featured_image
   assign iw = 640
+  if v == 'feature'
+    assign iw = 1100
+  endif
   assign ih = 800
   if img
     assign ih = iw | divided_by: img.aspect_ratio | round
@@ -43,7 +48,7 @@
     assign notes = product.tags | slice: 0, 3 | join: ' · '
   endif
 
-  # short tagline / description used by the default quick-add card body
+  # short tagline / description used by the quick-add + shelf card body
   assign desc = product.metafields.sorella.tagline.value
   if desc == blank
     assign desc = product.description | strip_html | truncatewords: 22
@@ -84,11 +89,37 @@
   unless v == 'row' or v == 'compact' or v == 'overlay'
     assign show_wish = true
   endunless
+
+  # --- selling-value data (shelf + feature cards) ---
+  assign is_rich = false
+  if v == 'shelf' or v == 'feature'
+    assign is_rich = true
+  endif
+  assign world = product.metafields.sorella.world.value
+  assign longevity = product.metafields.sorella.longevity.value
+  assign save_amt = 0
+  if on_sale
+    assign save_amt = product.compare_at_price | minus: product.price
+  endif
+  # tester nudge only on full-size bottles, never on a tester itself
+  assign show_try = false
+  if is_rich and product.price > 55000
+    unless product.handle contains 'tester' or product.handle contains '5ml' or product.title contains '5ml' or product.title contains 'Tester'
+      assign show_try = true
+    endunless
+  endif
+  assign show_world = false
+  if is_rich and world != blank
+    assign show_world = true
+  endif
+  assign is_original = product.metafields.sorella.is_original.value
 -%}
 <article class="{{ pclass }}"{% if product != blank %} data-quick-buy="{{ product.handle }}"{% endif %}>
   <div class="pcard__media pcard__m{{ mgrad }}">
     {%- if badge != blank -%}
       <div class="pcard__tags"><span class="tag tag--solid">{{ badge }}</span></div>
+    {%- elsif flag != blank and v == 'feature' -%}
+      <div class="pcard__tags"><span class="tag tag--solid">{{ flag }}</span></div>
     {%- elsif custom_badge != blank -%}
       <div class="pcard__tags"><span class="tag tag--out">{{ custom_badge }}</span></div>
     {%- elsif is_soldout -%}
@@ -107,6 +138,10 @@
       {%- endif -%}
     </a>
 
+    {%- if show_world -%}
+      <span class="pcard__world">{{ world }}</span>
+    {%- endif -%}
+
     {%- if show_wish -%}
       <button type="button" data-no-quickbuy data-wish class="pcard__wish" aria-label="Save {{ product.title | escape }} to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.4-8.9C1 8 2.6 4.6 6 4.6c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.4 0 5 3.4 3.4 6.5C19 15.6 12 20 12 20Z"/></svg></button>
     {%- endif -%}
@@ -123,7 +158,8 @@
 
   <div class="pcard__body">
     {%- if v == 'plus' -%}
-      {%- comment -%} default quick-add card: name → description → family → price + "+" {%- endcomment -%}
+      {%- comment -%} quick-add card: notes → name → description → price + "+" {%- endcomment -%}
+      {%- if notes != blank -%}<span class="pcard__notes">{{ notes }}</span>{%- endif -%}
       <h3 class="pcard__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
       {%- if desc != blank -%}<p class="pcard__desc">{{ desc }}</p>{%- endif -%}
       <div class="pcard__row">
@@ -135,6 +171,52 @@
           </form>
         {%- endif -%}
       </div>
+
+    {%- elsif is_rich -%}
+      {%- comment -%} shelf / feature: sell the value, not just the name {%- endcomment -%}
+      {%- unless show_world -%}
+        {%- if notes != blank -%}<span class="pcard__notes">{{ notes }}</span>{%- endif -%}
+      {%- endunless -%}
+
+      <h3 class="pcard__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+      {%- comment -%} originals don't need the badge on every tile — keep it for the hero + renditions {%- endcomment -%}
+      {%- if v == 'feature' or is_original == false -%}
+        {% render 'sorella-inspired-by', product: product %}
+      {%- endif -%}
+
+      {%- if desc != blank -%}<p class="pcard__desc">{{ desc }}</p>{%- endif -%}
+
+      {%- if v == 'feature' -%}
+        <ul class="pcard__facts">
+          <li>Composed in three acts on an oil-rich base — made fresh in Egypt.</li>
+          <li>{{ longevity | default: 'Built to last for days on your clothes.' }}</li>
+        </ul>
+      {%- endif -%}
+
+      {%- if save_amt > 0 or show_try or longevity != blank -%}
+        <div class="pcard__chips">
+          {%- if v != 'feature' and longevity != blank -%}<span class="pcard__chip">{{ longevity }}</span>{%- endif -%}
+          {%- if save_amt > 0 -%}<span class="pcard__chip pcard__chip--save">Save {{ save_amt | money }}</span>{%- endif -%}
+          {%- if show_try -%}<span class="pcard__chip pcard__chip--try">Try first · LE 85</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="pcard__row">
+        {%- if rating != blank -%}{% render 'sorella-stars', rating: rating, count: review_count %}{%- endif -%}
+        <span class="pcard__price">{% if on_sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}{{ product.price | money }}</span>
+      </div>
+
+      {%- if is_soldout -%}
+        <div class="pcard__cta"><button type="button" class="btn btn--ghost btn--full">✉ Notify me</button></div>
+      {%- else -%}
+        <div class="pcard__cta">
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ vid }}">
+            <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--full">Add to bag · {{ product.price | money }}</button>
+          </form>
+        </div>
+      {%- endif -%}
+
     {%- else -%}
     {%- unless v == 'compact' -%}
       {%- if notes != blank -%}<span class="pcard__notes">{{ notes }}</span>{%- endif -%}

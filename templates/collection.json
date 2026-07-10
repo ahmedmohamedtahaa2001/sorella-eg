@@ -21,9 +21,11 @@
       "type": "sorella-collection-grid",
       "settings": {
         "products_per_page": 16,
-        "card_variant": "plus",
+        "card_variant": "shelf",
+        "show_feature": true,
+        "feature_flag": "Bestseller",
         "show_interrupt": true,
-        "interrupt_after": 4
+        "interrupt_after": 5
       }
     }
   },
