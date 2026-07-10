@@ -2,7 +2,61 @@
   "sections": {
     "hero": {
       "type": "sorella-hero",
-      "settings": {}
+      "blocks": {
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "stat_value": "93",
+            "stat_decimals": 0,
+            "stat_label": "",
+            "heading": "perfumes poured by two sisters — and yours is the scent she'll <em>remember</em> you by.",
+            "subtext": "One kitchen table, 93 scents, no fake timers, no tricks. Every bottle blended fresh in Egypt.",
+            "primary_label": "Shop Bestsellers",
+            "primary_link": "/collections/the-most-loved",
+            "secondary_label": "Our Story",
+            "secondary_link": "/pages/about-us"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "stat_value": "23",
+            "stat_decimals": 0,
+            "stat_label": "",
+            "heading": "collections, all our <em>own</em> — not a single one a designer dupe.",
+            "subtext": "Dessert-table gourmands and Sahel-summer scents with real Egyptian names — never borrowed from Paris.",
+            "primary_label": "Shop Bestsellers",
+            "primary_link": "/collections/the-most-loved",
+            "secondary_label": "Smell One for LE 85",
+            "secondary_link": "/collections/5-ml-testers"
+          }
+        },
+        "s3": {
+          "type": "slide",
+          "settings": {
+            "stat_value": "6",
+            "stat_decimals": 0,
+            "stat_label": "",
+            "heading": "layering bundles — build one, and your 5ml is <em>free</em>.",
+            "subtext": "Every bundle clears the LE 1,100 free-gift line. Shown up front, never buried at checkout.",
+            "primary_label": "Shop Bundles",
+            "primary_link": "/collections/bundles",
+            "secondary_label": "How the Gift Works",
+            "secondary_link": "/collections/free-gift-5ml"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "interval": 6000,
+        "grayscale": true,
+        "overlay_opacity": 70,
+        "min_height": 90
+      }
     },
     "marquee": {
       "type": "sorella-trust-marquee",
@@ -58,7 +112,9 @@
     },
     "brand_story": {
       "type": "sorella-brand-story",
-      "settings": {}
+      "settings": {
+        "link_url": "/pages/about-us"
+      }
     },
     "worlds": {
       "type": "sorella-scent-worlds",
@@ -275,7 +331,11 @@
         "c2",
         "c3",
         "c4"
-      ]
+      ],
+      "settings": {
+        "button_url": "/collections/all",
+        "skip_url": "/collections/the-most-loved"
+      }
     },
     "trust": {
       "type": "sorella-trust-bar",
