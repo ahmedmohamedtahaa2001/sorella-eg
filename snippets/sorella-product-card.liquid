@@ -130,11 +130,26 @@
       <div class="pcard__tags"><span class="tag tag--out">New</span></div>
     {%- endif -%}
 
+    {%- liquid
+      # resolve the real URL. Some products carry an image record whose file
+      # never imported (image_url returns a URL that 404s) — Liquid can't tell.
+      # So the branded bottle placeholder is always rendered as a backdrop and
+      # the <img> removes itself on load error, revealing it.
+      assign img_src = ''
+      if img
+        assign img_src = img | image_url: width: iw
+      endif
+      assign ph_size = 'ph'
+      if v == 'feature'
+        assign ph_size = 'lg'
+      elsif v == 'row'
+        assign ph_size = 'sm'
+      endif
+    -%}
     <a href="{{ product.url }}" class="pcard__mediaLink" aria-label="{{ product.title | escape }}">
-      {%- if img -%}
-        <img src="{{ img | image_url: width: iw }}" alt="{{ img.alt | default: product.title | escape }}" width="{{ iw }}" height="{{ ih }}" loading="lazy">
-      {%- else -%}
-        <div class="b"></div>
+      {% render 'sorella-bottle', product: product, world: world, notes: notes, size: ph_size %}
+      {%- if img_src != blank -%}
+        <img class="pcard__img" src="{{ img_src }}" alt="{{ img.alt | default: product.title | escape }}" width="{{ iw }}" height="{{ ih }}" loading="lazy" onerror="this.remove()">
       {%- endif -%}
     </a>
 
@@ -184,7 +199,8 @@
         {% render 'sorella-inspired-by', product: product %}
       {%- endif -%}
 
-      {%- if desc != blank -%}<p class="pcard__desc">{{ desc }}</p>{%- endif -%}
+      {%- comment -%} description only on the landscape feature — keeps grid tiles short {%- endcomment -%}
+      {%- if desc != blank and v == 'feature' -%}<p class="pcard__desc">{{ desc }}</p>{%- endif -%}
 
       {%- if v == 'feature' -%}
         <ul class="pcard__facts">
@@ -193,9 +209,12 @@
         </ul>
       {%- endif -%}
 
-      {%- if save_amt > 0 or show_try or longevity != blank -%}
+      {%- comment -%} keep chips to one short row on grid tiles; longevity chip is verbose, drop it {%- endcomment -%}
+      {%- if v == 'feature' and longevity != blank -%}
+        <div class="pcard__chips"><span class="pcard__chip">{{ longevity }}</span></div>
+      {%- endif -%}
+      {%- if save_amt > 0 or show_try -%}
         <div class="pcard__chips">
-          {%- if v != 'feature' and longevity != blank -%}<span class="pcard__chip">{{ longevity }}</span>{%- endif -%}
           {%- if save_amt > 0 -%}<span class="pcard__chip pcard__chip--save">Save {{ save_amt | money }}</span>{%- endif -%}
           {%- if show_try -%}<span class="pcard__chip pcard__chip--try">Try first · LE 85</span>{%- endif -%}
         </div>
@@ -212,7 +231,7 @@
         <div class="pcard__cta">
           <form action="{{ routes.cart_add_url }}" method="post">
             <input type="hidden" name="id" value="{{ vid }}">
-            <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--full">Add to bag · {{ product.price | money }}</button>
+            <button type="submit" name="add" data-no-quickbuy class="btn btn--primary btn--full">Add to bag</button>
           </form>
         </div>
       {%- endif -%}

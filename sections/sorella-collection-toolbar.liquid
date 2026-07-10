@@ -42,10 +42,13 @@
 
   <form method="get" class="coltoolbar__form">
     <div class="wrap coltoolbar__bar">
-      <span class="coltoolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}fragrance{% else %}fragrances{% endif %}</span>
-
       {%- if s.show_filters and collection.filters.size > 0 -%}
-        <div class="coltoolbar__filters">
+        <div class="coltoolbar__lead">
+          <span class="coltoolbar__filterlabel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h13M11 18h9"/></svg>
+            Filter
+          </span>
+          <div class="coltoolbar__filters">
           {%- for filter in collection.filters -%}
             <details class="colfilter">
               <summary class="colfilter__summary">
@@ -82,9 +85,13 @@
               </div>
             </details>
           {%- endfor -%}
+          </div>
         </div>
       {%- endif -%}
 
+      <div class="coltoolbar__end">
+      <span class="coltoolbar__count">{{ collection.products_count }} {% if collection.products_count == 1 %}fragrance{% else %}fragrances{% endif %}</span>
+      <span class="coltoolbar__div" aria-hidden="true"></span>
       <label class="coltoolbar__sort">
         <span class="coltoolbar__sortlabel">Sort</span>
         <select name="sort_by" class="coltoolbar__select" onchange="this.form.submit()" aria-label="Sort products">
@@ -98,6 +105,7 @@
       </label>
 
       <noscript><button type="submit" class="btn btn--primary btn--sm coltoolbar__apply">Apply</button></noscript>
+      </div>
     </div>
 
     {%- if active_count > 0 -%}

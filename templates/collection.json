@@ -22,9 +22,9 @@
       "settings": {
         "products_per_page": 16,
         "card_variant": "shelf",
-        "show_feature": true,
+        "show_feature": false,
         "feature_flag": "Bestseller",
-        "show_interrupt": true,
+        "show_interrupt": false,
         "interrupt_after": 5
       }
     }

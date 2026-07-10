@@ -1,0 +1,40 @@
+{%- comment -%}
+  Sorella — branded bottle placeholder. Rendered inside .pcard__media when a
+  product has no featured_image, so an image-less product still reads as a
+  designed product shot instead of a flat gray void. Monochrome, on-brand:
+  a labelled bottle carrying the product's own name (Fraunces italic), the
+  Sorella wordmark, and a scent-world / format line.
+  Params:
+    product (object, required)
+    world   (string, optional) — scent world, shown on the label meta line
+    notes   (string, optional) — fallback meta line when no world
+    size    (string, default 'ph') — 'ph' grid tile · 'lg' feature · 'sm' row
+{%- endcomment -%}
+{%- liquid
+  assign ph_size = size | default: 'ph'
+  assign meta = world
+  if meta == blank
+    assign meta = product.metafields.sorella.format.value
+  endif
+  if meta == blank
+    assign meta = notes | split: ' · ' | first
+  endif
+  if meta == blank
+    assign meta = 'Eau de parfum'
+  endif
+-%}
+<div class="pcard__ph pcard__ph--{{ ph_size }}" aria-hidden="true">
+  <span class="pcard__phGlow"></span>
+  <div class="pcard__bottle">
+    <span class="pcard__cap"></span>
+    <span class="pcard__neck"></span>
+    <span class="pcard__glass">
+      <span class="pcard__label">
+        <span class="pcard__labelBrand">Sorella</span>
+        <span class="pcard__labelName">{{ product.title | strip_html | truncate: 26 }}</span>
+        <span class="pcard__labelMeta">{{ meta | strip_html | truncate: 24 }}</span>
+      </span>
+    </span>
+  </div>
+  <span class="pcard__phShadow"></span>
+</div>

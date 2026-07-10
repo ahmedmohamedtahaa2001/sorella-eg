@@ -31,8 +31,47 @@
   if count == 1
     assign count_noun = 'fragrance'
   endif
+
+  # distinct scent worlds present in this collection — powers the orientation
+  # strip. Derived from each collection's own products, so it stays true on
+  # /all, /bundles and every collection with zero per-page config.
+  assign world_seen = ''
+  assign world_join = ''
+  assign world_n = 0
+  if s.show_worlds
+    for p in collection.products limit: 80
+      assign w = p.metafields.sorella.world.value
+      if w != blank
+        capture wkey
+          echo '|'
+          echo w
+          echo '|'
+        endcapture
+        unless world_seen contains wkey
+          assign world_seen = world_seen | append: wkey
+          if world_n > 0
+            assign world_join = world_join | append: '~~'
+          endif
+          assign world_join = world_join | append: w
+          assign world_n = world_n | plus: 1
+        endunless
+      endif
+    endfor
+  endif
+  assign worlds = world_join | split: '~~'
 -%}
-<section class="colhead{% if banner != blank %} colhead--split{% endif %}" data-reveal>
+<section class="colhead colhead--dark{% if banner != blank %} colhead--hero{% else %} colhead--grad{% endif %}" data-reveal>
+  {%- if banner != blank -%}
+    <img class="colhead__bg"
+      src="{{ banner | image_url: width: 1800 }}"
+      srcset="{{ banner | image_url: width: 900 }} 900w, {{ banner | image_url: width: 1400 }} 1400w, {{ banner | image_url: width: 1800 }} 1800w, {{ banner | image_url: width: 2400 }} 2400w"
+      sizes="100vw"
+      alt="{{ banner.alt | default: collection.title | escape }}"
+      width="{{ banner.width | default: 1800 }}"
+      height="{{ banner.height | default: 1200 }}"
+      loading="eager" fetchpriority="high">
+    <span class="colhead__scrim" aria-hidden="true"></span>
+  {%- endif -%}
   <div class="wrap">
     <div class="colhead__inner">
       {%- if arabic != blank -%}
@@ -73,20 +112,18 @@
             {%- endif -%}
           </div>
         {%- endif -%}
-      </div>
 
-      {%- if banner != blank -%}
-        <div class="colhead__plate">
-          <img
-            src="{{ banner | image_url: width: 1100 }}"
-            srcset="{{ banner | image_url: width: 600 }} 600w, {{ banner | image_url: width: 900 }} 900w, {{ banner | image_url: width: 1100 }} 1100w"
-            sizes="(max-width:860px) 100vw, 420px"
-            alt="{{ banner.alt | default: collection.title | escape }}"
-            width="{{ banner.width | default: 1100 }}"
-            height="{{ banner.height | default: 1375 }}"
-            loading="lazy">
-        </div>
-      {%- endif -%}
+        {%- if s.show_worlds and worlds.size > 0 -%}
+          <div class="colhead__worlds" aria-label="Scent worlds in this collection">
+            {%- if s.worlds_label != blank -%}
+              <span class="colhead__worldsLabel">{{ s.worlds_label }}</span>
+            {%- endif -%}
+            {%- for w in worlds limit: 6 -%}
+              <span class="colhead__worldChip">{{ w }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </section>
@@ -113,6 +150,9 @@
       "label": "Arabic watermark (fallback)",
       "info": "Large faint Arabic word behind the title, e.g. بسبوسه or ذهب. Leave blank for a clean masthead."
     },
+    { "type": "header", "content": "Scent-world strip" },
+    { "type": "checkbox", "id": "show_worlds", "label": "Show scent-world strip", "default": true, "info": "A quiet row of the scent worlds this collection spans (from product metafield sorella.world). Orients the shopper to the range on offer." },
+    { "type": "text", "id": "worlds_label", "label": "Strip label", "default": "Scent worlds" },
     { "type": "header", "content": "Ladder rule" },
     { "type": "checkbox", "id": "show_ladder", "label": "Show ladder rule", "default": true },
     { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },

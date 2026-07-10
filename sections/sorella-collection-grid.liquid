@@ -70,10 +70,10 @@
       ]
     },
     { "type": "header", "content": "Feature card" },
-    { "type": "checkbox", "id": "show_feature", "label": "Lead with a large feature card", "default": true, "info": "The first product on page 1 renders as a wide landscape hero (needs 5+ products)." },
+    { "type": "checkbox", "id": "show_feature", "label": "Lead with a large feature card", "default": false, "info": "The first product on page 1 renders as a wide landscape hero (needs 5+ products). Off = a clean, uniform grid." },
     { "type": "text", "id": "feature_flag", "label": "Feature flag label", "default": "Bestseller" },
     { "type": "header", "content": "Discovery interrupt card" },
-    { "type": "checkbox", "id": "show_interrupt", "label": "Show quiz / discovery card", "default": true },
+    { "type": "checkbox", "id": "show_interrupt", "label": "Show quiz / discovery card", "default": false, "info": "Inserts a quiz prompt into the grid. Needs a real quiz URL below before enabling." },
     { "type": "range", "id": "interrupt_after", "label": "Insert after N products", "min": 2, "max": 12, "step": 1, "default": 4 },
     { "type": "text", "id": "interrupt_eyebrow", "label": "Eyebrow", "default": "Not sure yet?" },
     { "type": "text", "id": "interrupt_title", "label": "Title", "default": "Find your scent in 5 taps" },
