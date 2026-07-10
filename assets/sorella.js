@@ -297,11 +297,18 @@
     track.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       down = true; moved = false; startX = e.clientX;
-      track.classList.add('is-drag');
-      try { track.setPointerCapture(e.pointerId); } catch (_) {}
+      // Do NOT engage drag mode yet: adding .is-drag (which sets pointer-events:
+      // none on the cards) or capturing the pointer on a plain press reparents
+      // the click target off the card's link, so nothing navigates. Wait for a
+      // real horizontal move first.
     });
     track.addEventListener('pointermove', function (e) {
-      if (down && Math.abs(e.clientX - startX) > 6) moved = true;
+      if (!down || moved) return;
+      if (Math.abs(e.clientX - startX) > 6) {
+        moved = true;                       // a real drag — now suppress card interactions
+        track.classList.add('is-drag');
+        try { track.setPointerCapture(e.pointerId); } catch (_) {}
+      }
     });
     function swipeEnd(e) {
       if (!down) return;
@@ -416,6 +423,44 @@
       });
     }, { threshold: 0.35, rootMargin: '0px 0px -8% 0px' });
     targets.forEach(function (el) { io.observe(el); });
+  }
+
+  /* --- Reveal whole sections on scroll ---------------------------------
+     Each page section fades + rises gently into place as it enters the
+     viewport. Reuses the theme's .reveal-pending/.is-revealed CSS, which is
+     reduced-motion-gated and only ever applied by JS (so no-JS renders
+     everything visible). Only sections BELOW the fold at load are pre-hidden,
+     so above-the-fold content never flashes — anything already in view stays
+     visible immediately. Header/footer groups live outside #main-content and
+     are never touched.                                                    */
+  function initSectionReveal(ctx) {
+    if (reduce) return;                              // respect reduced motion
+    if (!('IntersectionObserver' in window)) return; // old browsers: leave visible
+    var scope = (ctx && ctx !== document) ? ctx : document;
+    var sections = all('#main-content > .shopify-section', scope);
+    // shopify:section:load hands us the reloaded section itself, not the page.
+    if (!sections.length && ctx && ctx.classList && ctx.classList.contains('shopify-section')) {
+      sections = [ctx];
+    }
+    if (!sections.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-revealed');
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    sections.forEach(function (el) {
+      if (el.dataset.revealInit) return;
+      el.dataset.revealInit = '1';
+      // Any part already in view on load → keep visible (no pre-hide, no flash).
+      if (el.getBoundingClientRect().top < vh) return;
+      el.classList.add('reveal-pending');
+      io.observe(el);
+    });
   }
 
   /* --- Quick-buy modal --------------------------------------------------
@@ -610,6 +655,7 @@
   function boot() {
     all('[data-carousel]').forEach(initCarousel);
     initReveal(document);
+    initSectionReveal(document);
     initGiftBar(document);
     initHeroSlideshow(document);
   }
@@ -619,6 +665,7 @@
   document.addEventListener('shopify:section:load', function (e) {
     all('[data-carousel]', e.target).forEach(initCarousel);
     initReveal(e.target);
+    initSectionReveal(e.target);
     initGiftBar(e.target);
     initHeroSlideshow(e.target);
   });

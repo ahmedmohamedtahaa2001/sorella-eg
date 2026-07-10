@@ -763,7 +763,7 @@ a.announce:hover{background:var(--surface-2);}
   --carousel-dur:850ms;--carousel-ease:cubic-bezier(.4,0,.2,1);}
 /* Static clip window: hides off-window cards horizontally while padding-block
    keeps vertical card shadows + hover-lift. */
-.carousel__viewport{overflow:hidden;padding-block:26px;}
+.carousel__viewport{overflow:hidden;}
 .carousel__track{display:flex;gap:0;align-items:center;will-change:transform;}
 /* Fixed-width cards; scale/translate/saturate/opacity are applied inline by
    initCarousel(). transform-origin:center so each card scales about its own
