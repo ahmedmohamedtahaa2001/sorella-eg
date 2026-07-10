@@ -5,7 +5,13 @@
 -%}
 <header class="header">
   <div class="wrap header__row">
-    <a class="brand" href="{{ routes.root_url }}">{{ brand }}</a>
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: brand, class: 'brand__logo', widths: '50,100,150,200,250,300,400', loading: 'eager' }}
+      {%- else -%}
+        <img class="brand__logo" src="{{ 'sorella-logo-white.png' | asset_url }}" alt="{{ brand | escape }}" width="310" height="537" loading="eager">
+      {%- endif -%}
+    </a>
 
     <nav class="mainnav" aria-label="Primary">
       {%- if menu != blank and menu.links.size > 0 -%}
@@ -76,6 +82,8 @@
 </div>
 
 <style>
+  #shopify-section-{{ section.id }} .brand{ display:inline-flex; align-items:center; }
+  #shopify-section-{{ section.id }} .brand__logo{ width:auto; height:{{ section.settings.logo_height | default: 46 }}px; display:block; }
   #shopify-section-{{ section.id }} .header__burger{ display:none; }
   @media(max-width:900px){ #shopify-section-{{ section.id }} .header__burger{ display:inline-flex; } }
   /* nav dropdown */
@@ -112,7 +120,23 @@
       "type": "text",
       "id": "brand_name",
       "label": "Brand wordmark",
-      "info": "Leave blank to use the store name."
+      "info": "Used as the logo alt text. Leave blank to use the store name."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Optional. Defaults to the built-in white Sorella wordmark, sized for the dark header. Upload a light/white version for best contrast."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 24,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 46
     },
     {
       "type": "link_list",

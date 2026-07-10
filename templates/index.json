@@ -443,34 +443,6 @@
     "newsletter": {
       "type": "sorella-newsletter",
       "settings": {}
-    },
-    "shoppable_showcase": {
-      "type": "shoppable-showcase",
-      "blocks": {
-        "story1": {
-          "type": "story",
-          "settings": {
-            "line_1": "From our <em>bond</em> to your senses",
-            "line_2": "Composed in <em>three acts</em>",
-            "line_3": "Made fresh in Egypt, the <em>عطّار</em> way",
-            "link_label": "Our story",
-            "link_url": "/pages/about-us"
-          }
-        }
-      },
-      "block_order": ["story1"],
-      "settings": {
-        "heading": "The <em>signature</em> shelf",
-        "subheading": "<p>Full-size bottles, layering bundles, and a 5ml tester so you never buy unsmelled.</p>",
-        "source": "collection",
-        "collection": "50ml-perfumes",
-        "feature_first": true,
-        "max_items": 8,
-        "show_story": true,
-        "story_position": 4,
-        "view_all_label": "Shop 50ml",
-        "view_all_url": "/collections/50ml-perfumes"
-      }
     }
   },
   "order": [
@@ -479,7 +451,6 @@
     "worlds",
     "bundles",
     "carousel",
-    "shoppable_showcase",
     "spotlight",
     "brand_story",
     "reviews",

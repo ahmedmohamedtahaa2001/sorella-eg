@@ -17,6 +17,11 @@
   #shopify-section-{{ section.id }} .footer__grid {
     padding-block: {{ s.padding_top | default: 72 }}px {{ s.padding_bottom | default: 40 }}px;
   }
+  #shopify-section-{{ section.id }} .footer__logo {
+    height: {{ s.logo_height | default: 60 }}px;
+    width: auto;
+    display: block;
+  }
   @media (max-width: 749px) {
     #shopify-section-{{ section.id }} .footer__grid {
       padding-block: {{ s.mobile_padding_top | default: 56 }}px {{ s.mobile_padding_bottom | default: 32 }}px;
@@ -30,7 +35,11 @@
 
       <div class="footer__brand">
         {%- if s.eyebrow != blank -%}<span class="footer__eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
-        <span class="footer__wordmark serif">{{ brand }}</span>
+        {%- if s.logo != blank -%}
+          {{ s.logo | image_url: width: 500 | image_tag: alt: brand, class: 'footer__wordmark footer__logo', widths: '100,200,300,400,500', loading: 'lazy' }}
+        {%- else -%}
+          <img class="footer__wordmark footer__logo" src="{{ 'sorella-logo-white.png' | asset_url }}" alt="{{ brand | escape }}" width="310" height="537" loading="lazy">
+        {%- endif -%}
         {%- if s.tagline != blank -%}<p>{{ s.tagline }}</p>{%- endif -%}
         {%- if section.blocks.size > 0 -%}
           <div class="footer__socials">
@@ -83,7 +92,9 @@
   "class": "footer-section",
   "enabled_on": { "groups": ["footer"] },
   "settings": [
-    { "type": "text", "id": "brand_name", "label": "Brand wordmark", "info": "Leave blank to use the store name." },
+    { "type": "text", "id": "brand_name", "label": "Brand wordmark", "info": "Used as the logo alt text. Leave blank to use the store name." },
+    { "type": "image_picker", "id": "logo", "label": "Logo image", "info": "Optional. Defaults to the built-in white Sorella wordmark, sized for the dark footer. Upload a light/white version for best contrast." },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 140, "step": 4, "unit": "px", "default": 60 },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow line", "default": "Made fresh in Egypt" },
     { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "From our bond to your senses. Fragrance made fresh in Egypt — true to the original, built to last." },
     { "type": "header", "content": "Column 1" },
