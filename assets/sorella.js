@@ -142,21 +142,30 @@
     }
 
     // ---- per-breakpoint config ----
-    //   windowSize   how many full cards are visible
-    //   targetBefore how many cards sit before the active one by default
-    //   decay        tier % by absolute distance from the active card;
-    //                strong contrast so the focused card clearly reads as hero.
-    //                Tier X → scale(X/100) + saturate(X%) + a hair of blur.
+    //   targetBefore / targetAfter — how many cards flank the active one;
+    //   windowSize = targetBefore + 1 + targetAfter visible cards.
+    // The carousel is INFINITE / CIRCULAR: activeIndex is an unbounded integer
+    // and every card's role is resolved purely by modular index math over the
+    // fixed set of real DOM cards — no clones, no shared-track reset, no
+    // start/end. The visible window pattern is identical at every activeIndex.
     var BP = {
-      desktop: { windowSize: 4, targetBefore: 1, decay: [100, 80, 65, 50] },
-      tablet:  { windowSize: 3, targetBefore: 1, decay: [100, 75, 50] },
-      mobile:  { windowSize: 2, targetBefore: 0, decay: [100, 65] }
+      desktop: { targetBefore: 1, targetAfter: 2 },
+      tablet:  { targetBefore: 1, targetAfter: 1 },
+      mobile:  { targetBefore: 0, targetAfter: 1 }
     };
-    function tierAt(i, active) {
-      var d = Math.abs(i - active);
-      var decay = cfg.decay;
-      return d < decay.length ? decay[d] : decay[decay.length - 1];
-    }
+    // Signed-offset tier table (offset = card position relative to active).
+    // The window shows offsets [-targetBefore, +targetAfter]; the single offset
+    // just outside each edge is a transparent BUFFER so entering / leaving cards
+    // slide in and out instead of popping. Forward-biased: +1 (90%) reads larger
+    // than -1 (80%). Tier X → scale(X/100) + saturate(X%) + a hair of blur.
+    var OFFSET_TIERS = { '-2': 70, '-1': 80, '0': 100, '1': 90, '2': 80, '3': 70 };
+    function tier(o) { var v = OFFSET_TIERS[String(o)]; return v == null ? 70 : v; }
+
+    // True modulo (handles negatives): mod(-1, 8) === 7. Maps any activeIndex —
+    // which grows or shrinks without bound as the user keeps clicking — back onto
+    // a real card index. Never used as a raw array index directly; always via this.
+    function mod(n, m) { return ((n % m) + m) % m; }
+
     var mqDesktop = window.matchMedia('(min-width: 1001px)');
     var mqTablet  = window.matchMedia('(min-width: 721px) and (max-width: 1000px)');
     function config() {
@@ -166,31 +175,16 @@
     }
 
     var cfg = config();
-    var activeIndex = 0;
+    var activeIndex = 0; // unbounded integer — resolved through mod(), never clamped
 
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(v, hi)); }
-    function lastIndex() { return Math.max(0, total - 1); }
-    function windowSize() { return Math.min(cfg.windowSize, total); }
-    function maxWindowStart() { return Math.max(0, total - windowSize()); }
+    function windowSize() { return cfg.targetBefore + 1 + cfg.targetAfter; }
 
-    // Clamped window start — correct at the start, the end AND the
-    // second-to-last position, with no special-casing and no out-of-range index.
-    function windowStart() {
-      return clamp(activeIndex - cfg.targetBefore, 0, maxWindowStart());
-    }
-
-    // Widest reachable window (in units of the full card width W) — sizing W to
-    // this makes the fullest window exactly fill the viewport, so narrower
-    // windows never overflow (no crop) and every card keeps a consistent size.
-    function maxScaleSum() {
-      var wsz = windowSize(), mx = 0;
-      for (var a = 0; a < total; a++) {
-        var ws = clamp(a - cfg.targetBefore, 0, Math.max(0, total - wsz));
-        var sum = 0;
-        for (var p = 0; p < wsz; p++) { var i = ws + p; if (i < total) sum += tierAt(i, a) / 100; }
-        if (sum > mx) mx = sum;
-      }
-      return mx || 1;
+    // Signed circular offset of DOM card i from the active card, mapped to
+    // (-total/2, total/2] so each real card takes exactly one nearest role.
+    function offsetOf(i) {
+      var raw = mod(i - activeIndex, total);
+      return raw * 2 > total ? raw - total : raw;
     }
 
     // ---- progress indicator (reuses the old scrollbar element) ----
@@ -207,8 +201,8 @@
         function fromX(clientX) {
           var r = dotsBox.getBoundingClientRect();
           var f = clamp((clientX - r.left) / Math.max(1, r.width), 0, 1);
-          var nv = Math.round(f * lastIndex());
-          if (nv !== activeIndex) { activeIndex = nv; render(false); }
+          var nv = Math.round(f * (total - 1));
+          if (nv !== mod(activeIndex, total)) { activeIndex = nv; render(false); }
         }
         dotsBox.addEventListener('pointerdown', function (e) {
           railDrag = true;
@@ -226,22 +220,24 @@
       if (!thumb) return;
       var rail = dotsBox.clientWidth;
       var tw = Math.max(32, Math.round(rail * (windowSize() / total)));
-      var last = lastIndex();
-      var left = last > 0 ? (activeIndex / last) * (rail - tw) : 0;
+      var pos = mod(activeIndex, total); // position within the current cycle
+      var left = total > 1 ? (pos / (total - 1)) * (rail - tw) : 0;
       thumb.style.width = tw + 'px';
       thumb.style.transform = 'translateX(' + left + 'px)';
     }
 
-    // ---- core render: even-gap cumulative layout + per-card tiers + controls ----
-    // Cards are laid out by their *actual scaled width* plus a CONSTANT gap G,
-    // so the visual space between every adjacent pair is identical regardless
-    // of each card's tier (fixes the old center-in-slot uneven-gap look). The
-    // full-size card width W is sized so the widest window fills the viewport;
-    // the window is left-aligned and off-window cards fade out (no crop/peek).
+    // ---- core render: per-card offset positioning (no shared track transform) --
+    // Every card is placed FRESH from its circular offset to the active card, so
+    // nothing accumulates and there is never a reset. The active card sits at
+    // offset 0; the visible window [-targetBefore, +targetAfter] is centred in
+    // the viewport. Cards outside the window fade to 0 (and stop catching
+    // pointers); the ones just outside park at the buffer edge so they slide in.
     function render(hardSnap) {
       cfg = config();
-      activeIndex = clamp(activeIndex, 0, lastIndex());
       var wsz = windowSize();
+      var tB = cfg.targetBefore, tA = cfg.targetAfter;
+      var bufB = tB + 1, bufA = tA + 1;           // one transparent buffer each side
+      var winCenter = (tA - tB) / 2;              // window midpoint, in offset units
       root.style.setProperty('--cards', wsz);
 
       if (hardSnap) { root.classList.add('is-snapping'); void root.offsetWidth; }
@@ -249,35 +245,38 @@
       var G = parseFloat(getComputedStyle(root).getPropertyValue('--gap')) || 14;
       var edgePad = 10;
       var Vw = viewport.clientWidth;
-      var W = Math.max(40, (Vw - 2 * edgePad - (wsz - 1) * G) / maxScaleSum());
+      // Size the full card W so the visible window exactly fills the viewport;
+      // slot is the constant centre-to-centre spacing between adjacent cards.
+      var sL = tier(-tB) / 100, sR = tier(tA) / 100;
+      var denom = (wsz - 1) + (sL + sR) / 2;
+      var W = Math.max(40, (Vw - 2 * edgePad - (wsz - 1) * G) / denom);
+      var slot = W + G;
       root.style.setProperty('--cardw', W + 'px');
 
-      // scaled widths + cumulative left edges, constant gap G between every pair
-      var scales = items.map(function (it, i) { return tierAt(i, activeIndex) / 100; });
-      var P = [], acc = 0;
-      for (var i = 0; i < total; i++) { P[i] = acc; acc += scales[i] * W + G; }
-
-      var wsIdx = windowStart();
-      var weIdx = Math.min(total - 1, wsIdx + wsz - 1);
-      var windowWidth = (P[weIdx] + scales[weIdx] * W) - P[wsIdx];
-      var offset = P[wsIdx] - (Vw - windowWidth) / 2; // center the window in the viewport
-
+      var vpCenter = Vw / 2;
       items.forEach(function (it, i) {
-        var t = tierAt(i, activeIndex);
+        var o = offsetOf(i);
+        var inWindow = o >= -tB && o <= tA;
+        // Position/tier use the offset clamped to the buffer edge, so any card
+        // beyond the buffer parks invisibly at the edge — the wrap never jumps.
+        var op = clamp(o, -bufB, bufA);
+        var t = tier(op);
+        var s = t / 100;
         var blur = ((100 - t) * 0.015).toFixed(3);
-        var inWindow = i >= wsIdx && i <= weIdx;
-        // item's natural flex position is i*W; translate its left edge to P[i]
-        var tx = (P[i] - offset) - i * W;
-        it.style.transform = 'translateX(' + tx + 'px) scale(' + scales[i] + ')';
+        var targetCenter = vpCenter + (op - winCenter) * slot;
+        var tx = targetCenter - (i * W + W / 2); // shift natural flex centre to target
+        it.style.transform = 'translateX(' + tx + 'px) scale(' + s + ')';
         it.style.filter = 'saturate(' + t + '%) blur(' + blur + 'px)';
         it.style.opacity = inWindow ? '1' : '0';
-        it.style.zIndex = Math.round(scales[i] * 100);
+        it.style.pointerEvents = inWindow ? '' : 'none';
+        it.style.zIndex = Math.round(s * 100);
         it.dataset.tier = t;
       });
       track.style.transform = 'none';
 
-      if (prev) prev.disabled = activeIndex <= 0;
-      if (next) next.disabled = activeIndex >= lastIndex();
+      // Infinite loop → no boundaries → both arrows are always enabled.
+      if (prev) prev.disabled = false;
+      if (next) next.disabled = false;
 
       updateThumb();
 
@@ -285,10 +284,8 @@
     }
 
     function go(dir) {
-      var nv = clamp(activeIndex + dir, 0, lastIndex());
-      if (nv === activeIndex) return;
-      activeIndex = nv;
-      render(false);
+      activeIndex += dir; // unbounded; mod() resolves it to a real card, so the
+      render(false);      // motion at the "wrap" is identical to any other step
     }
 
     // ---- arrows (handlers survive the reparent below) ----
@@ -321,12 +318,11 @@
       if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
     }, true);
 
-    // ---- autoplay: step one index every 6s; glide back at the end ----
-    var AUTOPLAY_MS = 6000, autoTimer = null;
+    // ---- autoplay: step one index every 4s; loops forever (no end to reset) ----
+    var AUTOPLAY_MS = 4000, autoTimer = null;
     function autoAdvance() {
       if (total < 2) return;
-      if (activeIndex >= lastIndex()) { activeIndex = 0; render(false); }
-      else go(1);
+      go(1);
     }
     function autoStop() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
     function autoStart() { if (reduce || total < 2) return; autoStop(); autoTimer = setInterval(autoAdvance, AUTOPLAY_MS); }
@@ -558,11 +554,64 @@
     sync();
   }
 
+  /* --- Hero slideshow: crossfade slides + synced copy, autoplay --------
+     Hook: [data-hero-slideshow][data-interval] wrapping .hero__slide
+     elements, with .hero__dot buttons ([data-goto]). Pauses on hover and
+     when the tab is hidden; no autoplay under reduced motion.            */
+  function initHeroSlideshow(root) {
+    all('[data-hero-slideshow]', root).forEach(function (hero) {
+      if (hero.hasAttribute('data-hero-done')) return;
+      hero.setAttribute('data-hero-done', '');
+      var slides = all('.hero__slide', hero);
+      var dots = all('.hero__dot', hero);
+      if (slides.length < 2) return;
+      var interval = parseInt(hero.getAttribute('data-interval') || '6000', 10);
+      var i = 0, timer = null;
+      function countUp(el) {
+        var target = parseFloat(el.getAttribute('data-hero-count'));
+        if (isNaN(target)) return;
+        var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+        var dur = parseInt(el.getAttribute('data-duration') || '1500', 10);
+        function fmt(n) { return n.toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+        if (reduce) { el.textContent = fmt(target); return; }
+        var start = null;
+        function stepFn(ts) {
+          if (start === null) start = ts;
+          var p = Math.min(1, (ts - start) / dur);
+          el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(stepFn); else el.textContent = fmt(target);
+        }
+        el.textContent = fmt(0);
+        requestAnimationFrame(stepFn);
+      }
+      function show(n) {
+        i = (n + slides.length) % slides.length;
+        slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+        dots.forEach(function (d, k) {
+          var on = k === i;
+          d.classList.toggle('is-active', on);
+          d.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        var num = slides[i].querySelector('[data-hero-count]');
+        if (num) countUp(num);
+      }
+      function start() { if (reduce || timer) return; timer = setInterval(function () { show(i + 1); }, interval); }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { show(k); stop(); start(); }); });
+      hero.addEventListener('mouseenter', stop);
+      hero.addEventListener('mouseleave', start);
+      document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+      show(0);
+      start();
+    });
+  }
+
   /* --- boot: one-time per-element enhancement --------------------------- */
   function boot() {
     all('[data-carousel]').forEach(initCarousel);
     initReveal(document);
     initGiftBar(document);
+    initHeroSlideshow(document);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -571,5 +620,6 @@
     all('[data-carousel]', e.target).forEach(initCarousel);
     initReveal(e.target);
     initGiftBar(e.target);
+    initHeroSlideshow(e.target);
   });
 })();
